@@ -1,0 +1,5 @@
+obj/*.o
+!obj/.gitkeep
+bin/*.dSYM
+*.dSYM
+.DS_Store
