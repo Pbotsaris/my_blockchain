@@ -20,20 +20,26 @@
 #include  <stdio.h>
 #include "../include/list.h"
 
-int main(int argc, char *argv[])
+int main(void)
 {
-    node_t *head = init_list(0); 
+    node_t *head = init_list("cat", 0); 
 
     int i;
-
     for (i = 1; i < 5; ++i) 
-        head = add_to_head(head, i);
-
+        head = add_to_head(head, "dog", i);
 
     print_list(head);
 
+    printf("------------\n");
+
+   head = remove_node(head, 4);
+   head = remove_node(head, 0);
+    print_list(head);
+
+    printf("------------\n");
+    
     free_list(head);
 
-    printf("hello wolrd");
+
     return 0;
 }
