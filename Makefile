@@ -1,5 +1,5 @@
 OBJ=obj/my_blockchain.o    	   				\
-OBJ=obj/list.o    	 				  				\
+		obj/list.o   
 
 CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude
 CC=gcc 
