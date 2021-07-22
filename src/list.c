@@ -101,9 +101,9 @@ node_t *remove_block(node_t *head, char *bid)
 
     while(current)
     {
-        if(strcmp(current->bid, bid) == 0)
+        if((strcmp(current->bid, bid)) == 0)
             current->bid[0] = '\0';
-            current = current->next;
+        current = current->next;
     }
 
     return head;
