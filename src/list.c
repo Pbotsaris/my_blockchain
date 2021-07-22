@@ -99,6 +99,35 @@ node_t *remove_block(node_t *head, char *bid)
     return head;
 }
 
+int node_exists(node_t *head, int nid)
+{
+    int count = 0;
+    node_t *current = head;
+    while(current)
+    {
+        if(current->nid == nid)
+            return count;
+
+        current = current->next;
+        count++;
+    }
+    return -1;
+}
+
+int block_exists(node_t *head, char *bid)
+{
+    int count = 0;
+    node_t *current = head;
+    while(current)
+    {
+        if(strcmp(current->bid, bid) == 0)
+            return count;
+
+        current = current->next;
+        count++;
+    }
+    return -1;
+}
 
 void print_list(node_t *head)
 {
@@ -115,6 +144,27 @@ void print_list(node_t *head)
         current = current->next;
     }
 }
+
+
+void print_block_list(node_t *head, char *bid)
+{
+    if(head == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
+
+    node_t *current = head;
+    while(current)
+    {
+
+        if(strcmp(current->bid, bid) == 0)
+              printf("%i: %s, \n", current->nid, current->bid);
+
+        current = current->next;
+    }
+}
+
 
 
 void free_list(node_t *head)
