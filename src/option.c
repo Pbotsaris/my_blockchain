@@ -30,7 +30,6 @@ char *get_input(char *input, int relative){
     
     while(input[relative]){
 
-        printf("%c \n", input[relative]);
         if(input[relative] == space)
             break;
 
