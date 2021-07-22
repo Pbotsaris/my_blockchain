@@ -40,7 +40,6 @@ int main(void)
 
     print_block_list(head, "dog");
 
-
     printf("------ Remove node: 1 Cat and 1 Dog ------\n");
     /* this removes a node by the nid one at time. */
     head = remove_node(head, 4);
