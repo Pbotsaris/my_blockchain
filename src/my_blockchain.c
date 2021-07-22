@@ -50,7 +50,7 @@ int main(void)
     printf("------ Remove block ------\n");
 
     /* this will remove all nodes with a matching bid */
-    head = remove_block(head, "dog");
+    head = remove_block(head, "sheep");
     
     /* Only sheeps will survive the slaugther -> see output */
     print_list(head);
