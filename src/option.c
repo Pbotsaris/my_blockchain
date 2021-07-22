@@ -28,22 +28,16 @@ static char *get_input(char *input, int *input_index)
 
 static bool_t check_number(char *input)
 {
-    int index = 0,
-        flag = 0,
-        size = (int)strlen(input) - 1;
-
+    int index = 0, flag = 0;
+    
     while(input[index]){
-        if(isdigit(input[index]) == 0){
+        if(isdigit(input[index]))
             flag++;
-        }
+
         index++;
     }
-    printf("flags %d\n", flag);
 
-    if(flag == size)
-        return TRUE;
-    else 
-        return FALSE;
+    return flag == index - 1;
 }
 
 
@@ -83,23 +77,19 @@ input_t* process_input(int file){
     int len_count = 0;
     input_t *arg = NULL;
 
-    /* sizeof(input) is of the pointer address not number of chars */
+    /* sizeof(input) is of the pointer address not number of chars
+    TODO: check for reading error with nbr = -1; 
+     */
     int nbr = read(file, input, 100);
     /*  extra safety  */
     input[nbr + 1] = '\0';
-
-    printf("input full: %s\n", input) ;
 
     /*TODO: if arg == NULL return error  */
     arg = (input_t*)malloc(sizeof(input_t));
 
     arg->cmd = get_input(input, &len_count);
     arg->type = get_input(input, &len_count);
-
     nid_bid = get_input(input, &len_count);
-    printf("len_count: %i, nid_bid %s\n", len_count, nid_bid);
-    
-    printf("type: %s\n", arg->type) ;
 
     if((strcmp(arg->type, NODE)) == 0){
         if((check_number(nid_bid)) == TRUE)
