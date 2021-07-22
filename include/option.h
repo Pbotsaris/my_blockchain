@@ -18,12 +18,12 @@ typedef enum{
     ERROROPT,
 } option_t;
 
-typedef struct input_split{
+typedef struct input{
     char *command;
     char *type;
     char *bid;
     int nid;
-} input_split;
+} input_t;
 
-input_split* process_input(int file);
-option_t check_option(input_split *input);
+input_t* process_input(int file);
+option_t check_option(input_t *input);

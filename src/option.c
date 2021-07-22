@@ -1,6 +1,6 @@
 #include "../include/list.h"
 
-bool_t check_number(char *input){
+static bool_t check_number(char *input){
 
     int index = 0,
         flag = 0,
@@ -20,7 +20,7 @@ bool_t check_number(char *input){
         return FALSE;
 }
 
-char *get_input(char *input, int relative){
+static char *get_input(char *input, int relative){
 
     char *ret_command = malloc(sizeof(char)*100);
 
@@ -42,15 +42,43 @@ char *get_input(char *input, int relative){
     return ret_command;
 }
 
-input_split* process_input(int file){
+static option_t check_add(input_t *input){
+    
+
+    if((strcmp(input->type, "node")) == 0){
+        return ADDNID;
+    }else if((strcmp(input->type, "block")) == 0){
+        return ADDBID;
+    }
+    return ERROROPT;
+}
+
+static option_t check_rm(input_t *input){
+
+    if((strcmp(input->type, "node")) == 0){
+        return RMNID;
+    }else if((strcmp(input->type, "block")) == 0){
+        return RMBID;
+    }
+    return ERROROPT;
+}
+
+/*
+ *
+                 PUBLIC
+
+ 
+                                               */
+
+input_t* process_input(int file){
 
     char *input = malloc(sizeof(char)*100);
 
     read(file, input, sizeof(input));
 
-    input_split *argument;
+    input_t *argument;
 
-    argument = malloc(sizeof(input_split));
+    argument = malloc(sizeof(input_t));
 
     argument->command = get_input(input, 0);
     argument->type = get_input(input, strlen(argument->command)+1);
@@ -74,28 +102,8 @@ input_split* process_input(int file){
     return argument;
 }
 
-option_t check_add(input_split *input){
-    
 
-    if((strcmp(input->type, "node")) == 0){
-        return ADDNID;
-    }else if((strcmp(input->type, "block")) == 0){
-        return ADDBID;
-    }
-    return ERROROPT;
-}
-
-option_t check_rm(input_split *input){
-
-    if((strcmp(input->type, "node")) == 0){
-        return RMNID;
-    }else if((strcmp(input->type, "block")) == 0){
-        return RMBID;
-    }
-    return ERROROPT;
-}
-
-option_t check_option(input_split *input){
+option_t check_option(input_t *input){
 
     option_t option = ERROROPT;
 
