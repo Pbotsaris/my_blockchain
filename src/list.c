@@ -15,7 +15,7 @@ node_t *init_list(char *bid, int nid)
     return head;
 }
 
-node_t *add_to_head(node_t *head, char *bid, int nid)
+node_t *add_node(node_t *head, char *bid, int nid)
 {
     node_t *node = (node_t*)malloc(sizeof(node_t));
     node->nid = nid;
@@ -47,10 +47,22 @@ node_t *remove_node(node_t *head, int nid)
             free(node_to_remove);
             break;
         }
-
         current = current->next;
     }
+    return head;
+}
 
+node_t *add_block(node_t *head, char *bid, int nid)
+{
+    node_t *current = head;
+
+    while(current)
+    {
+        if(nid == current->nid)
+            current->bid = bid;
+
+     current = current->next;
+    }
     return head;
 }
 
@@ -99,7 +111,7 @@ void print_list(node_t *head)
     node_t *current = head;
     while(current)
     {
-        printf("%s: %i\n", current->bid,current->nid);
+        printf("%i: %s, \n", current->nid, current->bid);
         current = current->next;
     }
 }

@@ -28,20 +28,23 @@ int main(void)
     int i;
 
     for (i = 1; i < 5; ++i) 
-        head = add_to_head(head, "dog", i);
+        head = add_node(head, "dog", i);
 
     for (i = 5; i < 10; ++i) 
-        head = add_to_head(head, "sheep", i);
+        head = add_node(head, "sheep", i);
 
     printf("------ Complete List ------\n");
-
     print_list(head);
 
     printf("------ Remove node ------\n");
-
-    /* this removed a node by the nid. Removed only one at the time */
+    /* this removes a node by the nid one at time. */
     head = remove_node(head, 4);
     head = remove_node(head, 0);
+    print_list(head);
+
+    /* add a block to a given node */
+    printf("------ Add Block  ------\n");
+    head = add_block(head,"giraffe", 7);
     print_list(head);
 
     printf("------ Remove block ------\n");
@@ -51,7 +54,6 @@ int main(void)
     
     /* Only sheeps will survive the slaugther -> see output */
     print_list(head);
-
     free_list(head);
 
 

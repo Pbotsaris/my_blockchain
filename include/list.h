@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define SELLECT_ALL "*"
+
 typedef struct node_s {
     int nid;
     char *bid;
@@ -11,7 +13,8 @@ typedef struct node_s {
     }node_t;
 
 node_t *init_list(char *bid, int nid);
-node_t *add_to_head(node_t *head, char *bid, int nid);
+node_t *add_node(node_t *head, char *bid, int nid);
+node_t *add_block(node_t *head, char *bid, int nid);
 node_t *remove_node(node_t *head, int nid);
 node_t *remove_block(node_t *head, char *bid);
 
