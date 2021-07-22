@@ -1,8 +1,17 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef INCLUDE_H
+#define INCLUDE_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "include/option.h"
+
+#endif
+
+
+#ifndef LIST_H
+#define LIST_H
 
 #define SELLECT_ALL "*"
 
