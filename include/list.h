@@ -22,6 +22,8 @@ int node_exists(node_t *head, int nid);
 int block_exists(node_t *head, char *bid);
 
 void print_list(node_t *head);
+void print_block_list(node_t *head, char *bid);
+
 void free_list(node_t *head);
 
 #endif

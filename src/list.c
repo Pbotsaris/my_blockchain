@@ -129,8 +129,6 @@ int block_exists(node_t *head, char *bid)
     return -1;
 }
 
-
-
 void print_list(node_t *head)
 {
     if(head == NULL)
@@ -146,6 +144,27 @@ void print_list(node_t *head)
         current = current->next;
     }
 }
+
+
+void print_block_list(node_t *head, char *bid)
+{
+    if(head == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
+
+    node_t *current = head;
+    while(current)
+    {
+
+        if(strcmp(current->bid, bid) == 0)
+              printf("%i: %s, \n", current->nid, current->bid);
+
+        current = current->next;
+    }
+}
+
 
 
 void free_list(node_t *head)
