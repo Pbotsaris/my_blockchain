@@ -48,11 +48,15 @@ int main(void)
 
     /* add a block to a given node */
     printf("------ Add Block: Giraffe  ------\n");
-    head = add_block(head,"giraffe", 7);
+    char* buffer = malloc(sizeof(char)*10);
+    /* char str[10] = "giraffe"; */
+    strcpy(buffer, "giraffe"); 
+    head = add_block(head, buffer, 7);
     print_list(head);
 
     printf("------ Remove block: Dogs ------\n");
     /* this will remove all nodes with a matching bid */
+    head = remove_block(head, "sheep");
     head = remove_block(head, "dog");
     print_list(head);
 
