@@ -1,7 +1,8 @@
 OBJ=obj/my_blockchain.o    	   				\
-		obj/list.o   
+		obj/list.o   						\
+		obj/option.o
 
-CFLAGS +=-W  -Wall -Wextra -g3 -fsanitize=address -Iinclude
+CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude
 CC=gcc 
 BIN=bin/my_blockchain
 RM=rm -rf
