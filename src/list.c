@@ -74,8 +74,8 @@ node_t *remove_block(node_t *head, char *bid)
                 current = head = current->next; 
             else 
             {
-                current->next = current->next;
-                current = prev->next;
+                prev->next = current->next;
+                current = current->next;
             }
             free(node_to_remove);
             continue;
