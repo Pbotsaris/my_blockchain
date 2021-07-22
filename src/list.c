@@ -99,6 +99,37 @@ node_t *remove_block(node_t *head, char *bid)
     return head;
 }
 
+int node_exists(node_t *head, int nid)
+{
+    int count = 0;
+    node_t *current = head;
+    while(current)
+    {
+        if(current->nid == nid)
+            return count;
+
+        current = current->next;
+        count++;
+    }
+    return -1;
+}
+
+int block_exists(node_t *head, char *bid)
+{
+    int count = 0;
+    node_t *current = head;
+    while(current)
+    {
+        if(strcmp(current->bid, bid) == 0)
+            return count;
+
+        current = current->next;
+        count++;
+    }
+    return -1;
+}
+
+
 
 void print_list(node_t *head)
 {
