@@ -26,7 +26,7 @@ int main(void)
     /* node_t *head = init_list("cat", 0); */
 
     int input = STDIN_FILENO;
-    input_split *processed_input = process_input(input);
+    input_t *processed_input = process_input(input);
 
 
     /* int i; */

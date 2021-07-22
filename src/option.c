@@ -1,7 +1,7 @@
 #include "../include/list.h"
 
-static bool_t check_number(char *input){
-
+static bool_t check_number(char *input)
+{
     int index = 0,
         flag = 0,
         size = strlen(input)-1;
@@ -20,12 +20,10 @@ static bool_t check_number(char *input){
         return FALSE;
 }
 
-static char *get_input(char *input, int relative){
-
+static char *get_input(char *input, int relative)
+{
     char *ret_command = malloc(sizeof(char)*100);
-
     int index = 0;
-    
     char space = ' ';
     
     while(input[relative]){
@@ -42,8 +40,8 @@ static char *get_input(char *input, int relative){
     return ret_command;
 }
 
-static option_t check_add(input_t *input){
-    
+static option_t check_add(input_t *input)
+{
 
     if((strcmp(input->type, "node")) == 0){
         return ADDNID;
@@ -53,7 +51,8 @@ static option_t check_add(input_t *input){
     return ERROROPT;
 }
 
-static option_t check_rm(input_t *input){
+static option_t check_rm(input_t *input)
+{
 
     if((strcmp(input->type, "node")) == 0){
         return RMNID;
@@ -76,30 +75,31 @@ input_t* process_input(int file){
 
     read(file, input, sizeof(input));
 
-    input_t *argument;
+    input_t *arg = NULL;
 
-    argument = malloc(sizeof(input_t));
+    /*TODO: if arg == NULL return error  */
+    arg = (input_t*)malloc(sizeof(input_t));
 
-    argument->command = get_input(input, 0);
-    argument->type = get_input(input, strlen(argument->command)+1);
+    arg->command = get_input(input, 0);
+    arg->type = get_input(input, strlen(arg->command)+1);
 
-    printf("%s\n", argument->command);
-    printf("%s\n", argument->type);
+    printf("%s\n", arg->command);
+    printf("%s\n", arg->type);
     
-    char *nid_bid = get_input(input, (strlen(argument->command)+1)+(strlen(argument->type)+1));
+    char *nid_bid = get_input(input, (strlen(arg->command)+1)+(strlen(arg->type)+1));
     
-    if((strcmp(argument->type, "node")) == 0){
+    if((strcmp(arg->type, "node")) == 0){
         if((check_number(nid_bid)) == TRUE)
-            argument->nid = atoi(nid_bid);
+            arg->nid = atoi(nid_bid);
         else
             printf("Error, you are trying to add a non numerical node\n");
 
-    }else if((strcmp(argument->type, "block")) == 0){
-        argument->bid = nid_bid;
-        printf("%s\n", argument->bid);
+    }else if((strcmp(arg->type, "block")) == 0){
+        arg->bid = nid_bid;
+        printf("%s\n", arg->bid);
     }
 
-    return argument;
+    return arg;
 }
 
 

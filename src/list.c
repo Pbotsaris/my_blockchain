@@ -3,7 +3,7 @@
 
 /*
  *
-   PRIVATE
+                   PRIVATE
                                              */
 
 static void make_bid_buffer(char *bid, node_t *node)
@@ -16,7 +16,8 @@ static void make_bid_buffer(char *bid, node_t *node)
 
 /*
  *
-   PUBLIC
+ *
+                    PUBLIC
                                              */
 
 node_t *init_list(char *bid, int nid)
