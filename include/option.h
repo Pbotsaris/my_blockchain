@@ -19,7 +19,7 @@ typedef enum{
 } option_t;
 
 typedef struct input{
-    char *command;
+    char *cmd;
     char *type;
     char *bid;
     int nid;
