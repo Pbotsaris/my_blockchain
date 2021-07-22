@@ -15,4 +15,4 @@ obj/%.o: src/%.c
 	${CC} ${CFLAGS} -c $< -o $@
 
 clean:
-	$(RM) bin/$(BIN) bin/*.dSYM obj/*
+	$(RM) bin/$(BIN) bin/*.dSYM obj/*.o
