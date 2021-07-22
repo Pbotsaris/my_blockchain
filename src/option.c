@@ -24,13 +24,13 @@ static char *get_input(char *input, int *input_index)
     return ret_command;
 }
 
-/* Functions in the order they are executed */
+/* Functions in the order of execution */
 
 static bool_t check_number(char *input)
 {
     int index = 0,
         flag = 0,
-        size = strlen(input)-1;
+        size = (int)strlen(input) - 1;
 
     while(input[index]){
         if(isdigit(input[index]) == 0){
@@ -79,10 +79,16 @@ static option_t check_rm(input_t *input)
 input_t* process_input(int file){
 
     char *input = malloc(sizeof(char)*100);
+    char *nid_bid = NULL;
     int len_count = 0;
     input_t *arg = NULL;
 
-    read(file, input, sizeof(input));
+    /* sizeof(input) is of the pointer address not number of chars */
+    int nbr = read(file, input, 100);
+    /*  extra safety  */
+    input[nbr + 1] = '\0';
+
+    printf("input full: %s\n", input) ;
 
     /*TODO: if arg == NULL return error  */
     arg = (input_t*)malloc(sizeof(input_t));
@@ -90,17 +96,16 @@ input_t* process_input(int file){
     arg->cmd = get_input(input, &len_count);
     arg->type = get_input(input, &len_count);
 
-    printf("%s\n", arg->cmd);
-    printf("%s\n", arg->type);
+    nid_bid = get_input(input, &len_count);
+    printf("len_count: %i, nid_bid %s\n", len_count, nid_bid);
     
-    len_count++;
-    char *nid_bid = get_input(input, &len_count);
-    
+    printf("type: %s\n", arg->type) ;
+
     if((strcmp(arg->type, NODE)) == 0){
         if((check_number(nid_bid)) == TRUE)
             arg->nid = atoi(nid_bid);
         else
-            /* TODO: return an error */
+            /* TODO: return error */
             printf("Error, you are trying to add a non numerical node\n");
     }
 

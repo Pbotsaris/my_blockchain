@@ -25,8 +25,14 @@ int main(void)
     /* Init list with 1 items. List functions ALWAYS return the head */
     /* node_t *head = init_list("cat", 0); */
 
-    int input = STDIN_FILENO;
-    input_t *processed_input = process_input(input);
+    input_t *input = process_input(STDIN_FILENO);
+
+    printf("cmd: %s, type: %s, bid: %s, nid: %i\n", input->cmd, input->type, input->bid, input->nid);
+
+    free(input->cmd);
+    free(input->type);
+
+
 
 
     /* int i; */
