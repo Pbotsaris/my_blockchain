@@ -1,5 +1,10 @@
 #include "../include/list.h"
 
+/*
+ *
+   PRIVATE
+                                             */
+
 static char *make_bid_buffer(char *bid)
 {
 
@@ -9,12 +14,17 @@ static char *make_bid_buffer(char *bid)
     return buffer;
 }
 
+/*
+ *
+   PUBLIC 
+                                             */
+
+
 node_t *init_list(char *bid, int nid)
 {
     node_t *head = (node_t*)malloc(sizeof(node_t));
 
     char *buffer = make_bid_buffer(bid);
-
     if(head == NULL)
         return NULL;
 
@@ -40,7 +50,7 @@ node_t *add_node(node_t *head, char *bid, int nid)
 node_t *remove_node(node_t *head, int nid)
 {
     node_t *current = head;
-    node_t *node_to_remove = NULL;
+    node_t *prev = NULL;
 
     if(head->nid == nid)
     { 
@@ -50,18 +60,19 @@ node_t *remove_node(node_t *head, int nid)
         return head;
     }
 
-    while(current->next)
+    while(current)
     {
-        if(current->next->nid == nid)
+        if(current->nid == nid)
         {
-            node_to_remove = current->next;
-            current->next = current->next->next;
-            free(node_to_remove->bid);
-            free(node_to_remove);
+            prev->next = current->next;
+            free(current->bid);
+            free(current);
             break;
         }
+        prev = current;
         current = current->next;
     }
+
     return head;
 }
 
@@ -75,9 +86,9 @@ node_t *add_block(node_t *head, char *bid, int nid)
     {
         if(nid == current->nid)
             current->bid = buffer;
-
         current = current->next;
     }
+
     return head;
 }
 
@@ -87,30 +98,12 @@ node_t *remove_block(node_t *head, char *bid)
         return NULL;
 
     node_t *current = head;
-    node_t *prev = NULL;
 
     while(current)
     {
-        node_t *node_to_remove = NULL;
-
         if(strcmp(current->bid, bid) == 0)
-        {
-            node_to_remove = current;
-
-            if (current == head)
-                current = head = current->next; 
-            else 
-            {
-                prev->next = current->next;
-                current = current->next;
-            }
-            free(node_to_remove->bid);
-            free(node_to_remove);
-
-            continue;
-        }
-        prev = current;
-        current = current->next;
+            current->bid[0] = '\0';
+            current = current->next;
     }
 
     return head;
@@ -173,7 +166,6 @@ void print_block_list(node_t *head, char *bid)
     node_t *current = head;
     while(current)
     {
-
         if(strcmp(current->bid, bid) == 0)
             printf("%i: %s, \n", current->nid, current->bid);
 
@@ -183,7 +175,6 @@ void print_block_list(node_t *head, char *bid)
 
 void free_list(node_t *head)
 {
-
     if(head == NULL)
         return;
 
@@ -197,8 +188,4 @@ void free_list(node_t *head)
         current = next;
     }
 }
-
-
-
-
 
