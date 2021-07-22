@@ -8,7 +8,7 @@ static char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
     int index = 0;
-    
+
     while(input[*input_index]){
 
         if(input[*input_index] == SPACE)
@@ -19,7 +19,7 @@ static char *get_input(char *input, int *input_index)
         (*input_index)++;
     }
 
-   (*input_index)++;
+    (*input_index)++;
     ret_command[index] = '\0';
     return ret_command;
 }
@@ -29,7 +29,7 @@ static char *get_input(char *input, int *input_index)
 static bool_t check_number(char *input)
 {
     int index = 0, flag = 0;
-    
+
     while(input[index]){
         if(isdigit(input[index]))
             flag++;
@@ -43,7 +43,6 @@ static bool_t check_number(char *input)
 
 static option_t check_add(input_t *input)
 {
-
     if((strcmp(input->type, NODE)) == 0){
         return ADDNID;
     }else if((strcmp(input->type, "block")) == 0){
@@ -65,10 +64,10 @@ static option_t check_rm(input_t *input)
 
 /*
  *
-                 PUBLIC
+                         PUBLIC
 
- 
-                                               */
+
+                                                            */
 
 input_t* process_input(int file){
 
@@ -78,8 +77,8 @@ input_t* process_input(int file){
     input_t *arg = NULL;
 
     /* sizeof(input) is of the pointer address not number of chars
-    TODO: check for reading error with nbr = -1; 
-     */
+      TODO: check for reading error with nbr = -1; 
+*/
     int nbr = read(file, input, 100);
     /*  extra safety  */
     input[nbr + 1] = '\0';
@@ -106,7 +105,6 @@ input_t* process_input(int file){
 
     /* free functions */
     free(input);
-
     return arg;
 }
 
