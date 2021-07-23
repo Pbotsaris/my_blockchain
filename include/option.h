@@ -6,20 +6,21 @@ typedef enum{
     ERRORBOOL,
 } bool_t;
 
+
 typedef enum{
-    ADDNID,
-    ADDBID,
-    RMNID,
-    RMBID,
+    ADDNID, /* These are really hard to understand */
+    ADDBID, /* These are really hard to understand */
+    RMNID, /* These are really hard to understand */
+    RMBID, /* These are really hard to understand */
     LS,
     SYNC,
     QUIT,
     NONE,
-    ERROROPT,
+    ERROROPT, /* These are really hard to understand */
 } option_t;
 
 typedef struct input{
-    char *command;
+    char *cmd;
     char *type;
     char *bid;
     int nid;

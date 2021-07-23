@@ -1,51 +1,49 @@
 #include "../include/list.h"
+#define SPACE ' '
+#define NODE "node"
+#define BLOCK "block"
 
-static bool_t check_number(char *input){
 
-    int index = 0,
-        flag = 0,
-        size = strlen(input)-1;
-
-    while(input[index]){
-        if(isdigit(input[index]) == 0){
-            flag++;
-        }
-        index++;
-    }
-    printf("flags %d\n", flag);
-
-    if(flag == size)
-        return TRUE;
-    else 
-        return FALSE;
-}
-
-static char *get_input(char *input, int relative){
-
-    char *ret_command = malloc(sizeof(char)*100);
-
+static char *get_input(char *input, int *input_index)
+{
+    char *ret_command = (char*)malloc(sizeof(char)*100);
     int index = 0;
-    
-    char space = ' ';
-    
-    while(input[relative]){
 
-        if(input[relative] == space)
+    while(input[*input_index]){
+
+        if(input[*input_index] == SPACE)
             break;
 
-        ret_command[index] =  input[relative];
+        ret_command[index] = input[*input_index];
         index++;
-        relative++;
+        (*input_index)++;
     }
-    
+
+    (*input_index)++;
     ret_command[index] = '\0';
     return ret_command;
 }
 
-static option_t check_add(input_t *input){
-    
+/* Functions in the order of execution */
 
-    if((strcmp(input->type, "node")) == 0){
+static bool_t check_number(char *input)
+{
+    int index = 0, flag = 0;
+
+    while(input[index]){
+        if(isdigit(input[index]))
+            flag++;
+
+        index++;
+    }
+
+    return flag == index - 1;
+}
+
+
+static option_t check_add(input_t *input)
+{
+    if((strcmp(input->type, NODE)) == 0){
         return ADDNID;
     }else if((strcmp(input->type, "block")) == 0){
         return ADDBID;
@@ -53,9 +51,10 @@ static option_t check_add(input_t *input){
     return ERROROPT;
 }
 
-static option_t check_rm(input_t *input){
+static option_t check_rm(input_t *input)
+{
 
-    if((strcmp(input->type, "node")) == 0){
+    if((strcmp(input->type, NODE)) == 0){
         return RMNID;
     }else if((strcmp(input->type, "block")) == 0){
         return RMBID;
@@ -65,41 +64,48 @@ static option_t check_rm(input_t *input){
 
 /*
  *
-                 PUBLIC
+                         PUBLIC
 
- 
-                                               */
+
+                                                            */
 
 input_t* process_input(int file){
 
     char *input = malloc(sizeof(char)*100);
+    char *nid_bid = NULL;
+    int len_count = 0;
+    input_t *arg = NULL;
 
-    read(file, input, sizeof(input));
+    /* sizeof(input) is of the pointer address not number of chars
+      TODO: check for reading error with nbr = -1; 
+*/
+    int nbr = read(file, input, 100);
+    /*  extra safety  */
+    input[nbr + 1] = '\0';
 
-    input_t *argument;
+    /*TODO: if arg == NULL return error  */
+    arg = (input_t*)malloc(sizeof(input_t));
 
-    argument = malloc(sizeof(input_t));
+    arg->cmd = get_input(input, &len_count);
+    arg->type = get_input(input, &len_count);
+    nid_bid = get_input(input, &len_count);
 
-    argument->command = get_input(input, 0);
-    argument->type = get_input(input, strlen(argument->command)+1);
-
-    printf("%s\n", argument->command);
-    printf("%s\n", argument->type);
-    
-    char *nid_bid = get_input(input, (strlen(argument->command)+1)+(strlen(argument->type)+1));
-    
-    if((strcmp(argument->type, "node")) == 0){
+    if((strcmp(arg->type, NODE)) == 0){
         if((check_number(nid_bid)) == TRUE)
-            argument->nid = atoi(nid_bid);
+            arg->nid = atoi(nid_bid);
         else
+            /* TODO: return error */
             printf("Error, you are trying to add a non numerical node\n");
-
-    }else if((strcmp(argument->type, "block")) == 0){
-        argument->bid = nid_bid;
-        printf("%s\n", argument->bid);
     }
 
-    return argument;
+    if((strcmp(arg->type, BLOCK)) == 0){
+        arg->bid = nid_bid;
+        printf("%s\n", arg->bid);
+    }
+
+    /* free functions */
+    free(input);
+    return arg;
 }
 
 
@@ -108,20 +114,20 @@ option_t check_option(input_t *input){
     option_t option = ERROROPT;
 
     if(input->type == NULL){
-        if((strcmp(input->command, "ls")) == 0){
+        if((strcmp(input->cmd, "ls")) == 0){
             option = LS;
-        }else if((strcmp(input->command, "sync"))==0){
+        }else if((strcmp(input->cmd, "sync"))==0){
             option = SYNC;
-        }else if((strcmp(input->command, "QUIT")) == 0){
+        }else if((strcmp(input->cmd, "QUIT")) == 0){
             option = QUIT;
         }
     }
 
-    if((strcmp(input->command, "add")) == 0){
+    if((strcmp(input->cmd, "add")) == 0){
         option = check_add(input);
     }
 
-    if((strcmp(input->command, "rm"))== 0){
+    if((strcmp(input->cmd, "rm"))== 0){
         option = check_rm(input);
     }
 
