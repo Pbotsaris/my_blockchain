@@ -170,7 +170,6 @@ void free_list(node_t *head)
     while (current)
     {
         next = current->next;
-        printf("freeling this: %s\n", current->bid);
         free(current->bid);
         free(current);
         current = next;
