@@ -2,5 +2,5 @@ obj/*.o
 !obj/.gitkeep
 bin/*.dSYM
 *.dSYM
-.idea
+.idea/*
 .DS_Store
