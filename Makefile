@@ -1,19 +1,23 @@
-OBJ=obj/my_blockchain.o    	   				\
-		obj/list.o   						\
-		obj/option.o
+
+SRC=src
+OBJ=obj
+B=bin
+
+SRCS=$(wildcard $(SRC)/*.c)
+OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude
 CC=gcc 
-BIN=bin/my_blockchain
+BIN=$(B)/my_blockchain
 RM=rm -rf
 
 all: $(BIN)
 
-$(BIN): $(OBJ)
-	$(CC) -o $(BIN) $(OBJ) $(CFLAGS) 
+$(BIN): $(OBJS)
+	$(CC) -o $(BIN) $(OBJS) $(CFLAGS) 
 
-obj/%.o: src/%.c 
+$(OBJ)/%.o: $(SRC)/%.c 
 	${CC} ${CFLAGS} -c $< -o $@
 
 clean:
-	$(RM) $(BIN) bin/*.dSYM obj/*.o
+	$(RM) $(BIN) $(B)/*.dSYM $(OBJ)/*.o
