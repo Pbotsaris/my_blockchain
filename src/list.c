@@ -79,7 +79,7 @@ node_t *add_block(node_t *head, char *bid, int nid)
 
     while (current)
     {
-        if (nid == current->nid) make_bid_buffer(bid, head);
+        if (nid == current->nid) make_bid_buffer(bid, current);
 
         current = current->next;
     }
