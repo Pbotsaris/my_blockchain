@@ -46,6 +46,9 @@ node_t *add_node(node_t *head, char *bid, int nid)
 
 node_t *remove_node(node_t *head, int nid)
 {
+
+    if (head == NULL) return NULL;
+    
     node_t *current = head;
     node_t *prev = NULL;
 
@@ -75,6 +78,9 @@ node_t *remove_node(node_t *head, int nid)
 
 node_t *add_block(node_t *head, char *bid, int nid)
 {
+
+    if (head == NULL) return NULL;
+
     node_t *current = head;
 
     while (current)
@@ -96,6 +102,8 @@ node_t *remove_block(node_t *head, char *bid)
     {
         if((strcmp(current->bid, bid)) == 0)
             current->bid[0] = '\0';
+
+        current = current->next;
     }
 
     return head;
