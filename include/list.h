@@ -24,20 +24,21 @@ typedef struct node_s {
     int nid;
     char *bid;
     struct node_s *next; 
-}node_t;
+}unsynced;
 
-node_t *init_list(char *bid, int nid);
-node_t *add_node(node_t *head, char *bid, int nid);
-node_t *add_block(node_t *head, char *bid, int nid);
-node_t *remove_node(node_t *head, int nid);
-node_t *remove_block(node_t *head, char *bid);
+unsynced *init_list(char *bid, int nid);
+unsynced *add_node(unsynced *head, char *bid, int nid);
+unsynced *add_block(unsynced *head, char *bid, int nid);
+unsynced *remove_node(unsynced *head, int nid);
+unsynced *remove_block(unsynced *head, char *bid);
 
-int node_exists(node_t *head, int nid);
-int block_exists(node_t *head, char *bid);
+option_t process_input(int std_in, unsynced *data);
+int node_exists(unsynced *head, int nid);
+int block_exists(unsynced *head, char *bid);
 
-void print_list(node_t *head);
-void print_block_list(node_t *head, char *bid);
+void print_list(unsynced *head);
+void print_block_list(unsynced *head, char *bid);
 
-void free_list(node_t *head);
+void free_list(unsynced *head);
 
 #endif
