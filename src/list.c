@@ -6,7 +6,7 @@
                    PRIVATE
                                              */
 
-static void make_bid_buffer(char *bid, node_t *node)
+static void make_bid_buffer(char *bid, unsynced *node)
 {
     size_t len = strlen(bid);
 
@@ -20,9 +20,9 @@ static void make_bid_buffer(char *bid, node_t *node)
                     PUBLIC
                                              */
 
-node_t *init_list(char *bid, int nid)
+unsynced *init_list(char *bid, int nid)
 {
-    node_t *head = (node_t *)malloc(sizeof(node_t));
+    unsynced *head = (unsynced *)malloc(sizeof(unsynced));
 
     if (head == NULL) return NULL;
 
@@ -33,9 +33,9 @@ node_t *init_list(char *bid, int nid)
     return head;
 }
 
-node_t *add_node(node_t *head, char *bid, int nid)
+unsynced *add_node(unsynced *head, char *bid, int nid)
 {
-    node_t *node = (node_t *)malloc(sizeof(node_t));
+    unsynced *node = (unsynced *)malloc(sizeof(unsynced));
 
     make_bid_buffer(bid, node);
     node->nid = nid;
@@ -44,13 +44,13 @@ node_t *add_node(node_t *head, char *bid, int nid)
     return node;
 }
 
-node_t *remove_node(node_t *head, int nid)
+unsynced *remove_node(unsynced *head, int nid)
 {
 
     if (head == NULL) return NULL;
     
-    node_t *current = head;
-    node_t *prev = NULL;
+    unsynced *current = head;
+    unsynced *prev = NULL;
 
     if (head->nid == nid)
     {
@@ -76,12 +76,12 @@ node_t *remove_node(node_t *head, int nid)
     return head;
 }
 
-node_t *add_block(node_t *head, char *bid, int nid)
+unsynced *add_block(unsynced *head, char *bid, int nid)
 {
 
     if (head == NULL) return NULL;
 
-    node_t *current = head;
+    unsynced *current = head;
 
     while (current)
     {
@@ -93,11 +93,11 @@ node_t *add_block(node_t *head, char *bid, int nid)
     return head;
 }
 
-node_t *remove_block(node_t *head, char *bid)
+unsynced *remove_block(unsynced *head, char *bid)
 {
     if (head == NULL) return NULL;
 
-    node_t *current = head;
+    unsynced *current = head;
     while (current)
     {
         if((strcmp(current->bid, bid)) == 0)
@@ -109,10 +109,10 @@ node_t *remove_block(node_t *head, char *bid)
     return head;
 }
 
-int node_exists(node_t *head, int nid)
+int node_exists(unsynced *head, int nid)
 {
     int count = 0;
-    node_t *current = head;
+    unsynced *current = head;
     while (current)
     {
         if (current->nid == nid) return count;
@@ -123,10 +123,10 @@ int node_exists(node_t *head, int nid)
     return -1;
 }
 
-int block_exists(node_t *head, char *bid)
+int block_exists(unsynced *head, char *bid)
 {
     int count = 0;
-    node_t *current = head;
+    unsynced *current = head;
     while (current)
     {
         if (strcmp(current->bid, bid) == 0) return count;
@@ -137,7 +137,7 @@ int block_exists(node_t *head, char *bid)
     return -1;
 }
 
-void print_list(node_t *head)
+void print_list(unsynced *head)
 {
     if (head == NULL)
     {
@@ -145,7 +145,7 @@ void print_list(node_t *head)
         return;
     }
 
-    node_t *current = head;
+    unsynced *current = head;
     while (current)
     {
         printf("%i: %s, \n", current->nid, current->bid);
@@ -153,11 +153,11 @@ void print_list(node_t *head)
     }
 }
 
-void print_block_list(node_t *head, char *bid)
+void print_block_list(unsynced *head, char *bid)
 {
     if (head == NULL) return;
 
-    node_t *current = head;
+    unsynced *current = head;
     while (current)
     {
         if (strcmp(current->bid, bid) == 0)
@@ -167,13 +167,13 @@ void print_block_list(node_t *head, char *bid)
     }
 }
 
-void free_list(node_t *head)
+void free_list(unsynced *head)
 {
     if (head == NULL)
         return;
 
-    node_t *current = head;
-    node_t *next = NULL;
+    unsynced *current = head;
+    unsynced *next = NULL;
 
     while (current)
     {
