@@ -66,6 +66,7 @@ int get_nid(char* nid_bid){
     if((check_number(nid_char)) == TRUE){
         nid = atoi(nid_char);
     }else{
+        /* TODO return a correct error */
         printf("Error, trying to add non numerical node\n");
         return -1;
     }
@@ -90,6 +91,7 @@ char *get_bid(char* nid_bid){
                     return bid;
                 }else{ 
                     printf("Error, provided nid isn't valid\n");
+                    free(bid);
                     return NULL;
                 }
             } 
@@ -104,19 +106,14 @@ char *get_bid(char* nid_bid){
     return bid;
 } 
 
-option_t check_add_node(char *nid, char *bid, unsynced *data){
+option_t check_add_node(char *nid_bid, char *bid, unsynced *data){
 
     option_t option = NONE;
+    int nid = get_nid(nid_bid); 
 
-    if((check_number(nid)) == TRUE){
-            data = add_node(data, bid, atoi(nid));
-            option = ADD_NID;
-    }else{
-        printf("Error, trying to add a non numerical node\n");
-        return ERROROPT;
-    } 
+    data = add_node(data, bid, nid);
 
-    return option;
+    return ADD_NID;
 }
 
 
