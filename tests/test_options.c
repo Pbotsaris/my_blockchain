@@ -3,59 +3,113 @@
 #include "../include/test.h"
 
 
-#define BUFF_SIZE 100
-
-
-char* load_from_file(const char *path)
+option_t create_test_option(char* command)
 {
-   char *buffer = malloc(sizeof(char)*BUFF_SIZE);
-   int fd = open(path, O_RDONLY);
-   int read_size = read(fd, buffer, BUFF_SIZE);
-   buffer[read_size] = '\0';
-   close(fd); 
+   int len = 0;
+   input_t input;
+   input.cmd = get_input(command, &len);
+   input.typ = get_input(command, &len);
+   return get_option(&input);
 
-   return buffer;
 }
-
 
 START_TEST (test_get_cmd_type_stdin_buffer)
 {
    int len = 0;
-   char *buffer = load_from_file("tests/test_commands/add_node.txt");
+   char buffer[] = "add node 12";
    char *cmd = get_input(buffer, &len);
    char *type = get_input(buffer, &len);
 
    ck_assert_str_eq(cmd, "add");
    ck_assert_str_eq(type, "node");
-   free(buffer);
 }
 END_TEST
+
 
 START_TEST (get_option_from_stdin_buffer)
 {
-   int len = 0;
-   char *buffer = load_from_file("tests/test_commands/add_node.txt");
-   input_t input;
+   
+   option_t option = create_test_option("quit");
+   option_t test_option = QUIT;
+   ck_assert_int_eq(option, test_option); 
 
-   input.cmd = get_input(buffer, &len);
-   input.typ = get_input(buffer, &len);
-   option_t result = get_option(&input);
 
-   ck_assert_int_eq(result, 4); // NONE
+   option = create_test_option("add node 12");
+   test_option = NONE;
+   ck_assert_int_eq(option, test_option); 
 
-//typedef enum{
-//    LS_NID,
-//    LS_NID_BID,
-//    SYNC,
-//    QUIT,
-//    NONE,
-//    ERROR_OPTION,
-//} option_t;
-//
+   option = create_test_option("ls");
+   test_option = LS_NID;
+   ck_assert_int_eq(option, test_option); 
 
+   option = create_test_option("ls -l");
+   test_option = LS_NID_BID;
+   ck_assert_int_eq(option, test_option); 
+
+   option = create_test_option("sync");
+   test_option = SYNC;
+   ck_assert_int_eq(option, test_option); 
+
+
+   option = create_test_option("randocommand");
+   test_option = ERROR_OPTION;
+   ck_assert_int_eq(option, test_option); 
 
 }
 END_TEST
+
+
+START_TEST (test_clean_stdin_buffer)
+{
+
+   // get 3 item? 
+   char buffer[] = "add node 10\n";
+   char *return_buffer =  clean_std_in(buffer);
+   ck_assert_str_eq(return_buffer, "10");
+
+   //  WHEN DOES IT RETURN NULL????
+   char buffer_error[] = "  rando -d , di, \n";
+   return_buffer =  clean_std_in(buffer_error);
+   ck_assert_ptr_null(return_buffer);
+
+
+   // multiple space case 
+   char buffer2[] = "  add    node   10\n";
+   return_buffer =  clean_std_in(buffer2);
+   ck_assert_str_eq(return_buffer, "10");
+
+
+   free(return_buffer);
+
+}
+END_TEST
+
+START_TEST (test_check_impact)
+{
+
+   // get 3 item? 
+   char buffer[] = "add block 21 *\n";
+
+   bool_t result = check_block_impact(buffer);
+   ck_assert_int_eq(result, TRUE);
+
+   char buffer2[] = "add block 21\n";
+   result = check_block_impact(buffer2);
+   ck_assert_int_eq(result, FALSE);
+
+
+   char buffer3[] = "add node 21 *\n";
+   result = check_block_impact(buffer3);
+   ck_assert_int_eq(result, FALSE);
+
+    char buffer4[] = "** add  * node 21 *\n";
+   result = check_block_impact(buffer4);
+   ck_assert_int_eq(result, FALSE);
+
+  
+}
+END_TEST
+
 
 
 Suite * test_options(void)
@@ -68,7 +122,9 @@ Suite * test_options(void)
 
    tcase_add_test(core, test_get_cmd_type_stdin_buffer);
    tcase_add_test(core, get_option_from_stdin_buffer);
-    suite_add_tcase(suite, core);
+   tcase_add_test(core, test_clean_stdin_buffer);
+   tcase_add_test(core, test_check_impact);
+   suite_add_tcase(suite, core);
 
    return(suite);
 }

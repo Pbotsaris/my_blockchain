@@ -31,7 +31,8 @@
     return ret_command;
 }
 
-static char *clean_std_in(char *std_in){
+ char *clean_std_in(char *std_in)
+{
     
     int index = 0,
         flag_space = 2;
@@ -65,7 +66,9 @@ static char *clean_std_in(char *std_in){
     return ret_str;
 }
 
-bool_t check_block_impact(char *std_in){
+
+bool_t check_block_impact(char *std_in)
+{
     if(std_in[strlen(std_in)-2] == '*')
         return TRUE;
     else return FALSE;
