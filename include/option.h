@@ -8,23 +8,17 @@ typedef enum{
 
 
 typedef enum{
-    ADDNID, /* These are really hard to understand */
-    ADDBID, /* These are really hard to understand */
-    RMNID, /* These are really hard to understand */
-    RMBID, /* These are really hard to understand */
-    LS,
+    ADD_NID, /* These are really hard to understand */
+    ADD_BID, /* These are really hard to understand */
+    RM_NID, /* These are really hard to understand */
+    RM_BID, /* These are really hard to understand */
+    ADD_BID_ALL,
+    RM_BID_ALL,
+    LS_NID,
+    LS_NID_BID,
     SYNC,
     QUIT,
     NONE,
     ERROROPT, /* These are really hard to understand */
 } option_t;
 
-typedef struct input{
-    char *cmd;
-    char *type;
-    char *bid;
-    int nid;
-} input_t;
-
-input_t* process_input(int file);
-option_t check_option(input_t *input);

@@ -22,10 +22,9 @@
 
 int main(void)
 {
-
- //   input_t *input = process_input(STDIN_FILENO);
-
-//    printf("cmd: %s, type: %s, bid: %s, nid: %i\n", input->cmd, input->type, input->bid, input->nid);
+    unsynced *data = NULL;
+    process_input(STDIN_FILENO, data); 
+    /* printf("cmd: %s, type: %s, bid: %s, nid: %i\n", input->cmd, input->type, input->bid, input->nid); */
 
     /* TODO: NEED FUNCTION TO FREE THESE */
  //   free(input->cmd);
