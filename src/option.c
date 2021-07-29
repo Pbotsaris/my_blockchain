@@ -10,7 +10,7 @@
  *
  *                                              */
 
-static char *get_input(char *input, int *input_index)
+ char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
     int index = 0;
@@ -165,7 +165,6 @@ static status_t process_command_add(input_t *input, char* std_in, unsynced *data
 
 /*
  *
- *
  *        Remove NODE
  *                                                      */
 
@@ -242,7 +241,8 @@ static status_t process_command_rm(input_t *input, char* std_in, unsynced *data)
 
 // TODO add functions under each case unless quit
 
-option_t get_option(input_t *input){
+option_t get_option(input_t *input)
+{
 
     option_t option = NONE;
 
@@ -268,9 +268,7 @@ option_t get_option(input_t *input){
 option_t process_input(int std_in, unsynced *data){
 
     input_t *input = malloc(sizeof(input_t));
-    
     int len_count = 0;
-    
     char *buffer = malloc(sizeof(char)*BUFF_SIZE);
 
     int read_ret = read(std_in, buffer, BUFF_SIZE);

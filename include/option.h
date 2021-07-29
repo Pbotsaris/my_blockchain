@@ -1,3 +1,7 @@
+#ifndef OPTION_H
+#define OPTION_H
+
+
 #define MAX_OPT_LEN 6
 
 typedef enum{
@@ -29,3 +33,6 @@ typedef struct input_split{
     char *nid;
     bool_t impact_all;
 } input_t;
+
+#endif
+
