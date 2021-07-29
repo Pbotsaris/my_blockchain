@@ -2,17 +2,22 @@
 #define SPACE ' '
 #define NODE "node"
 #define BLOCK "block"
+#define BUFF_SIZE 100
+
+/*
+ *
+ * PRIVATE FUNCTION
+ *
+ *                                              */
 
 static char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
-    static int enteries = 0;
-    enteries++;
     int index = 0;
 
-    while(input[*input_index] != '\n'){
+    while(input[*input_index]){
 
-        if(input[*input_index] == SPACE && enteries <= 2)
+        if(input[*input_index] == SPACE)
             break;
 
         ret_command[index] = input[*input_index];
@@ -26,7 +31,48 @@ static char *get_input(char *input, int *input_index)
     return ret_command;
 }
 
+static char *clean_std_in(char *std_in){
+    
+    int index = 0,
+        flag_space = 2;
+    
+    char *ret_str = malloc(sizeof(char)*strlen(std_in));
+
+    while(std_in[index] || std_in[index] != '\n'){
+        if(std_in[index] == SPACE)
+            flag_space--;
+
+        if(flag_space == 0)
+            break;
+
+
+        index++;
+    }
+
+    int current = index+1;
+    index = 0;
+
+    while(std_in[current]){
+
+        ret_str[index] = std_in[current];
+
+        index++;
+        current++;
+    }
+
+    ret_str[index] = '\0';
+
+    return ret_str;
+}
+
+bool_t check_block_impact(char *std_in){
+    if(std_in[strlen(std_in)-2] == '*')
+        return TRUE;
+    else return FALSE;
+}
+
 static bool_t check_number(char* input){
+
     int index = 0,
         flag = 0;
 
@@ -36,204 +82,220 @@ static bool_t check_number(char* input){
         
         index++;
     }
-
-    return flag == index;
+    
+    return flag == index-1;
 }
 
-int get_nid(char* nid_bid){
-    
-    char *nid_char = malloc(sizeof(char)*100);
-    int index = 0,
-        current = 0,
-        nid = 0;
+/*
+ *
+ *
+ *       ADD NODE
+ *                                                      */
 
-    while(nid_bid[current]){
-        if(nid_bid[current] == SPACE){
-            current++;;
-            break;
-        }
+static status_t check_add_block(input_t *input, char* std_in, unsynced *data){
 
-        current++;
-    }
+    int len_count = 0;
 
-    while(nid_bid[current] || nid_bid[current] == '\n'){
-        nid_char[index] = nid_bid[current];     
-        index++;
-        current++;
-    }
-    
-    nid_char[index] = '\0';
-    if((check_number(nid_char)) == TRUE){
-        nid = atoi(nid_char);
+    input->impact_all= check_block_impact(std_in);
+
+    if(input->impact_all == TRUE){
+        // TODO function that changes the previous passed nodes
+        input->bid = get_input(std_in, &len_count);
     }else{
-        printf("Error, trying to add non numerical node\n");
-        return -1;
-    }
 
-    return nid;
+        input->one_time_bid = get_input(std_in, &len_count);
+        input->nid = get_input(std_in, &len_count);
 
-}
+        if(check_number(input->nid) == TRUE){
 
-char *get_bid(char* nid_bid){
-    
-    int index = 0;
-    char *bid = malloc(sizeof(char)*100);
+            data = add_block(data, input->one_time_bid, atoi(input->nid));
+            free(input->one_time_bid);
+            return SUCCESS;
 
-    while(nid_bid[index]){
-        if(nid_bid[index] == SPACE){
-            bid[index] = nid_bid[index];
-            index++;
-            if(nid_bid[index] == '*'){
-                if(nid_bid[index+1] == '\0'){
-                    bid[index] = nid_bid[index];
-                    bid[index+1] = '\0';
-                    return bid;
-                }else{ 
-                    printf("Error, provided nid isn't valid\n");
-                    free(bid);
-                    return NULL;
-                }
-            } 
-            break;
+        }else{
+
+            printf("Error, trying to add non numerical node or a null\n");
+            return FAIL;
         }
-
-        
-        bid[index] = nid_bid[index];
-        index++;
     }
 
-    return bid;
-} 
-
-option_t check_add_node(char *nid, char *bid, unsynced *data){
-
-    option_t option = NONE;
-
-    if((check_number(nid)) == TRUE){
-            data = add_node(data, bid, atoi(nid));
-            option = ADD_NID;
-    }else{
-        printf("Error, trying to add a non numerical node\n");
-        return ERROROPT;
-    } 
-
-    return option;
+    return SUCCESS;
 }
 
+static status_t check_add_node(input_t *input, char *std_in, unsynced *data){
+    
+    if(check_number(std_in) == FALSE)
+        return FAIL;
 
+    if(input->impact_all == TRUE){
+        data = add_node(data, input->bid, atoi(std_in)); 
+        return SUCCESS;
+    }else{
+        // TODO pass a null bid 
+        data = add_node(data, " ", atoi(std_in));
+        return SUCCESS;
 
-option_t check_add_block(int nid, char* bid, unsynced *data){
+    }
+
+    return FAIL;
+}
+
+static status_t process_command_add(input_t *input, char* std_in, unsynced *data){
+    
+    char  *buffer = NULL;
+
+    if((buffer = clean_std_in(std_in)) == NULL)
+        return FAIL;
    
-    add_block(data, bid, nid);
-
-    return ADD_BID;
-}
-
-
-static bool_t impact_all(char *bid){
-
-    if((bid[strlen(bid)-1 ]) == '*')
-        return TRUE;
-    else
-        return FALSE;
-}
-
-char* bid_clean(char *bid){
-
-    char *ret = malloc(sizeof(char)*strlen(bid)-2);
-
-    int index = 0;
-
-    while(bid[index]){
-        if(bid[index] == SPACE){
-            index++;
-            break;
+    if((strcmp(input->typ, BLOCK)) == 0){
+        if((check_add_block(input, buffer, data)) == SUCCESS){
+            return SUCCESS;
         }
+        else return FAIL;
 
-        ret[index] = bid[index];
-        index++;
-    } 
+    }else if((strcmp(input->typ, NODE)) == 0){
+        if((check_add_node(input, buffer, data)) == SUCCESS)
+            return SUCCESS;
+        else return FAIL;
 
-    ret[index] = '\0';
-    return ret;
+    }else{
+        return FAIL;
+    }
 }
 
-option_t check_add(char* type, unsynced *data, char *nid_bid, char *bid){
-        
-    option_t option = NONE;
+/*
+ *
+ *
+ *        Remove NODE
+ *                                                      */
+
+static status_t check_rm_block(input_t *input, char* std_in, unsynced *data){
     
-    if ((strcmp(type, NODE)) == 0){ 
-        option = check_add_node(nid_bid, bid, data); 
-    }else if((strcmp(type, BLOCK)) == 0){
-        if((bid = get_bid(nid_bid)) != NULL){
-                if(impact_all(bid) == FALSE){
-                    int nid = get_nid(nid_bid);
-                    option = check_add_block(nid, bid, data);
-                    bid = NULL;
-                }else{
-                    bid = bid_clean(bid);
-                    printf("%s\n", bid);
-                    }
-        } else{
-            return ERROROPT;
+    int len_count = 0;
+
+    input->impact_all= check_block_impact(std_in);
+
+    if(input->impact_all == TRUE){
+        // TODO function that changes the previous passed nodes
+        input->bid = get_input(std_in, &len_count);
+    }else{
+        input->one_time_bid = get_input(std_in, &len_count);
+        input->nid = get_input(std_in, &len_count);
+        if(check_number(input->nid) == TRUE){
+            data = remove_block(data, input->one_time_bid);
+            free(input->one_time_bid);
+            return SUCCESS;
+        }else{
+            printf("Error, trying to add non numerical node or a null\n");
+            return FAIL;
         }
     }
 
-    return option;
+    return SUCCESS;
 }
+
+static status_t check_rm_node(input_t *input, char *std_in, unsynced *data){
+    
+    if(check_number(std_in) == FALSE)
+        return FAIL;
+
+    if(input->impact_all == TRUE){
+        // TODO to pass BLOCK in the function to remove node
+        data = remove_node(data, atoi(input->nid));
+        return SUCCESS;
+    }else{
+        data = remove_node(data, atoi(input->nid));
+        return SUCCESS;
+    }
+
+    return FAIL;
+}
+
+static status_t process_command_rm(input_t *input, char* std_in, unsynced *data){
+
+    char  *buffer = NULL;
+
+    if((buffer = clean_std_in(std_in)) == NULL)
+        return FAIL;
+
+
+    if((strcmp(input->typ, BLOCK)) == 0){
+        if((check_rm_block(input, buffer, data)) == SUCCESS)
+            return SUCCESS;
+        else return FAIL;
+
+    }else if((strcmp(input->typ, NODE)) == 0){
+        if((check_rm_node(input, buffer, data)) == SUCCESS)
+            return SUCCESS;
+        else return FAIL;
+
+    }else{
+        return FAIL;
+    }
+}
+
 /*
  *
                         PUBLIC 
 
                                                             */
 
+// TODO add functions under each case unless quit
 
-option_t get_option(char* cmd, char* type){
+option_t get_option(input_t *input){
 
     option_t option = NONE;
 
-    if(type == NULL){
-        if((strcmp(cmd, "sync"))==0){
+    if(input->typ == NULL){
+        if((strcmp(input->cmd, "sync"))==0){
             option = SYNC;
-        }else if((strcmp(cmd, "quit")) == 0){
+        }else if((strcmp(input->cmd, "quit")) == 0){
             option = QUIT;
-        }else option = ERROROPT;
+        }else option = ERROR_OPTION;
     }
     
-    if((strcmp(cmd, "ls")) == 0){
-        if(type == NULL)
+    if((strcmp(input->cmd, "ls")) == 0){
+        if(input->typ == NULL)
             option = LS_NID;
-        else if((strcmp(type, "-l")) == 0)
+        else if((strcmp(input->typ, "-l")) == 0)
             option = LS_NID_BID;
-        else option = ERROROPT;
+        else option = ERROR_OPTION;
     }
 
     return option;
 }
 
-option_t process_input(int std_in, unsynced* data){
- 
+option_t process_input(int std_in, unsynced *data){
+
+    input_t *input = malloc(sizeof(input_t));
+    
     int len_count = 0;
-    option_t option = NONE;
+    
+    char *buffer = malloc(sizeof(char)*BUFF_SIZE);
 
-    char *cmd = NULL,
-         *type = NULL,
-         *nid_bid = NULL,
-         *bid = NULL,
-         *input = malloc(sizeof(char)*100);
+    int read_ret = read(std_in, buffer, BUFF_SIZE);
+    buffer[read_ret] = '\0';
 
-    int nbr = read(std_in, input, 100);
-    input[nbr] = '\0';
+    input->cmd = get_input(buffer, &len_count);
+    input->typ = get_input(buffer, &len_count);
+    
+    if(get_option(input) == QUIT)
+        return QUIT;
 
-    cmd = get_input(input, &len_count);  
-    type = get_input(input, &len_count);  
-    nid_bid = get_input(input, &len_count);
-     
-    if(nid_bid == NULL)
-        return get_option(cmd, type);
-    else if((strcmp(cmd, "add")) == 0){
-        option = check_add(type, data, nid_bid, bid);
+    if((strcmp(input->cmd, "add")) == 0){
+        if(process_command_add(input, buffer, data) == SUCCESS)
+            printf("Successful\n");
+        else printf("Failed\n");
     }
-    printf("%s\n", bid);
-    return option;
+
+    if((strcmp(input->cmd, "rm")) == 0){
+        if(process_command_rm(input, buffer, data) == SUCCESS)
+            printf("Successful\n");
+        else printf("Failed\n");
+    }
+
+    // TODO Free input_t
+    /* free_input(input); */
+    free(buffer);
+    return NONE;
 }

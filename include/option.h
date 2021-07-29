@@ -3,22 +3,29 @@
 typedef enum{
     FALSE,
     TRUE,
-    ERRORBOOL,
+    ERROR_BOOL,
 } bool_t;
 
 
 typedef enum{
-    ADD_NID, /* These are really hard to understand */
-    ADD_BID, /* These are really hard to understand */
-    RM_NID, /* These are really hard to understand */
-    RM_BID, /* These are really hard to understand */
-    ADD_BID_ALL,
-    RM_BID_ALL,
     LS_NID,
     LS_NID_BID,
     SYNC,
     QUIT,
     NONE,
-    ERROROPT, /* These are really hard to understand */
+    ERROR_OPTION,
 } option_t;
 
+typedef enum{
+    SUCCESS,
+    FAIL,
+} status_t;
+
+typedef struct input_split{
+    char *cmd;
+    char *typ;
+    char *bid;
+    char *one_time_bid;
+    char *nid;
+    bool_t impact_all;
+} input_t;
