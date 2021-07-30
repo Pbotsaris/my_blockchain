@@ -74,7 +74,9 @@ bool_t check_block_impact(char *std_in)
     else return FALSE;
 }
 
-static bool_t check_number(char* input){
+
+ bool_t check_number(char* input)
+{
 
     int index = 0,
         flag = 0;
@@ -86,7 +88,7 @@ static bool_t check_number(char* input){
         index++;
     }
     
-    return flag == index-1;
+    return flag == index - 1;
 }
 
 /*
@@ -95,8 +97,8 @@ static bool_t check_number(char* input){
  *       ADD NODE
  *                                                      */
 
-static status_t check_add_block(input_t *input, char* std_in, unsynced *data){
-
+ status_t check_add_block(input_t *input, char* std_in, unsynced *data)
+{
     int len_count = 0;
 
     input->impact_all= check_block_impact(std_in);
@@ -125,7 +127,8 @@ static status_t check_add_block(input_t *input, char* std_in, unsynced *data){
     return SUCCESS;
 }
 
-static status_t check_add_node(input_t *input, char *std_in, unsynced *data){
+status_t check_add_node(input_t *input, char *std_in, unsynced *data)
+{
     
     if(check_number(std_in) == FALSE)
         return FAIL;

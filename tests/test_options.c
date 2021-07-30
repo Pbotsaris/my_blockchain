@@ -13,6 +13,18 @@ option_t create_test_option(char* command)
 
 }
 
+input_t *create_test_input(char *command)
+{
+   int len = 0;
+   input_t *input = (input_t*)malloc(sizeof(input_t));
+   input->cmd = get_input(command, &len);
+   input->typ = get_input(command, &len);
+
+   return input;
+}
+
+
+
 START_TEST (test_get_cmd_type_stdin_buffer)
 {
    int len = 0;
@@ -111,6 +123,55 @@ START_TEST (test_check_impact)
 END_TEST
 
 
+START_TEST (test_check_number)
+{
+
+   bool_t status = check_number("10");
+   ck_assert_int_eq(status, TRUE);
+
+   status = check_number("cat");
+   ck_assert_int_eq(status, FALSE);
+
+}
+END_TEST
+
+
+START_TEST (test_check_add_block)
+{
+   char buffer[] = "add block cat 1\n";
+   status_t status_test;
+
+   input_t *input = create_test_input(buffer);
+   unsynced *head = init_list("dog", 1);
+
+   status_t status = check_add_block(input, buffer, head);
+
+   status_test = SUCCESS;
+   ck_assert_int_eq(status, status_test);
+   ck_assert_str_eq(head->bid, "cat");
+     
+}
+END_TEST
+
+
+START_TEST (test_check_add_node)
+{
+   char buffer[] = "add node 2\n";
+   status_t status_test;
+
+   input_t *input = create_test_input(buffer);
+   unsynced *head = init_list("", 1);
+
+   status_t status = check_add_node(input, buffer, head);
+
+   status_test = SUCCESS;
+   ck_assert_int_eq(status, status_test);
+   ck_assert_int_eq(head->next->nid, 2);
+     
+}
+END_TEST
+
+
 
 Suite * test_options(void)
 {
@@ -124,6 +185,9 @@ Suite * test_options(void)
    tcase_add_test(core, get_option_from_stdin_buffer);
    tcase_add_test(core, test_clean_stdin_buffer);
    tcase_add_test(core, test_check_impact);
+   tcase_add_test(core, test_check_number);
+   tcase_add_test(core, test_check_add_block);
+   tcase_add_test(core, test_check_add_node);
    suite_add_tcase(suite, core);
 
    return(suite);
