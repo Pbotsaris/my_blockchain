@@ -1,0 +1,102 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BIN	Makefile	/^BIN=bin$/;"	m
+BLOCK	src/option.c	/^#define BLOCK /;"	d	file:
+BUFF_SIZE	src/option.c	/^#define BUFF_SIZE /;"	d	file:
+BUFF_SIZE	tests/test_list.c	/^#define BUFF_SIZE /;"	d	file:
+CC	Makefile	/^CC=gcc$/;"	m
+ERROR_BOOL	include/option.h	/^    ERROR_BOOL,$/;"	e	enum:__anon1
+ERROR_OPTION	include/option.h	/^    ERROR_OPTION,$/;"	e	enum:__anon2
+FAIL	include/option.h	/^    FAIL,$/;"	e	enum:__anon3
+FALSE	include/option.h	/^    FALSE,$/;"	e	enum:__anon1
+INCLUDE_H	include/list.h	/^#define INCLUDE_H$/;"	d
+LIST_H	include/list.h	/^#define LIST_H$/;"	d
+LS_NID	include/option.h	/^    LS_NID,$/;"	e	enum:__anon2
+LS_NID_BID	include/option.h	/^    LS_NID_BID,$/;"	e	enum:__anon2
+MAX_OPT_LEN	include/option.h	/^#define MAX_OPT_LEN /;"	d
+NODE	src/option.c	/^#define NODE /;"	d	file:
+NONE	include/option.h	/^    NONE,$/;"	e	enum:__anon2
+OBJ	Makefile	/^OBJ=obj$/;"	m
+OBJS	Makefile	/^OBJS=$(patsubst $(SRC)\/%.c, $(OBJ)\/%.o, $(SRCS))$/;"	m
+OPTION_H	include/option.h	/^#define OPTION_H$/;"	d
+QUIT	include/option.h	/^    QUIT,$/;"	e	enum:__anon2
+RM	Makefile	/^RM=rm -rf$/;"	m
+SELLECT_ALL	include/list.h	/^#define SELLECT_ALL /;"	d
+SPACE	src/option.c	/^#define SPACE /;"	d	file:
+SRC	Makefile	/^SRC=src$/;"	m
+SRCS	Makefile	/^SRCS=$(wildcard $(SRC)\/*.c)$/;"	m
+START_TEST	tests/test_list.c	/^START_TEST (test_add_block_to_node)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_add_unsyncedo_head)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_block_exists)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_init_list)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_node_exists)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_remove_block)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_remove_node)$/;"	f
+START_TEST	tests/test_list.c	/^START_TEST (test_remove_til_empty)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (get_option_from_stdin_buffer)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_check_add_block)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_check_add_node)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_check_impact)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_check_number)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_clean_stdin_buffer)$/;"	f
+START_TEST	tests/test_options.c	/^START_TEST (test_get_cmd_type_stdin_buffer)$/;"	f
+SUCCESS	include/option.h	/^    SUCCESS,$/;"	e	enum:__anon3
+SYNC	include/option.h	/^    SYNC,$/;"	e	enum:__anon2
+TARGET	Makefile	/^TARGET=$(BIN)\/my_blockchain$/;"	m
+TEST	Makefile	/^TEST=tests$/;"	m
+TESTBINS	Makefile	/^TESTBINS=$(patsubst $(TEST)\/%.c, $(TEST)\/bin\/%, $(TESTS))$/;"	m
+TESTOBJS	Makefile	/^TESTOBJS=${OBJ}\/list.o ${OBJ}\/option.o $/;"	m
+TESTS	Makefile	/^TESTS=$(wildcard $(TEST)\/*.c)$/;"	m
+TEST_H	include/test.h	/^#define TEST_H$/;"	d
+TRUE	include/option.h	/^    TRUE,$/;"	e	enum:__anon1
+add_block	src/list.c	/^unsynced *add_block(unsynced *head, char *bid, int nid)$/;"	f
+add_node	src/list.c	/^unsynced *add_node(unsynced *head, char *bid, int nid)$/;"	f
+bid	include/list.h	/^    char *bid;$/;"	m	struct:node_s
+bid	include/option.h	/^    char *bid;$/;"	m	struct:input_split
+block_exists	src/list.c	/^int block_exists(unsynced *head, char *bid)$/;"	f
+bool_t	include/option.h	/^} bool_t;$/;"	t	typeref:enum:__anon1
+check_add_block	src/option.c	/^ status_t check_add_block(input_t *input, char* std_in, unsynced *data)$/;"	f
+check_add_node	src/option.c	/^status_t check_add_node(input_t *input, char *std_in, unsynced *data)$/;"	f
+check_block_impact	src/option.c	/^bool_t check_block_impact(char *std_in)$/;"	f
+check_number	src/option.c	/^ bool_t check_number(char* input)$/;"	f
+check_rm_block	src/option.c	/^static status_t check_rm_block(input_t *input, char* std_in, unsynced *data){$/;"	f	file:
+check_rm_node	src/option.c	/^static status_t check_rm_node(input_t *input, char *std_in, unsynced *data){$/;"	f	file:
+clean_std_in	src/option.c	/^ char *clean_std_in(char *std_in)$/;"	f
+cmd	include/option.h	/^    char *cmd;$/;"	m	struct:input_split
+create_test_input	tests/test_options.c	/^input_t *create_test_input(char *command)$/;"	f
+create_test_option	tests/test_options.c	/^option_t create_test_option(char* command)$/;"	f
+find_node	src/list.c	/^unsynced *find_node(unsynced *head, int nid)$/;"	f
+free_list	src/list.c	/^void free_list(unsynced *head)$/;"	f
+get_input	src/option.c	/^ char *get_input(char *input, int *input_index)$/;"	f
+get_option	src/option.c	/^option_t get_option(input_t *input)$/;"	f
+impact_all	include/option.h	/^    bool_t impact_all;$/;"	m	struct:input_split
+init_list	src/list.c	/^unsynced *init_list(char *bid, int nid)$/;"	f
+input_split	include/option.h	/^typedef struct input_split{$/;"	s
+input_t	include/option.h	/^} input_t;$/;"	t	typeref:struct:input_split
+main	src/my_blockchain.c	/^int main(void)$/;"	f
+main	tests/test_list.c	/^int main(void)$/;"	f
+main	tests/test_options.c	/^int main(void)$/;"	f
+make_bid_buffer	src/list.c	/^static void make_bid_buffer(char *bid, unsynced *node)$/;"	f	file:
+next	include/list.h	/^    struct node_s *next; $/;"	m	struct:node_s	typeref:struct:node_s::node_s
+nid	include/list.h	/^    int nid;$/;"	m	struct:node_s
+nid	include/option.h	/^    char *nid;$/;"	m	struct:input_split
+node_exists	src/list.c	/^int node_exists(unsynced *head, int nid)$/;"	f
+node_s	include/list.h	/^typedef struct node_s {$/;"	s
+one_time_bid	include/option.h	/^    char *one_time_bid;$/;"	m	struct:input_split
+option_t	include/option.h	/^} option_t;$/;"	t	typeref:enum:__anon2
+print_block_list	src/list.c	/^void print_block_list(unsynced *head, char *bid)$/;"	f
+print_list	src/list.c	/^void print_list(unsynced *head)$/;"	f
+process_command_add	src/option.c	/^static status_t process_command_add(input_t *input, char* std_in, unsynced *data){$/;"	f	file:
+process_command_rm	src/option.c	/^static status_t process_command_rm(input_t *input, char* std_in, unsynced *data){$/;"	f	file:
+process_input	src/option.c	/^option_t process_input(int std_in, unsynced *data){$/;"	f
+remove_block	src/list.c	/^unsynced *remove_block(unsynced *head, char *bid)$/;"	f
+remove_node	src/list.c	/^unsynced *remove_node(unsynced *head, int nid)$/;"	f
+status_t	include/option.h	/^} status_t;$/;"	t	typeref:enum:__anon3
+test_list	tests/test_list.c	/^Suite * test_list(void)$/;"	f
+test_options	tests/test_options.c	/^Suite * test_options(void)$/;"	f
+typ	include/option.h	/^    char *typ;$/;"	m	struct:input_split
+unsynced	include/list.h	/^}unsynced;$/;"	t	typeref:struct:node_s

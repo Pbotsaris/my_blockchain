@@ -32,7 +32,6 @@ unsynced *add_block(unsynced *head, char *bid, int nid);
 unsynced *remove_node(unsynced *head, int nid);
 unsynced *remove_block(unsynced *head, char *bid);
 
-
 int node_exists(unsynced *head, int nid);
 int block_exists(unsynced *head, char *bid);
 unsynced *find_node(unsynced *head, int nid);

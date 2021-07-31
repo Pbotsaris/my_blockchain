@@ -10,6 +10,8 @@
  *
  *                                              */
 
+
+
  char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
