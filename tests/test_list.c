@@ -8,7 +8,7 @@
 
 START_TEST (test_init_list)
 {
-    unsynced *n =     init_list("dog", 1);
+    node_t *n =     init_list("dog", 1);
     /* ck_assert_ptr_nonnull(n); */
     ck_assert_str_eq(n->bid, "dog");
     ck_assert_int_eq(n->nid, 1);
@@ -16,9 +16,9 @@ START_TEST (test_init_list)
 }
 END_TEST
 
-START_TEST (test_add_unsyncedo_head)
+START_TEST (test_add_node_to_head)
 {
-    unsynced *n =     init_list("dog", 1);
+    node_t *n =     init_list("dog", 1);
     n = add_node(n, "cat", 2);
     /* ck_assert_ptr_nonnull(n); */
     ck_assert_str_eq(n->bid, "cat");
@@ -32,7 +32,7 @@ END_TEST
 
 START_TEST (test_add_block_to_node)
 {
-    unsynced *n =     init_list("dog", 1);
+    node_t *n =     init_list("dog", 1);
     n = add_node(n, "cat", 2);
     n = add_block(n, "giraffe", 1);
     n = add_block(n, "zebra", 2);
@@ -45,7 +45,7 @@ END_TEST
 
 START_TEST (test_remove_node)
 {
-    unsynced *n =     init_list("dog", 3);
+    node_t *n =     init_list("dog", 3);
     n = add_node(n, "cat", 2);
     n = add_node(n, "zebra", 1);
     ck_assert_int_eq(n->next->nid, 2);
@@ -67,7 +67,7 @@ END_TEST
 
 START_TEST (test_remove_til_empty)
 {
-    unsynced *n =     init_list("dog", 3);
+    node_t *n =     init_list("dog", 3);
     n = add_node(n, "cat", 2);
     n = add_node(n, "zebra", 1);
     n = remove_node(n, 2);
@@ -80,7 +80,7 @@ END_TEST
 
 START_TEST (test_remove_block)
 {
-    unsynced *n =     init_list("cat", 3);
+    node_t *n =     init_list("cat", 3);
     n = add_node(n, "cat", 2);
     n = add_node(n, "cat", 1);
     n = remove_block(n , "cat");
@@ -97,7 +97,7 @@ END_TEST
 
 START_TEST (test_node_exists)
 {
-    unsynced *n =     init_list("cat", 4);
+    node_t *n =     init_list("cat", 4);
     n = add_node(n, "cat", 3);
     n = add_node(n, "cat", 2);
     n = add_node(n, "cat", 1);
@@ -119,7 +119,7 @@ END_TEST
 
 START_TEST (test_block_exists)
 {
-    unsynced *n =     init_list("dog", 4);
+    node_t *n =     init_list("dog", 4);
     n = add_node(n, "dog", 3);
     n = add_node(n, "cat", 2);
     n = add_node(n, "cat", 1);
@@ -149,7 +149,7 @@ Suite * test_list(void)
     core = tcase_create("Core");
 
     tcase_add_test(core, test_init_list);
-    tcase_add_test(core, test_add_unsyncedo_head);
+    tcase_add_test(core, test_add_node_to_head);
     tcase_add_test(core, test_add_block_to_node);
     tcase_add_test(core, test_remove_node);
     tcase_add_test(core, test_remove_til_empty);
