@@ -5,7 +5,7 @@ BIN=bin
 CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude
 CFLAGS2 +=-W -g3 -Iinclude
 # CC=gcc-11
-CC=gcc
+CC=cc
 TARGET=$(BIN)/my_blockchain
 RM=rm -rf
 
