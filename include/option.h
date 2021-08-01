@@ -31,6 +31,7 @@ typedef struct input_split{
     char *bid;
     char *one_time_bid;
     char *nid;
+    char *buffer;
     bool_t impact_all;
 } input_t;
 
