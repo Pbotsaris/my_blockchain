@@ -65,6 +65,9 @@ char *clean_std_in(char *std_in)
     }
 
     ret_str[index] = '\0';
+    
+    if(ret_str[0] == '\0')
+        return NULL;
 
     return ret_str;
 }
@@ -259,6 +262,7 @@ option_t basic_commands(char *cmd)
         return QUIT;
     }else if((strcmp(cmd, "ls")) == 0){
         printf("ls\n");
+        /* print_list(unsynced); */
         return LS_NID;
     }else if((strcmp(cmd, "ls -l")) == 0){
         printf("ls -l\n");
