@@ -14,8 +14,9 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 TEST=tests
 TESTS=$(wildcard $(TEST)/*.c)
-TESTOBJS=${OBJ}/list.o ${OBJ}/option.o
+TESTOBJS=${OBJ}/list.o ${OBJ}/option.o 
 TESTBINS=$(patsubst $(TEST)/%.c, $(TEST)/bin/%, $(TESTS))
+
 
 all: $(TARGET)
 
@@ -37,7 +38,7 @@ $(TEST)/bin:
 
 # TESTING
 $(TEST)/bin/%: $(TEST)/%.c
-	${CC} ${CFLAGS2} $< $(TESTOBJS) -o $@ -lcheck
+	${CC} ${CFLAGS} $< $(TESTOBJS) -o $@ -lcheck
 
 test: $(TARGET) $(TEST)/bin $(TESTBINS)
 	for test in $(TESTBINS) ; do ./$$test ; done

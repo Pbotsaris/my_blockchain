@@ -109,6 +109,21 @@ unsynced *remove_block(unsynced *head, char *bid)
     return head;
 }
 
+
+unsynced *find_node(unsynced *head, int nid)
+{
+    unsynced *current = head;
+    while (current)
+    {
+        if (current->nid == nid) return current;
+
+        current = current->next;
+    }
+    return NULL;
+
+}
+
+
 int node_exists(unsynced *head, int nid)
 {
     int count = 0;

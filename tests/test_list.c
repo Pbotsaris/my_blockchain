@@ -1,5 +1,10 @@
-#include <check.h>
 #include "../include/list.h"
+#include <check.h>
+
+#include "../include/test.h"
+
+
+#define BUFF_SIZE 100
 
 START_TEST (test_init_list)
 {
@@ -134,12 +139,13 @@ START_TEST (test_block_exists)
 }
 END_TEST
 
+
 Suite * test_list(void)
 {
     Suite       *suite;
     TCase       *core;
 
-    suite = suite_create("test List");
+    suite = suite_create("Test List");
     core = tcase_create("Core");
 
     tcase_add_test(core, test_init_list);
@@ -154,6 +160,7 @@ Suite * test_list(void)
 
     return(suite);
 }
+
 
 int main(void)
 {
@@ -171,3 +178,4 @@ int main(void)
    return(failed == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 
 }
+
