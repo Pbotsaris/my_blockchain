@@ -22,8 +22,10 @@
 
 int main(void)
 {
-    unsynced *data = NULL;
-    process_input(STDIN_FILENO, data); 
+    node_t *unsynced = NULL;
+    while(process_input(STDIN_FILENO, unsynced) != QUIT){
+
+    } 
     /* printf("cmd: %s, type: %s, bid: %s, nid: %i\n", input->cmd, input->type, input->bid, input->nid); */
 
     /* TODO: NEED FUNCTION TO FREE THESE */
