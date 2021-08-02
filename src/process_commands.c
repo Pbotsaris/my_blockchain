@@ -1,4 +1,5 @@
-#include "../include/list.h"
+#include "../include/my_blockchain.h"
+
 #define SPACE ' '
 #define NODE "node"
 #define BLOCK "block"
@@ -6,10 +7,11 @@
 #define RM "rm"
 #define BUFF_SIZE 100
 #define NEW_LINE '\n'
+#define SELLECT_ALL "*"
+
 /*
  *
  * PRIVATE FUNCTION
- *
  *                                              */
 
 char *get_input(char *input, int *input_index)
@@ -19,8 +21,8 @@ char *get_input(char *input, int *input_index)
 
     while(input[*input_index]){
 
+        break;
         if(input[*input_index] == SPACE || input[*input_index] == NEW_LINE)
-            break;
 
         ret_command[index] = input[*input_index];
         index++;
@@ -176,7 +178,6 @@ status_t check_add_block(input_t *input, node_t *unsynced)
         return SUCCESS;
 
     }else{
-
         printf("Error, trying to add non numerical node or a null\n");
         return FAIL;
     }
@@ -187,7 +188,6 @@ status_t check_add_block(input_t *input, node_t *unsynced)
 
 status_t check_add_node(input_t *input, node_t *unsynced)
 {
-
     if(check_number(input->buffer) == FALSE)
         return FAIL;
 
@@ -198,7 +198,6 @@ status_t check_add_node(input_t *input, node_t *unsynced)
         // TODO pass a null bid 
         unsynced = add_node(unsynced, " ", atoi(input->buffer));
         return SUCCESS;
-
     }
 
     return FAIL;
@@ -251,83 +250,38 @@ status_t check_rm_node(input_t *input, node_t *unsynced){
     return FAIL;
 }
 
-/*
- *
- PUBLIC 
-
-*/
-
-// TODO add functions under each case unless quit
-
-option_t basic_commands(char *cmd)
+node_t process_commands(node_t *unsynced, char *buffer)
 {
 
-    if((strcmp(cmd, "sync")) == 0){
-        printf("sync\n");
-        return SYNC;
-    }else if((strcmp(cmd, "quit")) == 0){
-        printf("Quiting program successful.\n");
-        return QUIT;
-    }else if((strcmp(cmd, "ls")) == 0){
-        printf("ls\n");
-        /* print_list(unsynced); */
-        return LS_NID;
-    }else if((strcmp(cmd, "ls -l")) == 0){
-        printf("ls -l\n");
-        return LS_NID_BID;
-    }
+  input_t *input = malloc(sizeof(input_t));
+  status_t status;
 
-    return NONE;
+if((parse_input(input, buffer)) == FAIL)
+{
+    printf("Error! input doesn't seem to be a valid command.\n");
 }
 
-option_t process_input(int std_in, node_t *unsynced){
-
-    // check for basic commands
-    option_t option = NONE;
-    status_t status = FAIL;
-
-    char *buffer = malloc(sizeof(char)*BUFF_SIZE);
-
-    int read_ret = read(std_in, buffer, BUFF_SIZE);
-    buffer[read_ret-1] = '\0';
-
-    if((option = basic_commands(buffer)) != NONE){
-        free(buffer);
-        return option;
-    }
-
-    // if it's not a basic command // ls -l / quit / sync
-
-    input_t *input = malloc(sizeof(input_t));
-
-    if((parse_input(input, buffer)) == FAIL)
-    {
-        printf("Error! input doesn't seem to be a valid command.\n");
-        return ERROR_OPTION;
-    }
-
-    if(is_add(input->cmd) && is_block(input->typ)){
-        input->impact_all= check_block_impact(input->buffer);
-        status = check_add_block(input, unsynced);
-
-    }
-
-    if(is_add(input->cmd) && is_node(input->typ))
-        status = check_add_node(input, unsynced);
-
-    if(is_rm(input->cmd) && is_block(input->typ))
-    {
-        input->impact_all= check_block_impact(input->buffer);
-        status = check_rm_block(input, unsynced);
-    }
-
-    if(is_rm(input->cmd) && is_node(input->typ))
-        status = check_rm_node(input, unsynced);
-
-
-    print_status(status);
-    // TODO Free input_t
-    /* free_input(input); */
-    free(buffer);
-    return NONE;
+if(is_add(input->cmd) && is_block(input->typ)){
+    input->impact_all= check_block_impact(input->buffer);
+    status = check_add_block(input, unsynced);
 }
+
+if(is_add(input->cmd) && is_node(input->typ))
+    status = check_add_node(input, unsynced);
+
+if(is_rm(input->cmd) && is_block(input->typ))
+{
+    input->impact_all= check_block_impact(input->buffer);
+    status = check_rm_block(input, unsynced);
+}
+
+if(is_rm(input->cmd) && is_node(input->typ))
+    status = check_rm_node(input, unsynced);
+
+
+print_status(status);
+// TODO Free input_t
+/* free_input(input); */
+free(buffer);
+}
+

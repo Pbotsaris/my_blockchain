@@ -20,14 +20,13 @@ static void make_bid_buffer(char *bid, node_t *node)
                     PUBLIC
                                              */
 
-node_t *init_list(char *bid, int nid)
+node_t *init_list(void)
 {
     node_t *head = (node_t *)malloc(sizeof(node_t));
 
     if (head == NULL) return NULL;
 
-    make_bid_buffer(bid, head);
-    head->nid = nid;
+    head->bid = NULL;
     head->next = NULL;
 
     return head;
