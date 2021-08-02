@@ -65,7 +65,7 @@ char *clean_std_in(char *std_in)
     }
 
     ret_str[index] = '\0';
-    
+
     if(ret_str[0] == '\0')
         return NULL;
 
@@ -80,7 +80,7 @@ status_t parse_input(input_t *input, char *buffer){
     input->typ = get_input(buffer, &len_count);
 
     input->buffer = clean_std_in(buffer);
-    
+
     if(input->buffer[0] == '\0')
         return FAIL;
 
@@ -88,28 +88,28 @@ status_t parse_input(input_t *input, char *buffer){
 }
 
 bool_t is_add(char *cmd){
-    
+
     if((strcmp(cmd, ADD)) == 0)
         return TRUE;
     return FALSE;
 }
 
 bool_t is_rm(char *cmd){
-    
+
     if((strcmp(cmd, RM)) == 0)
         return TRUE;
     return FALSE;
 }
 
 bool_t is_node(char *type){
-    
+
     if((strcmp(type, NODE)) == 0)
         return TRUE;
     return FALSE;
 }
 
 bool_t is_block(char *type){
-    
+
     if((strcmp(type, BLOCK)) == 0)
         return TRUE;
     return FALSE;
@@ -275,7 +275,7 @@ option_t basic_commands(char *cmd)
 option_t process_input(int std_in, node_t *unsynced){
 
     // check for basic commands
-    
+
     option_t option = NONE;
     status_t status = FAIL;
 
@@ -290,7 +290,7 @@ option_t process_input(int std_in, node_t *unsynced){
     }
 
     // if it's not a basic command // ls -l / quit / sync
-    
+
     input_t *input = malloc(sizeof(input_t));
 
     if((parse_input(input, buffer)) == FAIL){
@@ -313,7 +313,7 @@ option_t process_input(int std_in, node_t *unsynced){
             status = check_rm_node(input, unsynced);
         }
     }
-    
+
     print_status(status);
     // TODO Free input_t
     /* free_input(input); */
