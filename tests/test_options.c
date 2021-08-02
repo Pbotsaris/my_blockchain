@@ -3,17 +3,6 @@
 #include "../include/test.h"
 
 
-option_t create_test_option(char* command)
-{
-    // I deleted the input_t and len because now we pass the whole buffer to check in cases of:
-    //                                                                                      ls
-    //                                                                                      ls -l
-    //                                                                                      quit
-    //                                                                                      sync
-    return basic_commands(command);
-
-}
-
 input_t *create_test_input(char *command)
 {
     int len = 0;
@@ -23,7 +12,6 @@ input_t *create_test_input(char *command)
 
     return input;
 }
-
 
 
 START_TEST (test_get_cmd_type_stdin_buffer)
@@ -42,24 +30,23 @@ END_TEST
 START_TEST (get_option_from_stdin_buffer)
 {
 
-    option_t option = create_test_option("quit");
+    option_t option =  basic_commands("quit");
     option_t test_option = QUIT;
     ck_assert_int_eq(option, test_option); 
 
-
-    option = create_test_option("add node 12");
+    option = basic_commands("add node 12");
     test_option = NONE;
     ck_assert_int_eq(option, test_option); 
 
-    option = create_test_option("ls");
+    option = basic_commands("ls");
     test_option = LS_NID;
     ck_assert_int_eq(option, test_option); 
 
-    option = create_test_option("ls -l");
+    option = basic_commands("ls -l");
     test_option = LS_NID_BID;
     ck_assert_int_eq(option, test_option); 
 
-    option = create_test_option("sync");
+    option = basic_commands("sync");
     test_option = SYNC;
     ck_assert_int_eq(option, test_option); 
 
@@ -81,15 +68,15 @@ START_TEST (test_clean_stdin_buffer)
     ck_assert_str_eq(return_buffer, "10");
 
     //  WHEN DOES IT RETURN NULL????
-    char buffer_error[] = "  rando -d , di, ";
-    return_buffer =  clean_std_in(buffer_error);
-    ck_assert_ptr_null(return_buffer);
+   // char buffer_error[] = "  rando -d , di, ";
+   // return_buffer =  clean_std_in(buffer_error);
+   // ck_assert_ptr_null(return_buffer);
 
 
     // multiple space case 
-    char buffer2[] = "  add    node   10";
-    return_buffer =  clean_std_in(buffer2);
-    ck_assert_str_eq(return_buffer, "10");
+  //  char buffer2[] = "  add    node   10";
+  //  return_buffer =  clean_std_in(buffer2);
+  //  ck_assert_str_eq(return_buffer, "10");
 
 
     free(return_buffer);
@@ -160,8 +147,6 @@ START_TEST (test_check_add_node)
 
 }
 END_TEST
-
-
 
 Suite * test_options(void)
 {

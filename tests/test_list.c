@@ -9,7 +9,7 @@
 START_TEST (test_init_list)
 {
     node_t *n =     init_list("dog", 1);
-    /* ck_assert_ptr_nonnull(n); */
+     ck_assert_ptr_nonnull(n); 
     ck_assert_str_eq(n->bid, "dog");
     ck_assert_int_eq(n->nid, 1);
     free_list(n);
@@ -20,10 +20,10 @@ START_TEST (test_add_node_to_head)
 {
     node_t *n =     init_list("dog", 1);
     n = add_node(n, "cat", 2);
-    /* ck_assert_ptr_nonnull(n); */
+     ck_assert_ptr_nonnull(n); 
     ck_assert_str_eq(n->bid, "cat");
     ck_assert_int_eq(n->nid, 2);
-    /* ck_assert_ptr_nonnull(n->next); */
+     ck_assert_ptr_nonnull(n->next); 
     ck_assert_str_eq(n->next->bid, "dog");
     ck_assert_int_eq(n->next->nid, 1);
     free_list(n);
@@ -36,7 +36,7 @@ START_TEST (test_add_block_to_node)
     n = add_node(n, "cat", 2);
     n = add_block(n, "giraffe", 1);
     n = add_block(n, "zebra", 2);
-    /* ck_assert_ptr_nonnull(n); */
+     ck_assert_ptr_nonnull(n); 
     ck_assert_str_eq(n->bid, "zebra");
     ck_assert_str_eq(n->next->bid, "giraffe");
     free_list(n);
@@ -73,7 +73,7 @@ START_TEST (test_remove_til_empty)
     n = remove_node(n, 2);
     n = remove_node(n, 3);
     n = remove_node(n, 1);
-    /* ck_assert_ptr_ne(n); */
+     ck_assert_ptr_null(n); 
 }
 END_TEST
 
@@ -88,7 +88,7 @@ START_TEST (test_remove_block)
     ck_assert_int_eq(n->bid[0], 0);
     ck_assert_int_eq(n->next->bid[0], 0);
     ck_assert_int_eq(n->next->next->bid[0], 0);
-    /* ck_assert_ptr_nonnull(n); */
+     ck_assert_ptr_nonnull(n); 
 
     free_list(n);
 }
