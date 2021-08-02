@@ -6,7 +6,7 @@
                    PRIVATE
                                              */
 
-static void make_bid_buffer(char *bid, unsynced *node)
+static void make_bid_buffer(char *bid, node_t *node)
 {
     size_t len = strlen(bid);
 
@@ -20,9 +20,9 @@ static void make_bid_buffer(char *bid, unsynced *node)
                     PUBLIC
                                              */
 
-unsynced *init_list(char *bid, int nid)
+node_t *init_list(char *bid, int nid)
 {
-    unsynced *head = (unsynced *)malloc(sizeof(unsynced));
+    node_t *head = (node_t *)malloc(sizeof(node_t));
 
     if (head == NULL) return NULL;
 
@@ -33,9 +33,9 @@ unsynced *init_list(char *bid, int nid)
     return head;
 }
 
-unsynced *add_node(unsynced *head, char *bid, int nid)
+node_t *add_node(node_t *head, char *bid, int nid)
 {
-    unsynced *node = (unsynced *)malloc(sizeof(unsynced));
+    node_t *node = (node_t *)malloc(sizeof(node_t));
 
     make_bid_buffer(bid, node);
     node->nid = nid;
@@ -44,13 +44,13 @@ unsynced *add_node(unsynced *head, char *bid, int nid)
     return node;
 }
 
-unsynced *remove_node(unsynced *head, int nid)
+node_t *remove_node(node_t *head, int nid)
 {
 
     if (head == NULL) return NULL;
     
-    unsynced *current = head;
-    unsynced *prev = NULL;
+    node_t *current = head;
+    node_t *prev = NULL;
 
     if (head->nid == nid)
     {
@@ -76,12 +76,12 @@ unsynced *remove_node(unsynced *head, int nid)
     return head;
 }
 
-unsynced *add_block(unsynced *head, char *bid, int nid)
+node_t *add_block(node_t *head, char *bid, int nid)
 {
 
     if (head == NULL) return NULL;
 
-    unsynced *current = head;
+    node_t *current = head;
 
     while (current)
     {
@@ -93,11 +93,11 @@ unsynced *add_block(unsynced *head, char *bid, int nid)
     return head;
 }
 
-unsynced *remove_block(unsynced *head, char *bid)
+node_t *remove_block(node_t *head, char *bid)
 {
     if (head == NULL) return NULL;
 
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         if((strcmp(current->bid, bid)) == 0)
@@ -110,9 +110,9 @@ unsynced *remove_block(unsynced *head, char *bid)
 }
 
 
-unsynced *find_node(unsynced *head, int nid)
+node_t *find_node(node_t *head, int nid)
 {
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         if (current->nid == nid) return current;
@@ -124,10 +124,10 @@ unsynced *find_node(unsynced *head, int nid)
 }
 
 
-int node_exists(unsynced *head, int nid)
+int node_exists(node_t *head, int nid)
 {
     int count = 0;
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         if (current->nid == nid) return count;
@@ -138,10 +138,10 @@ int node_exists(unsynced *head, int nid)
     return -1;
 }
 
-int block_exists(unsynced *head, char *bid)
+int block_exists(node_t *head, char *bid)
 {
     int count = 0;
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         if (strcmp(current->bid, bid) == 0) return count;
@@ -152,7 +152,7 @@ int block_exists(unsynced *head, char *bid)
     return -1;
 }
 
-void print_list(unsynced *head)
+void print_list(node_t *head)
 {
     if (head == NULL)
     {
@@ -160,7 +160,7 @@ void print_list(unsynced *head)
         return;
     }
 
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         printf("%i: %s, \n", current->nid, current->bid);
@@ -168,11 +168,11 @@ void print_list(unsynced *head)
     }
 }
 
-void print_block_list(unsynced *head, char *bid)
+void print_block_list(node_t *head, char *bid)
 {
     if (head == NULL) return;
 
-    unsynced *current = head;
+    node_t *current = head;
     while (current)
     {
         if (strcmp(current->bid, bid) == 0)
@@ -182,13 +182,13 @@ void print_block_list(unsynced *head, char *bid)
     }
 }
 
-void free_list(unsynced *head)
+void free_list(node_t *head)
 {
     if (head == NULL)
         return;
 
-    unsynced *current = head;
-    unsynced *next = NULL;
+    node_t *current = head;
+    node_t *next = NULL;
 
     while (current)
     {
