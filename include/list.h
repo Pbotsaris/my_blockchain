@@ -39,14 +39,11 @@ void print_block_list(node_t *head);
 
 void free_list(node_t *head);
 
-#include "option.h"
 
-option_t process_input(int std_in, input_t *input);
 #endif
 
 #ifndef PROMPT_H
 #define PROMPT_H
 
-void prompt_display(option_t option);
 
 #endif
