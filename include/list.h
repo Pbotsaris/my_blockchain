@@ -10,7 +10,6 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-
 #endif
 
 #ifndef LIST_H
@@ -39,11 +38,5 @@ void print_block_list(node_t *head);
 
 void free_list(node_t *head);
 
-
 #endif
 
-#ifndef PROMPT_H
-#define PROMPT_H
-
-
-#endif

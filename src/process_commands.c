@@ -89,7 +89,7 @@ status_t parse_input(input_t *input, char *buffer)
 
     if((input->buffer = clean_std_in(buffer)) == NULL)
         return FAIL;
-    
+
     return SUCCESS;
 }
 

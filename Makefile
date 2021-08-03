@@ -14,7 +14,7 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 TEST=tests
 TESTS=$(wildcard $(TEST)/*.c)
-TESTOBJS=${OBJ}/list.o ${OBJ}/option.o 
+TESTOBJS=${OBJ}/list.o ${OBJ}/process_input.o ${OBJ}/process_commands.o 
 TESTBINS=$(patsubst $(TEST)/%.c, $(TEST)/bin/%, $(TESTS))
 
 
@@ -44,4 +44,4 @@ test: $(TARGET) $(TEST)/bin $(TESTBINS)
 	for test in $(TESTBINS) ; do ./$$test ; done
 
 clean:
-	$(RM) $(TARGET) $(BIN)/*.dSYM $(OBJ)/*.o $(LIBDIR)
+	$(RM) $(TARGET) $(BIN)/*.dSYM $(OBJ)/*.o $(LIBDIR) $(TEST)/bin/*

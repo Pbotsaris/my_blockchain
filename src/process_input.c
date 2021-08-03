@@ -27,6 +27,6 @@ option_t process_input(int std_in, input_t *input){
     input->buffer[read_ret-1] = '\0';
 
     option = basic_commands(input->buffer, input->unsynced);
-    
+
     return option;
 }

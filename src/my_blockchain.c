@@ -47,3 +47,4 @@ int main(void)
     free_struct(input);
     return 0;
 }
+
