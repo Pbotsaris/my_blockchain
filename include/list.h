@@ -10,7 +10,6 @@
 #include <fcntl.h>
 #include <ctype.h>
 
-#include "option.h"
 
 #endif
 
@@ -36,10 +35,18 @@ int block_exists(node_t *head, char *bid);
 node_t *find_node(node_t *head, int nid);
 
 void print_list(node_t *head);
-void print_block_list(node_t *head, char *bid);
+void print_block_list(node_t *head);
 
 void free_list(node_t *head);
 
+#include "option.h"
 
-option_t process_input(int std_in, node_t *data);
+option_t process_input(int std_in, input_t *input);
+#endif
+
+#ifndef PROMPT_H
+#define PROMPT_H
+
+void prompt_display(option_t option);
+
 #endif
