@@ -163,19 +163,23 @@ void print_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-        printf("%i: %s, \n", current->nid, current->bid);
+        printf("%i,\n", current->nid);
         current = current->next;
     }
 }
 
-void print_block_list(node_t *head, char *bid)
+void print_block_list(node_t *head)
 {
-    if (head == NULL) return;
+
+    if (head == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
 
     node_t *current = head;
     while (current)
     {
-        if (strcmp(current->bid, bid) == 0)
             printf("%i: %s, \n", current->nid, current->bid);
 
         current = current->next;
