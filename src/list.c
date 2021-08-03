@@ -1,4 +1,4 @@
-#include "../include/list.h"
+#include "../include/my_blockchain.h"
 #include <string.h>
 
 /*
@@ -8,7 +8,7 @@
 
 static void make_bid_buffer(char *bid, node_t *node)
 {
-    size_t len = strlen(bid);
+    int len = (int)strlen(bid);
 
     node->bid = (char *)malloc((len + 2) * sizeof(char));
     strcpy(node->bid, bid);
@@ -20,17 +20,6 @@ static void make_bid_buffer(char *bid, node_t *node)
                     PUBLIC
                                              */
 
-node_t *init_list(void)
-{
-    node_t *head = (node_t *)malloc(sizeof(node_t));
-
-    if (head == NULL) return NULL;
-
-    head->bid = NULL;
-    head->next = NULL;
-
-    return head;
-}
 
 node_t *add_node(node_t *head, char *bid, int nid)
 {

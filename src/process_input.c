@@ -24,13 +24,11 @@ option_t process_input(int std_in, char *buffer){
     // check for basic commands
     option_t option = NONE;
 
-
     int read_ret = read(std_in, buffer, BUFF_SIZE);
     buffer[read_ret-1] = '\0';
 
-    if((option = basic_commands(buffer)) != NONE){
+    if((option = basic_commands(buffer)) != NONE)
         free(buffer);
+    
         return option;
-    }
-        return NONE;
 }

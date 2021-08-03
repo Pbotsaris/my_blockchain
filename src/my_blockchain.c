@@ -23,16 +23,15 @@
 
 int main(void)
 {
-    node_t *unsynced = init_list();
+    node_t *unsynced_head = NULL;
     char *input_buffer = malloc(sizeof(char)*MAX_BUFF_SIZE);
 
-    while(process_input(STDIN_FILENO, input_buffer) != QUIT){
+    while(process_input(STDIN_FILENO, input_buffer) != QUIT)
+          unsynced_head = process_commands(unsynced_head, input_buffer);
+           printf("%s\n", input_buffer);
 
-
-    } 
-
-
-
+ //   free(input_buffer);
+   // free_list(unsynced_head);
 
     /* printf("cmd: %s, type: %s, bid: %s, nid: %i\n", input->cmd, input->type, input->bid, input->nid); */
 
