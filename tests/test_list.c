@@ -6,17 +6,9 @@
 
 #define BUFF_SIZE 100
 
-START_TEST (test_init_list)
-{
-    node_t *n =     init_list();
-    ck_assert_ptr_nonnull(n); 
-    free_list(n);
-}
-END_TEST
-
 START_TEST (test_add_node_to_head)
 {
-    node_t *n =     init_list();
+    node_t *n =    NULL;
     n = add_node(n, "cat", 2);
      ck_assert_ptr_nonnull(n); 
     ck_assert_str_eq(n->bid, "cat");
@@ -27,7 +19,7 @@ END_TEST
 
 START_TEST (test_add_block_to_node)
 {
-    node_t *n =     init_list();
+    node_t *n = NULL;
 
     n = add_node(n, "dog", 1);
     n = add_node(n, "cat", 2);
@@ -153,7 +145,6 @@ Suite * test_list(void)
     suite = suite_create("Test List");
     core = tcase_create("Core");
 
-    tcase_add_test(core, test_init_list);
     tcase_add_test(core, test_add_node_to_head);
     tcase_add_test(core, test_add_block_to_node);
     tcase_add_test(core, test_remove_node);
