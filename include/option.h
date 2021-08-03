@@ -1,7 +1,6 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-
 #define MAX_OPT_LEN 6
 
 typedef enum{
@@ -10,8 +9,8 @@ typedef enum{
     ERROR_BOOL,
 } bool_t;
 
-
 typedef enum{
+    ADD_NID,
     LS_NID,
     LS_NID_BID,
     SYNC,
@@ -32,7 +31,9 @@ typedef struct input_split{
     char *one_time_bid;
     char *nid;
     char *buffer;
+    struct node_s *unsynced;
     bool_t impact_all;
+    option_t option;
 } input_t;
 
 #endif
