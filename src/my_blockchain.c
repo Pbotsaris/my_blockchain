@@ -16,9 +16,9 @@
  * =====================================================================================
  */
 
-#include <stdlib.h>
-#include  <stdio.h>
-#include "../include/list.h"
+#include "../include/my_blockchain.h"
+#define BUFF_SIZE 100
+
 void free_struct(input_t *input){
 
     free(input->bid);
@@ -40,10 +40,10 @@ int main(void)
     printf("Program starting...\n");
     while(input->option != QUIT){
         prompt_display(input->option);
-        input->option = process_input(STDIN_FILENO, input);
+        if((input->option = process_input(STDIN_FILENO,input)) == NONE)
+            process_commands(input);
     } 
 
     free_struct(input);
-    free(input);
     return 0;
 }
