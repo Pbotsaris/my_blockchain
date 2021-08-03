@@ -3,8 +3,8 @@
 
 /*
  *
-                   PRIVATE
-                                             */
+ PRIVATE
+ */
 
 static void make_bid_buffer(char *bid, node_t *node)
 {
@@ -17,8 +17,8 @@ static void make_bid_buffer(char *bid, node_t *node)
 /*
  *
  *
-                    PUBLIC
-                                             */
+ PUBLIC
+ */
 
 node_t *init_list(char *bid, int nid)
 {
@@ -48,7 +48,7 @@ node_t *remove_node(node_t *head, int nid)
 {
 
     if (head == NULL) return NULL;
-    
+
     node_t *current = head;
     node_t *prev = NULL;
 
@@ -180,7 +180,7 @@ void print_block_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-            printf("%i: %s, \n", current->nid, current->bid);
+        printf("%i: %s, \n", current->nid, current->bid);
 
         current = current->next;
     }
