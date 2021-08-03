@@ -1,14 +1,14 @@
-#include "../include/list.h"
+#include "../include/my_blockchain.h"
 #include <string.h>
 
 /*
  *
- PRIVATE
- */
+                   PRIVATE
+                                             */
 
 static void make_bid_buffer(char *bid, node_t *node)
 {
-    size_t len = strlen(bid);
+    int len = (int)strlen(bid);
 
     node->bid = (char *)malloc((len + 2) * sizeof(char));
     strcpy(node->bid, bid);
@@ -17,21 +17,9 @@ static void make_bid_buffer(char *bid, node_t *node)
 /*
  *
  *
- PUBLIC
- */
+                    PUBLIC
+                                             */
 
-node_t *init_list(char *bid, int nid)
-{
-    node_t *head = (node_t *)malloc(sizeof(node_t));
-
-    if (head == NULL) return NULL;
-
-    make_bid_buffer(bid, head);
-    head->nid = nid;
-    head->next = NULL;
-
-    return head;
-}
 
 node_t *add_node(node_t *head, char *bid, int nid)
 {
@@ -48,7 +36,7 @@ node_t *remove_node(node_t *head, int nid)
 {
 
     if (head == NULL) return NULL;
-
+    
     node_t *current = head;
     node_t *prev = NULL;
 
@@ -93,6 +81,24 @@ node_t *add_block(node_t *head, char *bid, int nid)
     return head;
 }
 
+node_t *remove_node_block(node_t *head, char *bid, int nid)
+{
+    if (head == NULL) return NULL;
+
+    node_t *current = head;
+    while (current)
+    {
+        if(current->nid == nid)
+            current->bid[0] = '\0';
+
+        current = current->next;
+    }
+
+    return head;
+}
+
+
+
 node_t *remove_block(node_t *head, char *bid)
 {
     if (head == NULL) return NULL;
@@ -126,6 +132,9 @@ node_t *find_node(node_t *head, int nid)
 
 int node_exists(node_t *head, int nid)
 {
+   if(head == NULL)
+       return -1;
+
     int count = 0;
     node_t *current = head;
     while (current)
@@ -140,6 +149,10 @@ int node_exists(node_t *head, int nid)
 
 int block_exists(node_t *head, char *bid)
 {
+
+   if(head == NULL)
+       return -1;
+
     int count = 0;
     node_t *current = head;
     while (current)
@@ -163,7 +176,7 @@ void print_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-        printf("%i,\n", current->nid);
+        printf("%i: %s, \n", current->nid, current->bid);
         current = current->next;
     }
 }
@@ -180,7 +193,7 @@ void print_block_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-        printf("%i: %s, \n", current->nid, current->bid);
+            printf("%i: %s, \n", current->nid, current->bid);
 
         current = current->next;
     }
