@@ -117,7 +117,7 @@ START_TEST (test_check_add_block)
     char buffer[] = "add block cat 1\n";
 
     input_t *input = malloc(sizeof(input_t));
-    node_t *head = init_list();
+    node_t *head = NULL;
 
     parse_input(input, buffer);
     head= check_add_block(input, head);
@@ -132,8 +132,8 @@ END_TEST
 
 START_TEST (test_check_add_node)
 {
-    char buffer[] = "add node 2\n";
-    node_t *head = init_list();
+    char buffer[] = "add node 2n";
+    node_t *head = NULL;
     input_t *input = malloc(sizeof(input_t));
 
     parse_input(input, buffer);

@@ -15,6 +15,6 @@
 #define SELLECT_ALL "*"
 
 option_t process_input(int std_in, char *buffer);
-node_t *process_commands(node_t *unsynced, char *buffer);
+node_t *process_commands(char *buffer);
 
 #endif

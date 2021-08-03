@@ -94,6 +94,8 @@ status_t parse_input(input_t *input, char *buffer)
     return SUCCESS;
 }
 
+
+
 bool_t is_add(char *cmd){
 
     if((strcmp(cmd, ADD)) == 0)
@@ -155,7 +157,7 @@ void print_status(status_t status){
  *       ADD BLOCK TO NODE 
  *                                                      */
 
-node_t *check_add_block(input_t *input, node_t *unsynced)
+node_t *check_add_block(input_t *input, node_t *head)
 {
     int len_count = 0;
 
@@ -169,9 +171,9 @@ node_t *check_add_block(input_t *input, node_t *unsynced)
     // TODO: add if statement +  error handling function
 
     if(check_number(input->nid))
-        return add_block(unsynced, input->one_time_bid, atoi(input->nid));
+        return add_block(head, input->one_time_bid, atoi(input->nid));
 
-    return unsynced;
+    return head;
 }
 
 /*
@@ -179,16 +181,16 @@ node_t *check_add_block(input_t *input, node_t *unsynced)
  *       ADD A NODE 
  *                                                      */
 
-node_t *check_add_node(input_t *input, node_t *unsynced)
+node_t *check_add_node(input_t *input, node_t *head)
 {
     if(check_number(input->buffer) == FALSE)
-        return unsynced;
+        return head;
     // add error handling function
 
     if(input->impact_all)
-        return add_node(unsynced, input->bid, atoi(input->buffer)); 
+        return add_node(head, input->bid, atoi(input->buffer)); 
 
-    return add_node(unsynced, " ", atoi(input->buffer));
+    return add_node(head, " ", atoi(input->buffer));
 }
 
 /*
@@ -197,7 +199,7 @@ node_t *check_add_node(input_t *input, node_t *unsynced)
  *        REMOVE A BLOCK FROM A NODE
  *                                                      */
 
-node_t *check_rm_block(input_t *input, node_t *unsynced)
+node_t *check_rm_block(input_t *input, node_t *head)
 {
     int len_count = 0;
 
@@ -208,15 +210,15 @@ node_t *check_rm_block(input_t *input, node_t *unsynced)
         input->one_time_bid = get_input(input->buffer, &len_count);
 
     if((input->nid = get_input(input->buffer, &len_count)) == NULL)
-        return unsynced;
+        return head;
     // TODO Error handling function 
 
     if(check_number(input->nid)){
-        return remove_block(unsynced, input->one_time_bid);
+        return remove_block(head, input->one_time_bid);
     }
 
     // TODO Error handling function 
-    return unsynced;
+    return head;
 }
 
 /*
@@ -225,18 +227,18 @@ node_t *check_rm_block(input_t *input, node_t *unsynced)
  *        REMOVE A NODE
  *                                                      */
 
-node_t *check_rm_node(input_t *input, node_t *unsynced)
+node_t *check_rm_node(input_t *input, node_t *head)
 {
 
     if(check_number(input->buffer) == FALSE)
-        return unsynced;
+        return head;
     // TODO Error handling function 
 
     if(input->impact_all)
         // TODO to pass BLOCK in the function to remove node
-        return remove_node(unsynced, atoi(input->buffer));
+        return remove_node(head, atoi(input->buffer));
 
-    return remove_node(unsynced, atoi(input->buffer));
+    return remove_node(head, atoi(input->buffer));
 }
 
 /*
@@ -246,7 +248,7 @@ node_t *check_rm_node(input_t *input, node_t *unsynced)
  *
  */
 
-node_t *process_commands(node_t *unsynced, char *buffer)
+node_t *process_commands(char *buffer)
 {
     input_t *input = malloc(sizeof(input_t));
     node_t *head = NULL;
@@ -257,29 +259,29 @@ node_t *process_commands(node_t *unsynced, char *buffer)
     if((parse_input(input, buffer)) == FAIL)
     {
         printf("Error! input doesn't seem to be a valid command.\n");
-        return unsynced;
+        return head;
     }
 
     if(is_add(input->cmd) && is_block(input->typ)){
         input->impact_all= check_block_impact(input->buffer);
-        head = check_add_block(input, unsynced);
+        head = check_add_block(input, head);
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
-        head = check_add_node(input, unsynced);
+        head = check_add_node(input, head);
     }
 
     if(is_rm(input->cmd) && is_block(input->typ))
     {
         input->impact_all= check_block_impact(input->buffer);
-        head = check_rm_block(input, unsynced);
+        head = check_rm_block(input, head);
     }
 
     if(is_rm(input->cmd) && is_node(input->typ))
-        head = check_rm_node(input, unsynced);
+        head = check_rm_node(input, head);
 
 
     //    print_status(status);
     //    free(input);
-    return head == NULL ? unsynced : head;
+    return head;
 }
