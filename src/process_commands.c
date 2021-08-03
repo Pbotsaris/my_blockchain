@@ -248,10 +248,9 @@ node_t *check_rm_node(input_t *input, node_t *head)
  *
  */
 
-node_t *process_commands(char *buffer)
+node_t *process_commands(node_t *head, char *buffer)
 {
     input_t *input = malloc(sizeof(input_t));
-    node_t *head = NULL;
 
     if((parse_input(input, buffer)) == FAIL)
         // printf("Error! input doesn't seem to be a valid command.\n");

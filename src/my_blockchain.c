@@ -27,7 +27,7 @@ int main(void)
     char *input_buffer = malloc(sizeof(char)*MAX_BUFF_SIZE);
 
     while(process_input(STDIN_FILENO, input_buffer) != QUIT)
-          unsynced_head = process_commands(input_buffer);
+          unsynced_head = process_commands(unsynced_head, input_buffer);
            printf("%s\n", input_buffer);
 
  //   free(input_buffer);

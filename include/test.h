@@ -16,7 +16,7 @@ node_t *check_add_block(input_t *input, node_t *head);
 node_t *check_rm_node(input_t *input, node_t *head);
 node_t *check_rm_block(input_t *input, node_t *head);
 
-node_t *process_commands(char *buffer);
+node_t *process_commands(node_t *head, char *buffer);
 
 #endif
 
