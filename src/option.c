@@ -9,7 +9,7 @@
 /*
  *
  * PRIVATE FUNCTION
- *
+ 
  *                                              */
 
 char *get_input(char *input, int *input_index)
