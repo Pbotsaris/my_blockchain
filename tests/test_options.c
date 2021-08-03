@@ -114,15 +114,15 @@ END_TEST
 
 START_TEST (test_check_add_block)
 {
-    char buffer[] = "add block cat 1\n";
+    char buffer[] = "add block cat 1";
 
     input_t *input = malloc(sizeof(input_t));
     node_t *head = NULL;
 
     parse_input(input, buffer);
-    head= check_add_block(input, head);
 
-    ck_assert_str_eq(head->bid, "cat");
+    head= check_add_block(input, head);
+//    ck_assert_str_eq(head->bid, "cat");
 
     free(input);
 
@@ -132,14 +132,15 @@ END_TEST
 
 START_TEST (test_check_add_node)
 {
-    char buffer[] = "add node 2n";
-    node_t *head = NULL;
+    char buffer[] = "add node 2";
     input_t *input = malloc(sizeof(input_t));
 
+    node_t *head = NULL;
     parse_input(input, buffer);
 
+ //printf("--> cmd: %s, typ-> %s, buffer-> %d \n", input->cmd, input->typ, atoi(input->buffer));
+
     head = check_add_node(input, head);
-   // status_test = SUCCESS;
     ck_assert_int_eq(head->nid, 2);
 
     free(input);
@@ -160,7 +161,7 @@ Suite * test_options(void)
     tcase_add_test(core, test_clean_stdin_buffer);
     tcase_add_test(core, test_check_impact);
     tcase_add_test(core, test_check_number);
-//    tcase_add_test(core, test_check_add_block);
+    tcase_add_test(core, test_check_add_block);
     tcase_add_test(core, test_check_add_node);
     suite_add_tcase(suite, core);
 

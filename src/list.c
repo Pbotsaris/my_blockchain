@@ -114,6 +114,9 @@ node_t *find_node(node_t *head, int nid)
 
 int node_exists(node_t *head, int nid)
 {
+   if(head == NULL)
+       return -1;
+
     int count = 0;
     node_t *current = head;
     while (current)
@@ -128,6 +131,11 @@ int node_exists(node_t *head, int nid)
 
 int block_exists(node_t *head, char *bid)
 {
+
+
+   if(head == NULL)
+       return -1;
+
     int count = 0;
     node_t *current = head;
     while (current)

@@ -13,7 +13,6 @@
  * PRIVATE FUNCTION
  *                                              */
 
-
 char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
@@ -167,11 +166,16 @@ node_t *check_add_block(input_t *input, node_t *head)
     else 
         input->one_time_bid = get_input(input->buffer, &len_count);
 
-    get_input(input->buffer, &len_count);
     // TODO: add if statement +  error handling function
+       input->nid = get_input(input->buffer, &len_count);
 
     if(check_number(input->nid))
-        return add_block(head, input->one_time_bid, atoi(input->nid));
+    {
+        if(node_exists(head, atoi(input->nid)) >= 0)
+             return add_block(head, input->one_time_bid, atoi(input->nid));
+        else 
+             return add_node(head,input->one_time_bid, atoi(input->nid));
+    }
 
     return head;
 }
@@ -183,9 +187,9 @@ node_t *check_add_block(input_t *input, node_t *head)
 
 node_t *check_add_node(input_t *input, node_t *head)
 {
+    // TODO add error handling function
     if(check_number(input->buffer) == FALSE)
         return head;
-    // add error handling function
 
     if(input->impact_all)
         return add_node(head, input->bid, atoi(input->buffer)); 
@@ -222,14 +226,13 @@ node_t *check_rm_block(input_t *input, node_t *head)
 }
 
 /*
-
+ *
  *
  *        REMOVE A NODE
  *                                                      */
 
 node_t *check_rm_node(input_t *input, node_t *head)
 {
-
     if(check_number(input->buffer) == FALSE)
         return head;
     // TODO Error handling function 
@@ -242,11 +245,11 @@ node_t *check_rm_node(input_t *input, node_t *head)
 }
 
 /*
+ *  
+ *      MAIN PUBLIC FUNCTION
  *
- *    MAIN
  *
- *
- */
+                                                    */
 
 node_t *process_commands(char *buffer)
 {
