@@ -22,8 +22,8 @@ char *get_input(char *input, int *input_index)
 
         if(input[*input_index] == SPACE || input[*input_index] == NEW_LINE)
             break;
-        
-         ret_command[index] = input[*input_index];
+
+        ret_command[index] = input[*input_index];
 
         index++;
         (*input_index)++;
@@ -32,7 +32,7 @@ char *get_input(char *input, int *input_index)
     (*input_index)++;
 
     ret_command[index] = '\0';
-        
+
     if(ret_command[0] == '\0')
         return NULL;
 
@@ -96,7 +96,6 @@ status_t parse_input(input_t *input, char *buffer)
 
 
 bool_t is_add(char *cmd){
-
     if((strcmp(cmd, ADD)) == 0)
         return TRUE;
     return FALSE;
@@ -167,14 +166,14 @@ node_t *check_add_block(input_t *input, node_t *head)
         input->one_time_bid = get_input(input->buffer, &len_count);
 
     // TODO: add if statement +  error handling function
-       input->nid = get_input(input->buffer, &len_count);
+    input->nid = get_input(input->buffer, &len_count);
 
     if(check_number(input->nid))
     {
-        if(node_exists(head, atoi(input->nid)) >= 0)
-             return add_block(head, input->one_time_bid, atoi(input->nid));
+        if((node_exists(head, atoi(input->nid))) >= 0)
+            return add_block(head, input->one_time_bid, atoi(input->nid));
         else 
-             return add_node(head,input->one_time_bid, atoi(input->nid));
+            return add_node(head,input->one_time_bid, atoi(input->nid));
     }
 
     return head;
@@ -194,7 +193,7 @@ node_t *check_add_node(input_t *input, node_t *head)
     if(input->impact_all)
         return add_node(head, input->bid, atoi(input->buffer)); 
 
-    return add_node(head, " ", atoi(input->buffer));
+    return add_node(head, "\0", atoi(input->buffer));
 }
 
 /*
@@ -210,23 +209,17 @@ node_t *check_rm_block(input_t *input, node_t *head)
     // TODO function that changes the previous passed nodes
     if(input->impact_all)
         input->bid = get_input(input->buffer, &len_count);
-    else
-        input->one_time_bid = get_input(input->buffer, &len_count);
 
-    if((input->nid = get_input(input->buffer, &len_count)) == NULL)
-        return head;
-    // TODO Error handling function 
+    input->one_time_bid = get_input(input->buffer, &len_count);
 
-    if(check_number(input->nid)){
+    if((block_exists(head, input->one_time_bid)) >= 0)
         return remove_block(head, input->one_time_bid);
-    }
-
-    // TODO Error handling function 
-    return head;
+    else
+        // TODO Error handling: list is empty
+        return head;
 }
 
 /*
- *
  *
  *        REMOVE A NODE
  *                                                      */
@@ -237,33 +230,33 @@ node_t *check_rm_node(input_t *input, node_t *head)
         return head;
     // TODO Error handling function 
 
-    if(input->impact_all)
-        // TODO to pass BLOCK in the function to remove node
-        return remove_node(head, atoi(input->buffer));
+    // if(input->impact_all)
+    // TODO to pass BLOCK in the function to remove node
 
-    return remove_node(head, atoi(input->buffer));
+    if(node_exists(head, atoi(input->buffer)) >= 0)
+        return remove_node(head, atoi(input->buffer));
+    else
+        // TODO Error handling: list is empty
+        return head;
 }
+
 
 /*
  *  
  *      MAIN PUBLIC FUNCTION
  *
  *
-                                                    */
+ */
 
 node_t *process_commands(char *buffer)
 {
     input_t *input = malloc(sizeof(input_t));
     node_t *head = NULL;
-    //   status_t status;
-
-    printf("%s\n", buffer);
 
     if((parse_input(input, buffer)) == FAIL)
-    {
-        printf("Error! input doesn't seem to be a valid command.\n");
+        // printf("Error! input doesn't seem to be a valid command.\n");
         return head;
-    }
+        // TODO: FUNCTION for error handling
 
     if(is_add(input->cmd) && is_block(input->typ)){
         input->impact_all= check_block_impact(input->buffer);
@@ -283,8 +276,6 @@ node_t *process_commands(char *buffer)
     if(is_rm(input->cmd) && is_node(input->typ))
         head = check_rm_node(input, head);
 
-
-    //    print_status(status);
-    //    free(input);
+    free(input);
     return head;
 }

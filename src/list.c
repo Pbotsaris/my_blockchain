@@ -81,6 +81,23 @@ node_t *add_block(node_t *head, char *bid, int nid)
     return head;
 }
 
+node_t *remove_node_block(node_t *head, char *bid, int nid)
+{
+    if (head == NULL) return NULL;
+
+    node_t *current = head;
+    while (current)
+    {
+        if(current->nid == nid)
+            current->bid[0] = '\0';
+
+        current = current->next;
+    }
+
+    return head;
+}
+
+
 node_t *remove_block(node_t *head, char *bid)
 {
     if (head == NULL) return NULL;
@@ -131,7 +148,6 @@ int node_exists(node_t *head, int nid)
 
 int block_exists(node_t *head, char *bid)
 {
-
 
    if(head == NULL)
        return -1;

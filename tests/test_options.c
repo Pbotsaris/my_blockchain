@@ -87,7 +87,6 @@ END_TEST
 START_TEST (test_check_impact)
 {
 
-    // get 3 item? 
     char buffer[] = "add block 21 *\n";
 
     bool_t result = check_block_impact(buffer);
@@ -123,7 +122,6 @@ START_TEST (test_check_add_block)
 
     head= check_add_block(input, head);
 //    ck_assert_str_eq(head->bid, "cat");
-
     free(input);
 
 }
@@ -138,14 +136,53 @@ START_TEST (test_check_add_node)
     node_t *head = NULL;
     parse_input(input, buffer);
 
- //printf("--> cmd: %s, typ-> %s, buffer-> %d \n", input->cmd, input->typ, atoi(input->buffer));
-
     head = check_add_node(input, head);
     ck_assert_int_eq(head->nid, 2);
 
     free(input);
 
 }
+
+START_TEST (test_check_rm_node)
+{
+    char buffer[] = "rm node 2";
+    input_t *input = malloc(sizeof(input_t));
+    node_t *head = NULL;
+    head = add_node(head, "\0", 2);
+    head = add_node(head, "\0", 1);
+    parse_input(input, buffer);
+
+    head = check_rm_node(input, head);
+    ck_assert_int_eq(head->nid, 1);
+
+    char buffer2[] = "rm node 1";
+    parse_input(input, buffer2);
+     
+    head = check_rm_node(input, head);
+    ck_assert_ptr_null(head);
+
+    free(input);
+}
+
+
+START_TEST (test_check_rm_block)
+{
+    char buffer[] = "rm block dog";
+    input_t *input = malloc(sizeof(input_t));
+    node_t *head = NULL;
+    head = add_node(head, "dog", 2);
+    head = add_node(head, "dog", 1);
+    parse_input(input, buffer);
+
+    head = check_rm_block(input, head);
+
+    ck_assert_int_eq(head->bid[0], 0);
+    ck_assert_int_eq(head->next->bid[0], 0);
+    
+    free(input);
+}
+
+
 END_TEST
 
 Suite * test_options(void)
@@ -163,6 +200,8 @@ Suite * test_options(void)
     tcase_add_test(core, test_check_number);
     tcase_add_test(core, test_check_add_block);
     tcase_add_test(core, test_check_add_node);
+    tcase_add_test(core, test_check_rm_node);
+    tcase_add_test(core, test_check_rm_block);
     suite_add_tcase(suite, core);
 
     return(suite);
