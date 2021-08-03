@@ -1,14 +1,15 @@
-#include "../include/list.h"
+#include "../include/my_blockchain.h"
 
-char *output_merge(char* output,char status, int added_nodes){
+char *output_merge(char* output,char *status, int added_nodes){
     
     char enter_boarder[] = "[";
     char end_boarder[] = "]> ";
 
     strcpy(output, enter_boarder);
-    strcat(output, &status);
+    strcat(output, status);
     char temp[100];
     sprintf(temp, "%d", added_nodes);
+    temp[strlen(temp)] = '\0';
     strcat(output, temp);
     strcat(output, end_boarder);
 
@@ -18,15 +19,15 @@ char *output_merge(char* output,char status, int added_nodes){
 void prompt_display(option_t option){
     
     static int added_nodes = 0;
-    static char status = 's'; 
+    static char status[] = "s"; 
    
     char *output = malloc(sizeof(char)*106);
 
     if(option == SYNC)
-        status = 's';
+        status[0] = 's';
 
     if(option == ADD_NID){
-        status = '-';
+        status[0] = '-';
         added_nodes++;
     }
     
