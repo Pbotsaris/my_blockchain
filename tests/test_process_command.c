@@ -84,7 +84,7 @@ START_TEST (test_process_input)
 END_TEST
 
 
-START_TEST (test_clean_stdin_buffer)
+START_TEST (test_extract_input_digits)
 {
     // get 3 item? 
     char buffer[] = "add node 10";
@@ -217,7 +217,7 @@ Suite * test_options(void)
 
     tcase_add_test(core, test_process_input);
     tcase_add_test(core, test_get_cmd_type_stdin_buffer);
-    tcase_add_test(core, test_clean_stdin_buffer);
+    tcase_add_test(core, test_extract_input_digits);
     tcase_add_test(core, test_check_impact);
     tcase_add_test(core, test_check_number);
     tcase_add_test(core, test_check_add_block);
