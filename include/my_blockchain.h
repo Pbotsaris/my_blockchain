@@ -12,9 +12,8 @@
 #include "option.h"
 #include "list.h"
 
-#define SELLECT_ALL "*"
-
-option_t process_input(int std_in, char *buffer);
-node_t *process_commands(node_t *head, char *buffer);
+option_t process_input(int std_in, input_t *input);
+void process_commands(input_t *input);
+void prompt_display(option_t option);
 
 #endif

@@ -1,7 +1,7 @@
 #include "../include/my_blockchain.h"
 #define BUFF_SIZE 100
 
-option_t basic_commands(char *cmd)
+option_t basic_commands(char *cmd, node_t *head)
 {
     if((strcmp(cmd, "sync")) == 0){
         printf("sync\n");
@@ -10,25 +10,23 @@ option_t basic_commands(char *cmd)
         printf("Quiting program successful.\n");
         return QUIT;
     }else if((strcmp(cmd, "ls")) == 0){
-        printf("ls\n");
-        /* print_list(unsynced); */
+        print_list(head);
         return LS_NID;
     }else if((strcmp(cmd, "ls -l")) == 0){
-        printf("ls -l\n");
+        print_block_list(head);
         return LS_NID_BID;
     }
     return NONE;
 }
 
-option_t process_input(int std_in, char *buffer){
+option_t process_input(int std_in, input_t *input){
     // check for basic commands
     option_t option = NONE;
+    input->buffer = malloc(sizeof(char)*BUFF_SIZE);
+    int read_ret = read(std_in, input->buffer, BUFF_SIZE);
+    input->buffer[read_ret-1] = '\0';
 
-    int read_ret = read(std_in, buffer, BUFF_SIZE);
-    buffer[read_ret-1] = '\0';
+    option = basic_commands(input->buffer, input->unsynced);
 
-    if((option = basic_commands(buffer)) != NONE)
-        free(buffer);
-    
-        return option;
+    return option;
 }

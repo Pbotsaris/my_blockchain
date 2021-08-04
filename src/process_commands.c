@@ -93,8 +93,6 @@ status_t parse_input(input_t *input, char *buffer)
     return SUCCESS;
 }
 
-
-
 bool_t is_add(char *cmd){
     if((strcmp(cmd, ADD)) == 0)
         return TRUE;
@@ -124,7 +122,7 @@ bool_t is_block(char *type){
 
 bool_t check_block_impact(char *std_in)
 {
-    if(std_in[strlen(std_in)-2] == '*')
+    if(std_in[strlen(std_in)-1] == '*')
         return TRUE;
     else return FALSE;
 }
@@ -152,17 +150,17 @@ void print_status(status_t status){
 
 /*
  *
- *       ADD BLOCK TO NODE 
+ *       ADD BLOCK TO NODE
  *                                                      */
 
-node_t *check_add_block(input_t *input, node_t *head)
+void check_add_block(input_t *input)
 {
     int len_count = 0;
 
     // TODO function that changes the previous passed nodes
-    if(input->impact_all) 
+    if(input->impact_all)
         input->bid = get_input(input->buffer, &len_count);
-    else 
+    else
         input->one_time_bid = get_input(input->buffer, &len_count);
 
     // TODO: add if statement +  error handling function
@@ -170,13 +168,12 @@ node_t *check_add_block(input_t *input, node_t *head)
 
     if(check_number(input->nid))
     {
-        if((node_exists(head, atoi(input->nid))) >= 0)
-            return add_block(head, input->one_time_bid, atoi(input->nid));
-        else 
-            return add_node(head,input->one_time_bid, atoi(input->nid));
+        if((node_exists(input->unsynced, atoi(input->nid))) >= 0)
+            input->unsynced = add_block(input->unsynced, input->one_time_bid, atoi(input->nid));
+        else
+            input->unsynced = add_node(input->unsynced,input->one_time_bid, atoi(input->nid));
     }
 
-    return head;
 }
 
 /*
@@ -184,25 +181,26 @@ node_t *check_add_block(input_t *input, node_t *head)
  *       ADD A NODE 
  *                                                      */
 
-node_t *check_add_node(input_t *input, node_t *head)
+void check_add_node(input_t *input)
 {
     // TODO add error handling function
     if(check_number(input->buffer) == FALSE)
-        return head;
+        return;
 
     if(input->impact_all)
-        return add_node(head, input->bid, atoi(input->buffer)); 
+        input->unsynced = add_node(input->unsynced, input->bid, atoi(input->buffer)); 
+    else
+        input->unsynced = add_node(input->unsynced, "\0", atoi(input->buffer));
 
-    return add_node(head, "\0", atoi(input->buffer));
+    input->option = ADD_NID;
 }
 
 /*
-
  *
  *        REMOVE A BLOCK FROM A NODE
  *                                                      */
 
-node_t *check_rm_block(input_t *input, node_t *head)
+void check_rm_block(input_t *input)
 {
     int len_count = 0;
 
@@ -212,11 +210,11 @@ node_t *check_rm_block(input_t *input, node_t *head)
 
     input->one_time_bid = get_input(input->buffer, &len_count);
 
-    if((block_exists(head, input->one_time_bid)) >= 0)
-        return remove_block(head, input->one_time_bid);
+    if((block_exists(input->unsynced, input->one_time_bid)) >= 0)
+        input->unsynced = remove_block(input->unsynced, input->one_time_bid);
     else
         // TODO Error handling: list is empty
-        return head;
+        return;
 }
 
 /*
@@ -224,57 +222,51 @@ node_t *check_rm_block(input_t *input, node_t *head)
  *        REMOVE A NODE
  *                                                      */
 
-node_t *check_rm_node(input_t *input, node_t *head)
+void check_rm_node(input_t *input)
 {
     if(check_number(input->buffer) == FALSE)
-        return head;
+        return; 
     // TODO Error handling function 
 
     // if(input->impact_all)
     // TODO to pass BLOCK in the function to remove node
 
-    if(node_exists(head, atoi(input->buffer)) >= 0)
-        return remove_node(head, atoi(input->buffer));
+    if(node_exists(input->unsynced, atoi(input->buffer)) >= 0)
+        input->unsynced = remove_node(input->unsynced, atoi(input->buffer));
     else
         // TODO Error handling: list is empty
-        return head;
+        return;
 }
 
-
 /*
- *  
+ *
  *      MAIN PUBLIC FUNCTION
  *
  *
  */
 
-node_t *process_commands(node_t *head, char *buffer)
+void process_commands(input_t *input)
 {
-    input_t *input = malloc(sizeof(input_t));
-
-    if((parse_input(input, buffer)) == FAIL)
+    if((parse_input(input, input->buffer)) == FAIL)
         // printf("Error! input doesn't seem to be a valid command.\n");
-        return head;
+        return;
         // TODO: FUNCTION for error handling
 
     if(is_add(input->cmd) && is_block(input->typ)){
         input->impact_all= check_block_impact(input->buffer);
-        head = check_add_block(input, head);
+        check_add_block(input);
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
-        head = check_add_node(input, head);
+        check_add_node(input);
     }
 
     if(is_rm(input->cmd) && is_block(input->typ))
     {
         input->impact_all= check_block_impact(input->buffer);
-        head = check_rm_block(input, head);
+        check_rm_block(input);
     }
 
     if(is_rm(input->cmd) && is_node(input->typ))
-        head = check_rm_node(input, head);
-
-    free(input);
-    return head;
+        check_rm_node(input);
 }
