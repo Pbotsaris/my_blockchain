@@ -7,7 +7,7 @@
 option_t basic_commands(char *buffer);
 
 /* HELPER process_commands */
-char *clean_std_in(char *std_in);
+char *extract_input_digits(char *stdin_buffer);
 bool_t check_block_impact(char *std_in);
 bool_t check_number(char* input);
 char *get_input(char *input, int *input_index);

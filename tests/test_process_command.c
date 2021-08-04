@@ -88,24 +88,23 @@ START_TEST (test_clean_stdin_buffer)
 {
     // get 3 item? 
     char buffer[] = "add node 10";
-    char *return_buffer =  clean_std_in(buffer);
+    char *return_buffer =  extract_input_digits(buffer);
     ck_assert_str_eq(return_buffer, "10");
-
-    //  WHEN DOES IT RETURN NULL????
-   // char buffer_error[] = "  rando -d , di, ";
-   // return_buffer =  clean_std_in(buffer_error);
-   // ck_assert_ptr_null(return_buffer);
-
-
-    // multiple space case 
-  //  char buffer2[] = "  add    node   10";
-  //  return_buffer =  clean_std_in(buffer2);
-  //  ck_assert_str_eq(return_buffer, "10");
-
-
     free(return_buffer);
 
+    // RANDOS!
+    char buffer_error[] = "  rando -d , di, ";
+    return_buffer =  extract_input_digits(buffer_error);
+    ck_assert_ptr_null(return_buffer);
+    free(return_buffer);
+
+    // multiple space case 
+    char buffer2[] = "  add    node   10";
+    return_buffer =  extract_input_digits(buffer2);
+    ck_assert_str_eq(return_buffer, "10");
+    free(return_buffer);
 }
+
 END_TEST
 
 START_TEST (test_check_impact)

@@ -13,6 +13,23 @@
  * PRIVATE FUNCTION
  *                                              */
 
+
+char *strrev(char *str)
+{
+      char *p1, *p2;
+
+      if (! str || ! *str)
+            return str;
+      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
+      {
+            *p1 ^= *p2;
+            *p2 ^= *p1;
+            *p1 ^= *p2;
+      }
+      return str;
+}
+
+
 char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
@@ -39,59 +56,49 @@ char *get_input(char *input, int *input_index)
     return ret_command;
 }
 
-// TODO: CHECK FOR RANDOM INPUT: if doesn't start with add or rm -> error
 
-char *clean_std_in(char *std_in)
+char *extract_input_digits(char *stdin_buffer)
 {
-    int index = 1,
-        flag_space = 2;
+    bool_t was_digit = FALSE;
+    int stdin_index, return_index = 0;
+    char *return_buffer = malloc(sizeof(char)*strlen(stdin_buffer));
+    size_t len = strlen(stdin_buffer);
 
-    char *ret_str = malloc(sizeof(char)*strlen(std_in));
-
-    while(std_in[index]){
-        if(std_in[index] == SPACE)
-            flag_space--;
-
-        if(flag_space == 0)
+    for (stdin_index = len; stdin_index >= 0 ; --stdin_index) 
+    {
+        if(isdigit(stdin_buffer[stdin_index]))
+        {
+            return_buffer[return_index] = stdin_buffer[stdin_index];
+            return_index++;
+            was_digit = TRUE;
+        }
+        if(was_digit && stdin_buffer[stdin_index] == SPACE)
+        {
+            return_buffer[return_index] = '\0';
             break;
-
-        index++;
+        }
     }
+        strrev(return_buffer);
 
-    if(std_in[index] == '\0' || std_in[index] == '\n')
-        return NULL;
-
-    int current = index+1;
-    index = 0;
-    while(std_in[current]){
-
-        ret_str[index] = std_in[current];
-
-        index++;
-        current++;
-    }
-
-    ret_str[index] = '\0';
-
-    if(ret_str[0] == '\0')
-        return NULL;
-
-    return ret_str;
+        if(was_digit == FALSE)
+            return NULL;
+        else
+            return return_buffer;
 }
 
 status_t parse_input(input_t *input, char *buffer)
 {
-
     int len_count = 0;
 
     input->cmd = get_input(buffer, &len_count);
     input->typ = get_input(buffer, &len_count);
 
-    if((input->buffer = clean_std_in(buffer)) == NULL)
+    if((input->buffer = extract_input_digits(buffer)) == NULL)
         return FAIL;
 
     return SUCCESS;
 }
+
 
 bool_t is_add(char *cmd){
     if((strcmp(cmd, ADD)) == 0)
