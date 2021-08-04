@@ -82,7 +82,7 @@ node_t *add_block(node_t *head, char *bid, int nid)
     return head;
 }
 
-node_t *remove_node_block(node_t *head, char *bid, int nid)
+node_t *remove_node_block(node_t *head, int nid)
 {
     if (head == NULL) return NULL;
 
