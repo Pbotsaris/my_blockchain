@@ -13,7 +13,6 @@ bool_t check_number(char* input);
 char *get_input(char *input, int *input_index);
 status_t parse_input(input_t *input, char *buffer);
 
-
 /* IMPLEMENTATION process_commands */
 node_t *check_add_node(input_t *input, node_t *head);
 node_t *check_add_block(input_t *input, node_t *head);
