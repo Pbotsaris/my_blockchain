@@ -120,11 +120,15 @@ bool_t is_block(char *type){
     return FALSE;
 }
 
-bool_t check_block_impact(char *std_in)
+bool_t check_block_impact(char *buffer)
 {
-    if(std_in[strlen(std_in)-1] == '*')
-        return TRUE;
-    else return FALSE;
+    size_t len = strlen(buffer);
+    
+    for (int i = len; i >= 0 ; --i) 
+        if(buffer[i] == '*')
+            return TRUE;
+
+     return FALSE;
 }
 
 

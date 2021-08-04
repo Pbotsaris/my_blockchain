@@ -110,7 +110,6 @@ END_TEST
 
 START_TEST (test_check_impact)
 {
-
     char buffer[] = "add block 21 *\n";
 
     bool_t result = check_block_impact(buffer);
