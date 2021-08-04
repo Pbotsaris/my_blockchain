@@ -28,7 +28,6 @@ typedef struct input_split{
     char *cmd;
     char *typ;
     char *bid;
-    char *one_time_bid;
     char *nid;
     char *buffer;
     struct node_s *unsynced;
