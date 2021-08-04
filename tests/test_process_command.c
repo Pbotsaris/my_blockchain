@@ -13,6 +13,19 @@
     /*return input;*/
 /*}*/
 
+//typedef struct input_split{
+//    char *cmd;
+//    char *typ;
+//    char *bid;
+//    char *one_time_bid;
+//    char *nid;
+//    char *buffer;
+//    struct node_s *unsynced;
+//    bool_t impact_all;
+//    option_t option;
+//} input_t;
+//
+
 
 START_TEST (test_get_cmd_type_stdin_buffer)
 {
@@ -27,41 +40,52 @@ START_TEST (test_get_cmd_type_stdin_buffer)
 END_TEST
 
 
-START_TEST (get_option_from_stdin_buffer)
+START_TEST (test_process_input)
 {
+    input_t input; 
+    input.option = NONE;
+    input.unsynced = NULL;
 
-    option_t option =  basic_commands("quit");
+    int fd = open("tests/test_commands/quit", O_RDWR);
+    option_t option =  process_input(fd, &input);
     option_t test_option = QUIT;
     ck_assert_int_eq(option, test_option); 
+    close(fd);
 
-    option = basic_commands("add node 12");
+    fd = open("tests/test_commands/none", O_RDWR);
+
+    option = process_input(fd, &input);
     test_option = NONE;
     ck_assert_int_eq(option, test_option); 
 
-    option = basic_commands("ls");
+    close(fd);
+    fd = open("tests/test_commands/ls", O_RDWR);
+
+    option = process_input(fd, &input);
     test_option = LS_NID;
     ck_assert_int_eq(option, test_option); 
 
-    option = basic_commands("ls -l");
+    close(fd);
+    fd = open("tests/test_commands/ls_l", O_RDWR);
+
+    option = process_input(fd, &input);
     test_option = LS_NID_BID;
     ck_assert_int_eq(option, test_option); 
 
-    option = basic_commands("sync");
+    close(fd);
+    fd = open("tests/test_commands/sync", O_RDWR);
+
+    option = process_input(fd, &input);
     test_option = SYNC;
     ck_assert_int_eq(option, test_option); 
 
-    // This will will not return ERROR_OPT unless it's passed in process_input function
-    /* option = create_test_option("randocommand"); */
-    /* test_option = ERROR_OPTION; */
-    /* ck_assert_int_eq(option, test_option); */ 
-
+    close(fd);
 }
 END_TEST
 
 
 START_TEST (test_clean_stdin_buffer)
 {
-
     // get 3 item? 
     char buffer[] = "add node 10";
     char *return_buffer =  clean_std_in(buffer);
@@ -193,8 +217,8 @@ Suite * test_options(void)
     suite = suite_create("Test Options");
     core = tcase_create("Core");
 
+    tcase_add_test(core, test_process_input);
     tcase_add_test(core, test_get_cmd_type_stdin_buffer);
-    tcase_add_test(core, get_option_from_stdin_buffer);
     tcase_add_test(core, test_clean_stdin_buffer);
     tcase_add_test(core, test_check_impact);
     tcase_add_test(core, test_check_number);
