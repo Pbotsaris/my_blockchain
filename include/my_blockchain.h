@@ -11,6 +11,7 @@
 
 #include "option.h"
 #include "list.h"
+#include "error.h"
 
 option_t process_input(int std_in, input_t *input);
 void process_commands(input_t *input);
