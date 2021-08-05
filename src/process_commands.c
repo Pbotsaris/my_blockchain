@@ -1,6 +1,6 @@
 #include "../include/my_blockchain.h"
+#include "../include/err.h"
 
-#define SPACE ' '
 #define NODE "node"
 #define BLOCK "block"
 #define ADD "add"
@@ -8,12 +8,10 @@
 #define BUFF_SIZE 100
 #define NEW_LINE '\n'
 
-
 /*
  *
  * PRIVATE FUNCTION
  *                                              */
-
 
 bool_t is_add(char *cmd){
     if((strcmp(cmd, ADD)) == 0)
@@ -45,14 +43,13 @@ bool_t is_block(char *type){
 bool_t check_block_impact(char *buffer)
 {
     size_t len = strlen(buffer);
-    
+
     for (int i = len; i >= 0 ; --i) 
         if(buffer[i] == '*')
             return TRUE;
 
-     return FALSE;
+    return FALSE;
 }
-
 
 bool_t check_number(char* input)
 {
@@ -73,17 +70,17 @@ char *get_input(char *input, int *input_index)
 {
     char *ret_command = (char*)malloc(sizeof(char)*100);
     int index = 0;
-     bool_t is_reading = FALSE;
+    bool_t is_reading = FALSE;
 
     while(input[*input_index]){
 
-       if(is_reading == FALSE && isspace(input[*input_index]))
-       {
-         (*input_index)++;
-           continue;
-       }
+        if(is_reading == FALSE && isspace(input[*input_index]))
+        {
+            (*input_index)++;
+            continue;
+        }
 
-       is_reading = TRUE;
+        is_reading = TRUE;
 
         if(isspace(input[*input_index]) || input[*input_index] == NEW_LINE)
             break;
@@ -116,15 +113,15 @@ status_t parse_input(input_t *input)
         return FAIL;
 
     if((strcmp(input->typ, NODE)) == 0){
-         if((input->nid = get_input(input->buffer, &len_count)) == NULL)
-             return FAIL;
+        if((input->nid = get_input(input->buffer, &len_count)) == NULL)
+            return FAIL;
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
-         input->bid = get_input(input->buffer, &len_count);
-         input->nid = get_input(input->buffer, &len_count); 
-         if(input->bid == NULL || input->nid == NULL)
-                return FAIL;
+        input->bid = get_input(input->buffer, &len_count);
+        input->nid = get_input(input->buffer, &len_count); 
+        if(input->bid == NULL || input->nid == NULL)
+            return FAIL;
     }
 
     else
@@ -133,7 +130,6 @@ status_t parse_input(input_t *input)
     return SUCCESS;
 }
 
-
 /*
  *
  *       ADD BLOCK TO NODE
@@ -141,6 +137,13 @@ status_t parse_input(input_t *input)
 
 void check_add_block(input_t *input)
 {
+
+    if(block_exists(input->unsynced, input->bid) >= 0)
+    {
+        print_error(BLOCK_EXISTS);
+        return;
+    }
+
     // TODO function that changes the previous passed nodes
     if(check_number(input->nid))
     {
@@ -149,7 +152,7 @@ void check_add_block(input_t *input)
         else
             input->unsynced = add_node(input->unsynced,input->bid, atoi(input->nid));
     }
-    
+
 }
 
 /*
@@ -159,12 +162,17 @@ void check_add_block(input_t *input)
 
 void check_add_node(input_t *input)
 {
-    // TODO add error handling function
     if(check_number(input->nid) == FALSE)
+    {
+        print_error(INVALID_NODE);
         return;
+    }
 
     if(node_exists(input->unsynced,atoi(input->nid)) >= 0)
+    {
+        print_error(NODE_EXISTS);
         return;
+    }
 
     if(input->impact_all)
         input->unsynced = add_node(input->unsynced, input->bid, atoi(input->nid)); 
@@ -173,7 +181,6 @@ void check_add_node(input_t *input)
 
     input->option = ADD_NID;
 }
-
 
 /*
  *
@@ -187,8 +194,7 @@ void check_rm_block(input_t *input)
     if((block_exists(input->unsynced, input->bid)) >= 0)
         input->unsynced = remove_block(input->unsynced, input->bid);
     else
-        // TODO Error handling: list is empty
-        return;
+        print_error(BLOCK_NOT_EXISTS);
 }
 
 /*
@@ -199,30 +205,30 @@ void check_rm_block(input_t *input)
 void check_rm_node(input_t *input)
 {
     if(check_number(input->nid) == FALSE)
+    {
+        print_error(INVALID_NODE);
         return; 
-    // TODO Error handling function 
-    // TODO to pass BLOCK in the function to remove node
-
-    if(node_exists(input->unsynced, atoi(input->nid)) >= 0){
-        input->unsynced = remove_node(input->unsynced, atoi(input->nid));
     }
+
+    // TODO to pass BLOCK in the function to remove node
+    if(node_exists(input->unsynced, atoi(input->nid)) >= 0)
+        input->unsynced = remove_node(input->unsynced, atoi(input->nid));
     else
-        // TODO Error handling: list is empty
-        return;
+        print_error(NODE_NOT_EXISTS);
 }
 
 /*
- *
  *      MAIN PUBLIC FUNCTION
- *
  *
  */
 
 void process_commands(input_t *input)
 {
     if((parse_input(input)) == FAIL)
+    {
+        print_error(CMD_NOT_FOUND);
         return;
-    // TODO: FUNCTION for error handling
+    }
 
     if(is_add(input->cmd) && is_block(input->typ)){
         input->impact_all= check_block_impact(input->buffer);
