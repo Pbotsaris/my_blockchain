@@ -1,7 +1,7 @@
 #include "../include/my_blockchain.h"
 
 char *output_merge(char* output,char *status, int added_nodes){
-    
+
     char enter_boarder[] = "[";
     char end_boarder[] = "]> ";
 
@@ -17,10 +17,10 @@ char *output_merge(char* output,char *status, int added_nodes){
 }
 
 void prompt_display(option_t option){
-    
+
     static int added_nodes = 0;
     static char status[] = "s"; 
-   
+
     char *output = malloc(sizeof(char)*106);
 
     if(option == SYNC)
@@ -30,7 +30,12 @@ void prompt_display(option_t option){
         status[0] = '-';
         added_nodes++;
     }
-    
+
+    if(option == RM_NID){
+        status[0] = '-';
+        added_nodes--;
+    }
+
     output = output_merge(output, status, added_nodes);
     write(0, output, sizeof(output));
     free(output);

@@ -127,7 +127,6 @@ bool_t check_block_impact(char *std_in)
     else return FALSE;
 }
 
-
 bool_t check_number(char* input)
 {
     int index = 0,

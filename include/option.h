@@ -11,6 +11,7 @@ typedef enum{
 
 typedef enum{
     ADD_NID,
+    RM_NID,
     LS_NID,
     LS_NID_BID,
     SYNC,
