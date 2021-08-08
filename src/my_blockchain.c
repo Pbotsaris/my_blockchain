@@ -25,7 +25,6 @@ void free_struct(input_t *input){
     free(input->buffer);
     free(input->cmd);
     free(input->typ);
-    free(input->one_time_bid);
     free(input->nid);
     free_list(input->unsynced);
 }
