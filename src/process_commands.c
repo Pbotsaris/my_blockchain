@@ -215,6 +215,8 @@ void check_rm_node(input_t *input)
         input->unsynced = remove_node(input->unsynced, atoi(input->nid));
     else
         print_error(NODE_NOT_EXISTS);
+
+    input->option = RM_NID;
 }
 
 /*
