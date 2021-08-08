@@ -7,7 +7,7 @@
                    PRIVATE
                                              */
 
-static void make_bid_buffer(char *bid, node_t *node)
+void make_bid_buffer(char *bid, node_t *node)
 {
     int len = (int)strlen(bid);
 
@@ -177,7 +177,7 @@ void print_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-        printf("%i: %s, \n", current->nid, current->bid);
+        printf("%i:\n", current->nid);
         current = current->next;
     }
 }
