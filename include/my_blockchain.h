@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 
+#include "err.h"
 #include "option.h"
 #include "list.h"
 
