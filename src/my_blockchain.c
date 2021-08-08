@@ -26,7 +26,6 @@ void free_struct(input_t *input){
     free(input->cmd);
     free(input->typ);
     free(input->nid);
-    free_list(input->unsynced);
 }
 
 int main(void)
@@ -35,14 +34,21 @@ int main(void)
     input_t *input = malloc(sizeof(input_t));
     input->option = NONE;
     input->unsynced = NULL;
-    
+
+    node_t *synced = NULL;
+    synced = get_synced_nodes(synced);
+    input->unsynced = synced;
+
     printf("Program starting...\n");
     while(input->option != QUIT){
-        prompt_display(input->option);
-        if((input->option = process_input(STDIN_FILENO,input)) == NONE)
+        prompt_display(input);
+        if((input->option = process_input(STDIN_FILENO,input, &synced)) == NONE)
             process_commands(input);
     } 
 
+    write_nodes(synced);
+
+    free_list(synced);
     free_struct(input);
     return 0;
 }
