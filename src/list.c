@@ -184,7 +184,6 @@ void print_list(node_t *head)
 
 void print_block_list(node_t *head)
 {
-
     if (head == NULL)
     {
         printf("Empty List\n");

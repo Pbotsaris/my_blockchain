@@ -25,7 +25,7 @@ START_TEST (test_add_block_to_node)
     n = add_node(n, "cat", 2);
     n = add_block(n, "giraffe", 1);
     n = add_block(n, "zebra", 2);
-     ck_assert_ptr_nonnull(n); 
+    ck_assert_ptr_nonnull(n); 
     ck_assert_str_eq(n->bid, "zebra");
     ck_assert_str_eq(n->next->bid, "giraffe");
     free_list(n);
