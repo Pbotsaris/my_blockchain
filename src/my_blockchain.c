@@ -20,13 +20,13 @@
 #define BUFF_SIZE 100
 
 void free_struct(input_t *input){
-
     free(input->bid);
     free(input->buffer);
     free(input->cmd);
     free(input->typ);
     free(input->nid);
     free_list(input->unsynced);
+    free(input);
 }
 
 int main(void)
@@ -34,16 +34,49 @@ int main(void)
 
     input_t *input = malloc(sizeof(input_t));
     input->option = NONE;
-    input->unsynced = NULL;
-    
-    printf("Program starting...\n");
+
+    node_t *synced = NULL;
+    synced = get_synced_nodes(synced);
+    input->unsynced = copy_list(synced, input->unsynced);
+
     while(input->option != QUIT){
-        prompt_display(input->option);
-        if((input->option = process_input(STDIN_FILENO,input)) == NONE)
-            process_commands(input);
+
+        prompt_display(input);
+        input->option = process_input(STDIN_FILENO,input); 
+
+        switch(input->option){
+            case SYNC:
+                printf("OK: Syncing...\n");
+                synced = copy_list(input->unsynced, synced);
+                break;
+
+            case LS_NID:
+                printf("OK: Synced list:\n");
+                print_list(synced);
+                break;
+
+            case LS_NID_BID:
+                printf("OK: Synced list including blocks:\n");
+                print_block_list(synced);
+                break;
+
+            case QUIT:
+                write_nodes(synced);
+                free_list(synced);
+                free_struct(input);
+                printf("OK: Quitting program successful.\n");
+                break;
+
+            case LS_UNS:
+                print_block_list(input->unsynced);
+                break;
+
+            default:
+                process_commands(input);
+                break;
+        }
     } 
 
-    free_struct(input);
     return 0;
 }
 

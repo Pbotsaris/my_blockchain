@@ -9,6 +9,8 @@ typedef struct node_s {
     struct node_s *next; 
 }node_t;
 
+void make_bid_buffer(char *bid, node_t *node);
+node_t *copy_list(node_t *src, node_t *dest);
 node_t *init_list(char *bid, int nid);
 node_t *add_node(node_t *head, char *bid, int nid);
 node_t *add_block(node_t *head, char *bid, int nid);

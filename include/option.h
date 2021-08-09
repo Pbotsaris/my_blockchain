@@ -10,14 +10,14 @@ typedef enum{
 } bool_t;
 
 typedef enum{
-    ADD_NID,         /* 0 */
-    LS_NID,          /* 1 */
-    LS_NID_BID,      /* 2 */
-    SYNC,            /* 3 */
-    QUIT,            /* 4 */
-    NONE,            /* 5 */
-    ERROR_OPTION,    /* 6 */
-} option_t; 
+    LS_NID,
+    LS_NID_BID,
+    LS_UNS,
+    SYNC,
+    QUIT,
+    NONE,
+    ERROR_OPTION,
+} option_t;
 
 typedef enum{
     SUCCESS,

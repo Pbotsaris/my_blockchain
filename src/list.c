@@ -1,13 +1,12 @@
-
 #include "../include/my_blockchain.h"
 #include <string.h>
 
 /*
  *
-                   PRIVATE
-                                             */
+ PRIVATE
+ */
 
-static void make_bid_buffer(char *bid, node_t *node)
+void make_bid_buffer(char *bid, node_t *node)
 {
     int len = (int)strlen(bid);
 
@@ -18,9 +17,27 @@ static void make_bid_buffer(char *bid, node_t *node)
 /*
  *
  *
-                    PUBLIC
-                                             */
+ PUBLIC
+ */
 
+node_t *copy_list(node_t *src, node_t *dest){
+
+    if(src == NULL)
+        return NULL;
+    else{
+        node_t *temp_head = src;
+
+        free_list(dest);
+        dest = NULL;
+
+        while(temp_head){
+                dest = add_node(dest, temp_head->bid, temp_head->nid);
+                temp_head = temp_head->next;
+        }
+    }
+    return dest;
+
+}
 
 node_t *add_node(node_t *head, char *bid, int nid)
 {
@@ -37,7 +54,7 @@ node_t *remove_node(node_t *head, int nid)
 {
 
     if (head == NULL) return NULL;
-    
+
     node_t *current = head;
     node_t *prev = NULL;
 
@@ -130,11 +147,10 @@ node_t *find_node(node_t *head, int nid)
 
 }
 
-
 int node_exists(node_t *head, int nid)
 {
-   if(head == NULL)
-       return -1;
+    if(head == NULL)
+        return -2;
 
     int count = 0;
     node_t *current = head;
@@ -151,8 +167,8 @@ int node_exists(node_t *head, int nid)
 int block_exists(node_t *head, char *bid)
 {
 
-   if(head == NULL)
-       return -1;
+    if(head == NULL)
+        return -1;
 
     int count = 0;
     node_t *current = head;
@@ -177,7 +193,7 @@ void print_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-        printf("%i: %s, \n", current->nid, current->bid);
+        printf("%i:\n", current->nid);
         current = current->next;
     }
 }
@@ -193,7 +209,7 @@ void print_block_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-            printf("%i: %s, \n", current->nid, current->bid);
+        printf("%i: %s, \n", current->nid, current->bid);
 
         current = current->next;
     }

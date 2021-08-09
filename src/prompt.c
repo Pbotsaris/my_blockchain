@@ -1,7 +1,7 @@
 #include "../include/my_blockchain.h"
 
 char *output_merge(char* output,char *status, int added_nodes){
-    
+
     char enter_boarder[] = "[";
     char end_boarder[] = "]> ";
 
@@ -16,22 +16,45 @@ char *output_merge(char* output,char *status, int added_nodes){
     return output;
 }
 
-void prompt_display(option_t option){
-    
-    static int added_nodes = 0;
+int count_nodes(node_t *head)
+{
+    if(head == NULL)
+        return 0;
+
+    int count = 0;
+    node_t *current = head;
+    while (current)
+    {
+        current = current->next;
+        count++;
+    }
+    return count;
+} 
+
+void prompt_display(input_t *input){
+
     static char status[] = "s"; 
-   
-    char *output = malloc(sizeof(char)*106);
+    static int prev_node_count = 0;
+    static int entries = 0;
 
-    if(option == SYNC)
-        status[0] = 's';
-
-    if(option == ADD_NID){
-        status[0] = '-';
-        added_nodes++;
+    if(entries == 0){
+        printf("Program starting...\n");
+        prev_node_count = count_nodes(input->unsynced);
+        entries++;
     }
     
-    output = output_merge(output, status, added_nodes);
+    char *output = malloc(sizeof(char)*BUFSIZ);
+
+    if(count_nodes(input->unsynced) != prev_node_count){
+        status[0] = '-';
+        prev_node_count = count_nodes(input->unsynced);
+    }
+
+    if(input->option == SYNC)
+        status[0] = 's';
+
+
+    output = output_merge(output, status, count_nodes(input->unsynced));
     write(0, output, sizeof(output));
     free(output);
 }
