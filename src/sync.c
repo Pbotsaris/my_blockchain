@@ -5,6 +5,12 @@ node_t *get_synced_nodes(node_t *head){
     int file = open("./bin/saved_nodes.txt", O_RDWR),
         skip = 0;
 
+    if(file < 0){
+        file = open("./bin/saved_nodes.txt", O_CREAT | O_RDWR);
+        if(file < 0)
+            return NULL;
+    }
+
     char    *temp = malloc(sizeof(char)),
             *nid = malloc(sizeof(char)*BUFSIZ),
             *bid = malloc(sizeof(char)*BUFSIZ);
@@ -42,7 +48,14 @@ node_t *get_synced_nodes(node_t *head){
 
 void write_nodes(node_t *synced){
 
-    int file = open("./bin/saved_nodes.txt", O_CREAT | O_RDWR);
+    int file = open("./bin/saved_nodes.txt", O_RDWR);
+
+    if(file < 0){
+        file = open("./bin/saved_nodes.txt", O_CREAT | O_RDWR);
+        if(file < 0)
+            return;
+    }
+
     
     char *nid_str = malloc(sizeof(char)*BUFSIZ);
 
