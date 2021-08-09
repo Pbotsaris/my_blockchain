@@ -147,7 +147,6 @@ node_t *find_node(node_t *head, int nid)
 
 }
 
-
 int node_exists(node_t *head, int nid)
 {
     if(head == NULL)
