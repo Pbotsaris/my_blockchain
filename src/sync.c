@@ -1,38 +1,21 @@
 #include "../include/my_blockchain.h"
 
-void read_nodes(int nid, char* bid, node_t **head){
-   
-    node_t *node = malloc(sizeof(node_t));
-    make_bid_buffer(bid, node);
-    node->nid = nid;
-    node->next = NULL;
-
-    if(*head == NULL){
-        *head = node;
-    }
-    else{
-        node_t *last_node = *head;
-
-        while(last_node->next != NULL)
-            last_node = last_node->next;
-        
-        last_node->next = node;
-    }
-}
-
 node_t *get_synced_nodes(node_t *head){
     
     int file = open("./bin/saved_nodes.txt", O_RDWR),
         skip = 0;
 
     char    *temp = malloc(sizeof(char)),
-            *nid = malloc(sizeof(char)*100),
-            *bid = malloc(sizeof(char)*100);
+            *nid = malloc(sizeof(char)*BUFSIZ),
+            *bid = malloc(sizeof(char)*BUFSIZ);
     
     if(file < 0)
         return NULL;
     
     while(read(file, temp, 1) > 0){
+
+        if(temp[0] == ' ')
+            continue;
 
         if(temp[0] != ':' && skip == 0)
             strcat(nid, temp);
@@ -45,7 +28,7 @@ node_t *get_synced_nodes(node_t *head){
             strcat(bid, temp);
         }else if(temp[0] == ','){
             skip = 0;
-            read_nodes(atoi(nid), bid, &head);
+            head = add_node(head, bid, atoi(nid));
             nid[0] = '\0';
             bid[0] = '\0';
         }
