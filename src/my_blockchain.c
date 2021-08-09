@@ -20,7 +20,6 @@
 #define BUFF_SIZE 100
 
 void free_struct(input_t *input){
-
     free(input->bid);
     free(input->buffer);
     free(input->cmd);
@@ -37,7 +36,7 @@ int main(void)
 
     node_t *synced = NULL;
     synced = get_synced_nodes(synced);
-    input->unsynced = synced;
+    input->unsynced = copy_list(synced, input->unsynced);
 
     printf("Program starting...\n");
     while(input->option != QUIT){
