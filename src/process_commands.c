@@ -112,7 +112,7 @@ status_t parse_input(input_t *input)
         return FAIL;
 
     if((strcmp(input->typ, NODE)) == 0){
-        if((input->nid = get_input(input->buffer, &len_count)) == NULL)
+        if((input->nid = get_input(input->buffer, &len_count)) == NULL || (get_input(input->buffer, &len_count)) != NULL)
             return FAIL;
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
@@ -137,13 +137,13 @@ status_t parse_input(input_t *input)
  *       ADD BLOCK TO NODE
  *                                                      */
 
-void check_add_block(input_t *input)
+status_t check_add_block(input_t *input)
 {
 
     if(block_exists(input->unsynced, input->bid) >= 0)
     {
         print_error(BLOCK_EXISTS);
-        return;
+        return FAIL;
     }
 
     // TODO function that changes the previous passed nodes
@@ -155,6 +155,7 @@ void check_add_block(input_t *input)
             input->unsynced = add_node(input->unsynced,input->bid, atoi(input->nid));
     }
 
+    return SUCCESS;
 }
 
 /*
@@ -162,18 +163,18 @@ void check_add_block(input_t *input)
  *       ADD A NODE 
  *                                                      */
 
-void check_add_node(input_t *input)
+status_t check_add_node(input_t *input)
 {
     if(check_number(input->nid) == FALSE)
     {
         print_error(INVALID_NODE);
-        return;
+        return FAIL;
     }
 
     if(node_exists(input->unsynced,atoi(input->nid)) >= 0)
     {
         print_error(NODE_EXISTS);
-        return;
+        return FAIL;
     }
 
     if(input->impact_all)
@@ -181,6 +182,7 @@ void check_add_node(input_t *input)
     else
         input->unsynced = add_node(input->unsynced, "\0", atoi(input->nid));
 
+    return SUCCESS;
 }
 
 /*
@@ -188,14 +190,17 @@ void check_add_node(input_t *input)
  *        REMOVE A BLOCK FROM A NODE
  *                                                      */
 
-void check_rm_block(input_t *input)
+status_t check_rm_block(input_t *input)
 {
     // TODO function that changes the previous passed nodes
 
-    if((block_exists(input->unsynced, input->bid)) >= 0)
+    if((block_exists(input->unsynced, input->bid)) >= 0){
         input->unsynced = remove_block(input->unsynced, input->bid);
+        return SUCCESS;
+    }
     else
         print_error(BLOCK_NOT_EXISTS);
+    return FAIL;
 }
 
 /*
@@ -203,24 +208,27 @@ void check_rm_block(input_t *input)
  *        REMOVE A NODE
  *                                                      */
 
-void check_rm_node(input_t *input)
+status_t check_rm_node(input_t *input)
 {
     if(check_number(input->nid) == FALSE)
     {
         if((strcmp(input->nid, "*")) == 0){
             input->unsynced = NULL;
-            return;
+            return SUCCESS;
         }else{
             print_error(INVALID_NODE);
-            return; 
+            return FAIL; 
         }
     }
 
     // TODO to pass BLOCK in the function to remove node
-    if(node_exists(input->unsynced, atoi(input->nid)) >= 0)
+    if(node_exists(input->unsynced, atoi(input->nid)) >= 0){
         input->unsynced = remove_node(input->unsynced, atoi(input->nid));
+        return SUCCESS;
+    }
     else
         print_error(NODE_NOT_EXISTS);
+    return FAIL;
 
 }
 
@@ -231,6 +239,9 @@ void check_rm_node(input_t *input)
 
 void process_commands(input_t *input)
 {
+
+    status_t status;
+
     if((parse_input(input)) == FAIL)
     {
         print_error(CMD_NOT_FOUND);
@@ -239,20 +250,22 @@ void process_commands(input_t *input)
 
     if(is_add(input->cmd) && is_block(input->typ)){
         input->impact_all= check_block_impact(input->buffer);
-        check_add_block(input);
+        status = check_add_block(input);
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
-        check_add_node(input);
+        status = check_add_node(input);
     }
 
     if(is_rm(input->cmd) && is_block(input->typ))
     {
         input->impact_all= check_block_impact(input->buffer);
-        check_rm_block(input);
+        status = check_rm_block(input);
     }
 
     if(is_rm(input->cmd) && is_node(input->typ))
-        check_rm_node(input);
+        status = check_rm_node(input);
 
+    if(status == SUCCESS)
+        printf("OK\n");
 }
