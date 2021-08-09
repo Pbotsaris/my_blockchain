@@ -19,7 +19,7 @@ char *output_merge(char* output,char *status, int added_nodes){
 int count_nodes(node_t *head)
 {
     if(head == NULL)
-        return -1;
+        return 0;
 
     int count = 0;
     node_t *current = head;
@@ -36,20 +36,23 @@ void prompt_display(input_t *input){
     static char status[] = "s"; 
     static int prev_node_count = 0;
     static int entries = 0;
+
     if(entries == 0){
+        printf("Program starting...\n");
         prev_node_count = count_nodes(input->unsynced);
+        entries++;
     }
-    entries++;
     
     char *output = malloc(sizeof(char)*106);
-
-    if(input->option == SYNC)
-        status[0] = 's';
 
     if(count_nodes(input->unsynced) != prev_node_count){
         status[0] = '-';
         prev_node_count = count_nodes(input->unsynced);
     }
+
+    if(input->option == SYNC)
+        status[0] = 's';
+
 
     output = output_merge(output, status, count_nodes(input->unsynced));
     write(0, output, sizeof(output));
