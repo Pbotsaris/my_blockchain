@@ -5,7 +5,7 @@ option_t basic_commands(input_t *input, node_t **synced)
 {
     if((strcmp(input->buffer, "sync")) == 0){
         printf("syncing...\n");
-        *synced = input->unsynced;
+        *synced = copy_list(input->unsynced, *synced);
         return SYNC;
     }else if((strcmp(input->buffer, "quit")) == 0){
         printf("Quiting program successful.\n");
@@ -15,6 +15,9 @@ option_t basic_commands(input_t *input, node_t **synced)
         return LS_NID;
     }else if((strcmp(input->buffer, "ls -l")) == 0){
         print_block_list(*synced);
+        return LS_NID_BID;
+    }else if((strcmp(input->buffer, "ls -x")) == 0){
+        print_block_list(input->unsynced);
         return LS_NID_BID;
     }
     return NONE;
