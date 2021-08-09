@@ -2,6 +2,7 @@
 #define LIST_H
 
 #define SELLECT_ALL "*"
+#include "./my_blockchain.h"
 
 typedef struct node_s {
     int nid;

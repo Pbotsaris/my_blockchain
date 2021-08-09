@@ -196,6 +196,7 @@ int block_exists(node_t *head, char *bid)
     return -1;
 }
 
+
 void print_list(node_t *head)
 {
     if (head == NULL)

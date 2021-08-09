@@ -42,24 +42,24 @@ int main(void)
 
     while(input->option != QUIT){
 
-        prompt_display(input);
+        bool_t needs_sync = prompt_display(input);
         input->option = process_input(STDIN_FILENO,input); 
 
         switch(input->option){
             case SYNC:
-              //  printf("OK: Syncing...\n");
-                print_message(SYNC_MSG);
+                if(needs_sync)
+                    print_message(SYNC_MSG);
+                else
+                    print_message(NOSYNC_MSG);
                 synced = copy_list(input->unsynced, synced);
                 break;
 
             case LS_NID:
                 print_message(LS_MSG);
-              //  printf("OK: Synced list:\n");
                 print_list(synced);
                 break;
 
             case LS_NID_BID:
-              //  printf("OK: Synced list including blocks:\n");
                 print_message(LS_L_MSG);
                 print_block_list(synced);
                 break;
@@ -69,7 +69,6 @@ int main(void)
                 free_list(synced);
                 free_struct(input);
                 print_message(QUIT_MSG);
-              //  printf("OK: Quitting program successful.\n");
                 break;
 
             case LS_UNS:

@@ -21,6 +21,7 @@ void print_message(msg_t type)
 {
     char messages[][100] = {
         "Program starting...\n",
+        "NOK: Nothing to sync.\n",
         "OK: Syncing...\n",
         "OK: Synced nodes:\n",
         "OK: Synced nodes and blocks:\n",

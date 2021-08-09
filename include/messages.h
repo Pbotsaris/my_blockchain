@@ -14,6 +14,7 @@ typedef enum err{
 
 typedef enum msg{
     LAUNCH_MSG,
+    NOSYNC_MSG,
     SYNC_MSG,
     LS_MSG,
     LS_L_MSG,
