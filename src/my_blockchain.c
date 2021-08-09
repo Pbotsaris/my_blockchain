@@ -48,10 +48,12 @@ int main(void)
         switch(input->option){
             case SYNC:
                 if(needs_sync)
+                {
                     print_message(SYNC_MSG);
+                synced = copy_list(input->unsynced, synced);
+                }
                 else
                     print_message(NOSYNC_MSG);
-                synced = copy_list(input->unsynced, synced);
                 break;
 
             case LS_NID:
