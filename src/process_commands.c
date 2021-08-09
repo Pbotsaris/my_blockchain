@@ -91,7 +91,6 @@ char *get_input(char *input, int *input_index)
         (*input_index)++;
     }
 
-    (*input_index)++;
 
     ret_command[index] = '\0';
 
@@ -120,7 +119,10 @@ status_t parse_input(input_t *input)
     {
         input->bid = get_input(input->buffer, &len_count);
         input->nid = get_input(input->buffer, &len_count); 
-        if(input->bid == NULL || input->nid == NULL)
+
+        if((strcmp(input->cmd, RM) == 0) && input->nid != NULL){
+            return FAIL;
+        }else if(input->bid == NULL || input->bid == NULL)
             return FAIL;
     }
 
@@ -190,7 +192,6 @@ void check_rm_block(input_t *input)
 {
     // TODO function that changes the previous passed nodes
 
-    printf("Here\n");
     if((block_exists(input->unsynced, input->bid)) >= 0)
         input->unsynced = remove_block(input->unsynced, input->bid);
     else
@@ -206,8 +207,13 @@ void check_rm_node(input_t *input)
 {
     if(check_number(input->nid) == FALSE)
     {
-        print_error(INVALID_NODE);
-        return; 
+        if((strcmp(input->nid, "*")) == 0){
+            input->unsynced = NULL;
+            return;
+        }else{
+            print_error(INVALID_NODE);
+            return; 
+        }
     }
 
     // TODO to pass BLOCK in the function to remove node
@@ -248,4 +254,5 @@ void process_commands(input_t *input)
 
     if(is_rm(input->cmd) && is_node(input->typ))
         check_rm_node(input);
+
 }
