@@ -2,9 +2,5 @@
 1. need to be able to add a block to an exsitent node with no block
 2. add block "cat" * needs to impact all the previous nodes
 3. remove the option to add a node when doing `add block new_node 12`
-4. rm node * should remove all nodes
 
-
-## ERRORS
-you can pass rm block cat 12 // where rm block can accept only 1 argument which is the name of the block
 
