@@ -43,7 +43,7 @@ void prompt_display(input_t *input){
         entries++;
     }
     
-    char *output = malloc(sizeof(char)*106);
+    char *output = malloc(sizeof(char)*BUFSIZ);
 
     if(count_nodes(input->unsynced) != prev_node_count){
         status[0] = '-';
