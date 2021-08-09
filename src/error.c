@@ -9,10 +9,10 @@ void print_error(err_t type)
         "This block already exists.\n",
         "Node doesn't exist.\n",
         "Block doesn't exists.\n",
-        "Command not found.\n"
-            "Node must be a number.\n"
+        "Command not found.\n",
+        "Node must be a number.\n"
     };
 
-    printf("%s", error_messages[type]);
+    printf("NOK: %s", error_messages[type]);
 }
 
