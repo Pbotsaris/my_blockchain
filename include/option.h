@@ -10,10 +10,9 @@ typedef enum{
 } bool_t;
 
 typedef enum{
-    ADD_NID,
-    RM_NID,
     LS_NID,
     LS_NID_BID,
+    LS_UNS,
     SYNC,
     QUIT,
     NONE,
