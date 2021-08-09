@@ -179,7 +179,6 @@ void check_add_node(input_t *input)
     else
         input->unsynced = add_node(input->unsynced, "\0", atoi(input->nid));
 
-    input->option = ADD_NID;
 }
 
 /*
@@ -191,6 +190,7 @@ void check_rm_block(input_t *input)
 {
     // TODO function that changes the previous passed nodes
 
+    printf("Here\n");
     if((block_exists(input->unsynced, input->bid)) >= 0)
         input->unsynced = remove_block(input->unsynced, input->bid);
     else
@@ -216,7 +216,6 @@ void check_rm_node(input_t *input)
     else
         print_error(NODE_NOT_EXISTS);
 
-    input->option = RM_NID;
 }
 
 /*
