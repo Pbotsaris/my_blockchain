@@ -46,17 +46,17 @@ int main(void)
 
         switch(input->option){
             case SYNC:
-                printf("Syncing...\n");
+                printf("OK: Syncing...\n");
                 synced = copy_list(input->unsynced, synced);
                 break;
 
             case LS_NID:
-                printf("Synced list:\n");
+                printf("OK: Synced list:\n");
                 print_list(synced);
                 break;
 
             case LS_NID_BID:
-                printf("Synced list including blocks:\n");
+                printf("OK: Synced list including blocks:\n");
                 print_block_list(synced);
                 break;
 
@@ -64,7 +64,7 @@ int main(void)
                 write_nodes(synced);
                 free_list(synced);
                 free_struct(input);
-                printf("Quitting program successful.\n");
+                printf("OK: Quitting program successful.\n");
                 break;
 
             case LS_UNS:
