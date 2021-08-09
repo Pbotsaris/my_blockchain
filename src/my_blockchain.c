@@ -17,6 +17,7 @@
  */
 
 #include "../include/my_blockchain.h"
+#include "../include/messages.h"
 #define BUFF_SIZE 100
 
 void free_struct(input_t *input){
@@ -46,17 +47,20 @@ int main(void)
 
         switch(input->option){
             case SYNC:
-                printf("OK: Syncing...\n");
+              //  printf("OK: Syncing...\n");
+                print_message(SYNC_MSG);
                 synced = copy_list(input->unsynced, synced);
                 break;
 
             case LS_NID:
-                printf("OK: Synced list:\n");
+                print_message(LS_MSG);
+              //  printf("OK: Synced list:\n");
                 print_list(synced);
                 break;
 
             case LS_NID_BID:
-                printf("OK: Synced list including blocks:\n");
+              //  printf("OK: Synced list including blocks:\n");
+                print_message(LS_L_MSG);
                 print_block_list(synced);
                 break;
 
@@ -64,15 +68,17 @@ int main(void)
                 write_nodes(synced);
                 free_list(synced);
                 free_struct(input);
-                printf("OK: Quitting program successful.\n");
+                print_message(QUIT_MSG);
+              //  printf("OK: Quitting program successful.\n");
                 break;
 
             case LS_UNS:
+                print_message(LS_X_MSG);
                 print_block_list(input->unsynced);
                 break;
 
             default:
-                process_commands(input);
+                process_commands(input, synced);
                 break;
         }
     } 

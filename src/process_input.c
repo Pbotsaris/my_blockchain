@@ -1,7 +1,7 @@
 #include "../include/my_blockchain.h"
 #define BUFF_SIZE 100
 
-option_t basic_commands(input_t *input)
+static option_t basic_commands(input_t *input)
 {
     if((strcmp(input->buffer, "sync")) == 0)
         return SYNC;
@@ -27,3 +27,4 @@ option_t process_input(int std_in, input_t *input){
 
     return option;
 }
+

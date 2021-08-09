@@ -14,6 +14,8 @@ node_t *copy_list(node_t *src, node_t *dest);
 node_t *init_list(char *bid, int nid);
 node_t *add_node(node_t *head, char *bid, int nid);
 node_t *add_block(node_t *head, char *bid, int nid);
+void add_block_all(node_t *head, char *bid);
+
 node_t *remove_node(node_t *head, int nid);
 node_t *remove_block(node_t *head, char *bid);
 

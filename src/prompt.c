@@ -1,4 +1,5 @@
 #include "../include/my_blockchain.h"
+#include "../include/messages.h"
 
 char *output_merge(char* output,char *status, int added_nodes){
 
@@ -38,7 +39,7 @@ void prompt_display(input_t *input){
     static int entries = 0;
 
     if(entries == 0){
-        printf("Program starting...\n");
+        print_message(LAUNCH_MSG);
         prev_node_count = count_nodes(input->unsynced);
         entries++;
     }

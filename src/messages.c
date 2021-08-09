@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/err.h"
+#include "../include/messages.h"
 
 void print_error(err_t type)
 {
@@ -15,4 +15,21 @@ void print_error(err_t type)
 
     printf("NOK: %s", error_messages[type]);
 }
+
+
+void print_message(msg_t type)
+{
+    char messages[][100] = {
+        "Program starting...\n",
+        "OK: Syncing...\n",
+        "OK: Synced nodes:\n",
+        "OK: Synced nodes and blocks:\n",
+        "OK: Quitting program successful.\n",
+        "OK: Unsynced nodes:\n",
+        "OK\n",
+    };
+
+    printf("%s", messages[type]);
+}
+
 
