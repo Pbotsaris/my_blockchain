@@ -1,4 +1,5 @@
 #include "../include/my_blockchain.h"
+#include "../include/messages.h"
 
 char *output_merge(char* output,char *status, int added_nodes){
 
@@ -31,14 +32,15 @@ int count_nodes(node_t *head)
     return count;
 } 
 
-void prompt_display(input_t *input){
+bool_t prompt_display(input_t *input){
 
+    bool_t needs_sync = FALSE;
     static char status[] = "s"; 
     static int prev_node_count = 0;
     static int entries = 0;
 
     if(entries == 0){
-        printf("Program starting...\n");
+        print_message(LAUNCH_MSG);
         prev_node_count = count_nodes(input->unsynced);
         entries++;
     }
@@ -47,6 +49,7 @@ void prompt_display(input_t *input){
 
     if(count_nodes(input->unsynced) != prev_node_count){
         status[0] = '-';
+        needs_sync = TRUE;
         prev_node_count = count_nodes(input->unsynced);
     }
 
@@ -57,4 +60,6 @@ void prompt_display(input_t *input){
     output = output_merge(output, status, count_nodes(input->unsynced));
     write(0, output, sizeof(output));
     free(output);
+
+    return needs_sync;
 }

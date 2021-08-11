@@ -1,5 +1,5 @@
 #include "../include/my_blockchain.h"
-#include "../include/err.h"
+#include "../include/messages.h"
 
 #define NODE "node"
 #define BLOCK "block"
@@ -112,7 +112,8 @@ status_t parse_input(input_t *input)
         return FAIL;
 
     if((strcmp(input->typ, NODE)) == 0){
-        if((input->nid = get_input(input->buffer, &len_count)) == NULL || (get_input(input->buffer, &len_count)) != NULL)
+        if((input->nid = get_input(input->buffer, &len_count)) == NULL
+                || (get_input(input->buffer, &len_count)) != NULL)
             return FAIL;
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
@@ -147,6 +148,7 @@ status_t check_add_block(input_t *input)
     }
 
     // TODO function that changes the previous passed nodes
+    
     if(check_number(input->nid))
     {
         if((node_exists(input->unsynced, atoi(input->nid))) >= 0)
@@ -237,7 +239,7 @@ status_t check_rm_node(input_t *input)
  *
  */
 
-void process_commands(input_t *input)
+void process_commands(input_t *input, node_t *synced)
 {
 
     status_t status;
@@ -249,8 +251,13 @@ void process_commands(input_t *input)
     }
 
     if(is_add(input->cmd) && is_block(input->typ)){
-        input->impact_all= check_block_impact(input->buffer);
-        status = check_add_block(input);
+        if((input->impact_all= check_block_impact(input->buffer)))
+        {
+            add_block_all(synced, input->bid);
+            add_block_all(input->unsynced, input->bid);
+        }
+        else
+          status = check_add_block(input);
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
@@ -267,5 +274,6 @@ void process_commands(input_t *input)
         status = check_rm_node(input);
 
     if(status == SUCCESS)
-        printf("OK\n");
+        print_message(OK_MSG);
+        
 }
