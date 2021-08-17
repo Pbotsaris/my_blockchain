@@ -1,4 +1,5 @@
 #include "../include/my_blockchain.h"
+#include "../include/messages.h"
 #include <string.h>
 
 /*
@@ -84,6 +85,7 @@ node_t *remove_node(node_t *head, int nid)
 
 node_t *add_block(node_t *head, char *bid, int nid)
 {
+    bool_t node_not_found = TRUE;
 
     if (head == NULL) return NULL;
 
@@ -91,10 +93,17 @@ node_t *add_block(node_t *head, char *bid, int nid)
 
     while (current)
     {
-        if (nid == current->nid) make_bid_buffer(bid, current);
+        if (nid == current->nid)
+        {
+            make_bid_buffer(bid, current);
+            node_not_found = FALSE;
+        }
 
         current = current->next;
     }
+
+    if(node_not_found)
+        print_error(NODE_NOT_EXISTS);
 
     return head;
 }
