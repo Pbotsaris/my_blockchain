@@ -42,18 +42,13 @@ int main(void)
 
     while(input->option != QUIT){
 
-        bool_t needs_sync = prompt_display(input);
+        prompt_display(input);
         input->option = process_input(STDIN_FILENO,input); 
 
         switch(input->option){
             case SYNC:
-                if(needs_sync)
-                {
-                    print_message(SYNC_MSG);
+                print_message(SYNC_MSG);
                 synced = copy_list(input->unsynced, synced);
-                }
-                else
-                    print_message(NOSYNC_MSG);
                 break;
 
             case LS_NID:

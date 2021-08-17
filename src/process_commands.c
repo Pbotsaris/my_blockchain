@@ -118,8 +118,8 @@ status_t parse_input(input_t *input)
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
-        input->bid = get_input(input->buffer, &len_count);
         input->nid = get_input(input->buffer, &len_count); 
+        input->bid = get_input(input->buffer, &len_count);
 
         if((strcmp(input->cmd, RM) == 0) && input->nid != NULL){
             return FAIL;
@@ -141,13 +141,13 @@ status_t parse_input(input_t *input)
 status_t check_add_block(input_t *input)
 {
 
+
     if(block_exists(input->unsynced, input->bid) >= 0)
     {
         print_error(BLOCK_EXISTS);
         return FAIL;
     }
 
-    // TODO function that changes the previous passed nodes
     
     if(check_number(input->nid))
     {
@@ -156,6 +156,8 @@ status_t check_add_block(input_t *input)
         else
             input->unsynced = add_node(input->unsynced,input->bid, atoi(input->nid));
     }
+    else 
+        print_error(INVALID_NODE);
 
     return SUCCESS;
 }
@@ -167,6 +169,7 @@ status_t check_add_block(input_t *input)
 
 status_t check_add_node(input_t *input)
 {
+
     if(check_number(input->nid) == FALSE)
     {
         print_error(INVALID_NODE);
