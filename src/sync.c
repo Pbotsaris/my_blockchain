@@ -45,7 +45,7 @@
 //    free(bid);
 //    return head;
 //}
-
+//
 //void write_nodes(node_t *synced){
 //
 //    int file = open("./bin/saved_nodes.txt", O_RDWR);
@@ -70,4 +70,4 @@
 //    }
 //
 //    free(nid_str);
-//}
+}
