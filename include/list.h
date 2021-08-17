@@ -2,6 +2,7 @@
 #define LIST_H
 
 #define SELLECT_ALL "*"
+#define BLOCKS_INIT_MAX_LEN 5
 #include "my_blockchain.h"
 
 typedef struct node_s {
@@ -18,11 +19,12 @@ node_t *add_node(node_t *head, int nid);
 node_t *add_block(node_t *head, char *bid, int nid);
 void add_block_all(node_t *head, char *bid);
 
+node_t *remove_block(node_t *head, char *bid, int nid);
 node_t *remove_node(node_t *head, int nid);
-node_t *remove_block(node_t *head, int nid, char *bid);
 
 int node_exists(node_t *head, int nid);
-// int block_exists(node_t *head, char *bid);
+
+bool_t block_exists(node_t *head, char *bid, int nid);
 node_t *find_node(node_t *head, int nid);
 
 void print_list(node_t *head);

@@ -8,7 +8,11 @@ block_t *create_blocks(int maxlen)
     blocks->bids = (char**)malloc(maxlen * sizeof(char*)); 
 
     for(int i = 0; i < maxlen; i++)
+    {
         blocks->bids[i] = (char*)malloc(MAX_BID_SIZE * sizeof(char));
+        strcpy(blocks->bids[i], "\0");
+    }
+
 
     return blocks;
 }

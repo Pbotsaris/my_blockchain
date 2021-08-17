@@ -15,9 +15,8 @@
 #include "blocks.h"
 #include "sync.h"
 
-
 option_t process_input(int std_in, input_t *input);
-void process_commands(input_t *input, node_t *synced);
+//void process_commands(input_t *input, node_t *synced);
 bool_t prompt_display(input_t *input);
 
 #endif
