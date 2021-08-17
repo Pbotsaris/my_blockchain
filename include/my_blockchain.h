@@ -12,7 +12,9 @@
 #include "err.h"
 #include "option.h"
 #include "list.h"
+#include "blocks.h"
 #include "sync.h"
+
 
 option_t process_input(int std_in, input_t *input);
 void process_commands(input_t *input, node_t *synced);
