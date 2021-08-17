@@ -38,7 +38,7 @@ int main(void)
 
     node_t *synced = NULL;
     synced = get_synced_nodes(synced);
-    input->unsynced = copy_list(synced, input->unsynced);
+ //   input->unsynced = copy_list(synced, input->unsynced);
 
     while(input->option != QUIT){
 
@@ -48,7 +48,7 @@ int main(void)
         switch(input->option){
             case SYNC:
                 print_message(SYNC_MSG);
-                synced = copy_list(input->unsynced, synced);
+              //  synced = copy_list(input->unsynced, synced);
                 break;
 
             case LS_NID:

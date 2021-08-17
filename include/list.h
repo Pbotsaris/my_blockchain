@@ -6,7 +6,7 @@
 
 typedef struct node_s {
     int nid;
-    block_t *blocks;
+    struct block_s *blocks;
     struct node_s *next; 
 }node_t;
 

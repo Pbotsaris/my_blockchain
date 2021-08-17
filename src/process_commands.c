@@ -142,19 +142,19 @@ status_t check_add_block(input_t *input)
 {
 
 
-    if(block_exists(input->unsynced, input->bid) >= 0)
-    {
-        print_error(BLOCK_EXISTS);
-        return FAIL;
-    }
+    //    if(block_exists(input->unsynced, input->bid) >= 0)
+    //    {
+    //        print_error(BLOCK_EXISTS);
+    //        return FAIL;
+    //    }
+    //
 
-    
     if(check_number(input->nid))
     {
         if((node_exists(input->unsynced, atoi(input->nid))) >= 0)
             input->unsynced = add_block(input->unsynced, input->bid, atoi(input->nid));
         else
-            input->unsynced = add_node(input->unsynced,input->bid, atoi(input->nid));
+            print_error(NODE_NOT_EXISTS);
     }
     else 
         print_error(INVALID_NODE);
@@ -182,10 +182,10 @@ status_t check_add_node(input_t *input)
         return FAIL;
     }
 
-    if(input->impact_all)
-        input->unsynced = add_node(input->unsynced, input->bid, atoi(input->nid)); 
-    else
-        input->unsynced = add_node(input->unsynced, "\0", atoi(input->nid));
+//    if(input->impact_all)
+ //       input->unsynced = add_node(input->unsynced, input->bid, atoi(input->nid)); 
+  //  else
+      input->unsynced = add_node(input->unsynced, atoi(input->nid));
 
     return SUCCESS;
 }
@@ -197,15 +197,11 @@ status_t check_add_node(input_t *input)
 
 status_t check_rm_block(input_t *input)
 {
-    // TODO function that changes the previous passed nodes
-
-    if((block_exists(input->unsynced, input->bid)) >= 0){
-        input->unsynced = remove_block(input->unsynced, input->bid);
-        return SUCCESS;
-    }
-    else
-        print_error(BLOCK_NOT_EXISTS);
-    return FAIL;
+//    if((block_exists(input->unsynced, input->bid)) >= 0){
+        input->unsynced = remove_block(input->unsynced, atoi(input->nid), input->bid);
+        //return SUCCESS;
+   // }
+    return SUCCESS;
 }
 
 /*
@@ -215,6 +211,7 @@ status_t check_rm_block(input_t *input)
 
 status_t check_rm_node(input_t *input)
 {
+
     if(check_number(input->nid) == FALSE)
     {
         if((strcmp(input->nid, "*")) == 0){
@@ -226,7 +223,6 @@ status_t check_rm_node(input_t *input)
         }
     }
 
-    // TODO to pass BLOCK in the function to remove node
     if(node_exists(input->unsynced, atoi(input->nid)) >= 0){
         input->unsynced = remove_node(input->unsynced, atoi(input->nid));
         return SUCCESS;
@@ -256,11 +252,11 @@ void process_commands(input_t *input, node_t *synced)
     if(is_add(input->cmd) && is_block(input->typ)){
         if((input->impact_all= check_block_impact(input->buffer)))
         {
-            add_block_all(synced, input->bid);
-            add_block_all(input->unsynced, input->bid);
+          //  add_block_all(synced, input->bid);
+          //  add_block_all(input->unsynced, input->bid);
         }
         else
-          status = check_add_block(input);
+            status = check_add_block(input);
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
@@ -278,5 +274,5 @@ void process_commands(input_t *input, node_t *synced)
 
     if(status == SUCCESS)
         print_message(OK_MSG);
-        
+
 }
