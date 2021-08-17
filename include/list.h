@@ -4,9 +4,15 @@
 #define SELLECT_ALL "*"
 #include "./my_blockchain.h"
 
+typedef struct block_s {
+    char *bid;
+    struct block_s *next;
+}block_t;
+
 typedef struct node_s {
     int nid;
-    char *bid;
+ //   char *bid;
+    block_t bid;
     struct node_s *next; 
 }node_t;
 
