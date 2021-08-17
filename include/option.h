@@ -30,7 +30,7 @@ typedef struct input_split{
     char *bid;
     char *nid;
     char *buffer;
-    struct node_s *unsynced;
+    struct node_s *head;
     bool_t impact_all;
     option_t option;
 } input_t;

@@ -14,11 +14,11 @@ char *get_input(char *input, int *input_index);
 status_t parse_input(input_t *input);
 
 /* IMPLEMENTATION process_commands */
-void check_add_node(input_t *input);
-void check_add_block(input_t *input);
+status_t check_add_node(input_t *input);
+status_t check_add_block(input_t *input);
 
-void check_rm_node(input_t *input);
-void check_rm_block(input_t *input);
+status_t check_rm_node(input_t *input);
+status_t check_rm_block(input_t *input);
 
 /* PUBLIC */
 void process_commands(input_t *input);
