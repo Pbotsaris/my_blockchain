@@ -200,6 +200,7 @@ START_TEST (test_add_block_til_grow)
 
     ck_assert_str_eq(n->blocks->bids[5], "giraffe");
     ck_assert_str_eq(n->blocks->bids[4], "dolphin");
+    print_block_list(n);
 //
     free_list(n);
 }

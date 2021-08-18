@@ -218,7 +218,7 @@ status_t check_rm_node(input_t *input)
  *
  */
 
-void process_commands(input_t *input, node_t *synced)
+void process_commands(input_t *input)
 {
 
     status_t status;

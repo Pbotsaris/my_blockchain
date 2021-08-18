@@ -69,7 +69,7 @@ int main(void)
                break;
 
            default:
-               process_commands(input, head);
+               process_commands(input);
                break;
        }
    } 

@@ -173,7 +173,7 @@ void print_block_list(node_t *head)
     while (current)
     {
        char *blocks_buffer = concat_blocks(current->blocks);
-        printf("%i: %s, \n", current->nid, blocks_buffer);
+        printf("%i: %s \n", current->nid, blocks_buffer);
         free(blocks_buffer);
 
         current = current->next;

@@ -93,9 +93,10 @@ char *concat_blocks(block_t *blocks)
 {
     char *buffer = (char*) malloc((blocks->maxlen*MAX_BID_SIZE) * sizeof(char));
 
-    for(int i = 0; i <= blocks->index; i++)
+    /* need to deduce 1 from index cause it is counter for the next block index*/ 
+    for(int i = 0; i <= blocks->index - 1; i++)
     {
-        if(i > 0 && i < blocks->index)
+        if(i < blocks->index - 1)
         {
             strcat(buffer, blocks->bids[i]);    
             strcat(buffer, ", ");    
