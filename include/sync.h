@@ -6,4 +6,7 @@
 //node_t *sync_nodes(node_t *head);
 //void write_nodes(node_t *synced);
 //
+
+node_t* sync_nodes(node_t *head);
+
 #endif

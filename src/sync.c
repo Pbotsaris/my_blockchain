@@ -71,3 +71,43 @@
 //
 //    free(nid_str);
 //}
+node_t* impact_prev_nodes(node_t *head){
+
+    node_t *first_node = malloc(sizeof(node_t*));
+    first_node = head;
+ 
+    printf("first node %d\n", first_node->nid);
+
+    node_t *current = malloc(sizeof(node_t*));
+    current = head;
+
+    while(current){
+        for(int i = 0; first_node->blocks->bids[i][0] != '\0'; i++){
+            if(!(bid_exists(current->blocks, first_node->blocks->bids[i]))){
+                add_bid (current->blocks, first_node->blocks->bids[i]);
+            }
+        }
+        current = current->next;
+    }
+
+    return head;
+}
+
+node_t* sync_nodes(node_t *head){
+
+    node_t *temp = malloc(sizeof(node_t*));
+    temp = head;
+
+    while(temp){
+        if(temp->next != NULL)
+            for(int i = 0 ; temp->next->blocks->bids[i][0] != '\0'; i++)
+                if(!(bid_exists(temp->blocks, temp->next->blocks->bids[i])))
+                    add_bid(temp->blocks, temp->next->blocks->bids[i]);
+                
+        temp = temp->next;
+    }
+
+    head =impact_prev_nodes(head);
+
+    return head;
+}
