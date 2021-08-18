@@ -62,7 +62,6 @@ block_t *add_bid(block_t *blocks, char *bid)
     }
 
       strcpy(blocks->bids[blocks->index], bid);
-      printf("index: %d bid: %s\n", blocks->index, blocks->bids[blocks->index]);
       blocks->index++;
 
       return blocks;
