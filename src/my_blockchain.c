@@ -42,7 +42,7 @@ int main(void)
 
    while(input->option != QUIT){
 
-//       prompt_display(input);
+       prompt_display(input);
        input->option = process_input(STDIN_FILENO,input); 
 
        switch(input->option){

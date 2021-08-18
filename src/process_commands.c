@@ -167,14 +167,11 @@ status_t check_add_node(input_t *input)
     }
 
     if(node_exists(input->head,atoi(input->nid)) >= 0)
-        return FAIL;
     {
         print_error(NODE_EXISTS);
+        return FAIL;
     }
 
-    //    if(input->impact_all)
-    //       input->unsynced = add_node(input->unsynced, input->bid, atoi(input->nid)); 
-    //  else
       input->head = add_node(input->head, atoi(input->nid));
 
     return SUCCESS;

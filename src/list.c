@@ -98,12 +98,6 @@ bool_t is_list_synced(node_t *head)
 
     while (current)
     {
-//            if(current->next != NULL)
-//            {
-//            bool_t res = compare_blocks(current->blocks, current->next->blocks);
-//            printf("----> current: %s, next: %s  %d \n", concat_blocks(current->blocks), concat_blocks(current->next->blocks), res);
-//            }
-
         if(current->next != NULL && !(compare_blocks(current->blocks, current->next->blocks)))
         {
             return FALSE;
@@ -132,6 +126,20 @@ node_t *find_node(node_t *head, int nid)
     return NULL;
 
 }
+
+
+int count_nodes(node_t *head)
+{
+    node_t *current = head;
+    int count = 0;
+    while (current)
+    {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
 
 
 int node_exists(node_t *head, int nid)
