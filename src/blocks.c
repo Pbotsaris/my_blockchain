@@ -56,7 +56,8 @@ block_t *grow_blocks(block_t *blocks)
 
 block_t *add_bid(block_t *blocks, char *bid)
 {
-    if(blocks->index >= blocks->maxlen)
+
+    if(blocks->index >= blocks->maxlen - 1)
       blocks = grow_blocks(blocks);
     
       strcpy(blocks->bids[blocks->index], bid);

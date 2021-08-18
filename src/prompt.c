@@ -32,34 +32,34 @@ int count_nodes(node_t *head)
     return count;
 } 
 
-bool_t prompt_display(input_t *input){
-
-    bool_t needs_sync = FALSE;
-    static char status[] = "s"; 
-    static int prev_node_count = 0;
-    static int entries = 0;
-
-    if(entries == 0){
-        print_message(LAUNCH_MSG);
-        prev_node_count = count_nodes(input->unsynced);
-        entries++;
-    }
-    
-    char *output = malloc(sizeof(char)*BUFSIZ);
-
-    if(count_nodes(input->unsynced) != prev_node_count){
-        status[0] = '-';
-        needs_sync = TRUE;
-        prev_node_count = count_nodes(input->unsynced);
-    }
-
-    if(input->option == SYNC)
-        status[0] = 's';
-
-
-    output = output_merge(output, status, count_nodes(input->unsynced));
-    write(0, output, sizeof(output));
-    free(output);
-
-    return needs_sync;
-}
+//bool_t prompt_display(input_t *input){
+//
+//    bool_t needs_sync = FALSE;
+//    static char status[] = "s"; 
+//    static int prev_node_count = 0;
+//    static int entries = 0;
+//
+//    if(entries == 0){
+//        print_message(LAUNCH_MSG);
+//        prev_node_count = count_nodes(input->unsynced);
+//        entries++;
+//    }
+//    
+//    char *output = malloc(sizeof(char)*BUFSIZ);
+//
+//    if(count_nodes(input->unsynced) != prev_node_count){
+//        status[0] = '-';
+//        needs_sync = TRUE;
+//        prev_node_count = count_nodes(input->unsynced);
+//    }
+//
+//    if(input->option == SYNC)
+//        status[0] = 's';
+//
+//
+//    output = output_merge(output, status, count_nodes(input->unsynced));
+//    write(0, output, sizeof(output));
+//    free(output);
+//
+//    return needs_sync;
+//}

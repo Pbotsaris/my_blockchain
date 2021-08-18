@@ -182,6 +182,31 @@ START_TEST (test_block_exists)
 END_TEST
 
 
+START_TEST (test_add_block_til_grow)
+{
+    node_t *n =   NULL; 
+    n = add_node(n, 1);
+
+    n = add_block(n,"dog", 1);
+    n = add_block(n,"cat", 1);
+    n = add_block(n,"camel", 1);
+    n = add_block(n,"cow", 1);
+    n = add_block(n,"dolphin", 1);
+    n = add_block(n,"giraffe", 1);
+
+    ck_assert_int_eq(n->blocks->maxlen, 10);
+    /* index is set for the next entry */
+    ck_assert_int_eq(n->blocks->index, 6);
+
+    ck_assert_str_eq(n->blocks->bids[5], "giraffe");
+    ck_assert_str_eq(n->blocks->bids[4], "dolphin");
+//
+    free_list(n);
+}
+END_TEST
+
+
+
 Suite * test_list(void)
 {
     Suite       *suite;
@@ -199,6 +224,7 @@ Suite * test_list(void)
     tcase_add_test(core, test_remove_block);
     tcase_add_test(core, test_node_exists);
     tcase_add_test(core, test_block_exists);
+    tcase_add_test(core, test_add_block_til_grow);
     suite_add_tcase(suite, core);
 
     return(suite);
