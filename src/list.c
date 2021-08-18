@@ -91,6 +91,34 @@ node_t *remove_block(node_t *head, char *bid, int nid)
     return head;
 }
 
+bool_t is_list_synced(node_t *head)
+{
+
+    node_t *current = head;
+
+    while (current)
+    {
+//            if(current->next != NULL)
+//            {
+//            bool_t res = compare_blocks(current->blocks, current->next->blocks);
+//            printf("----> current: %s, next: %s  %d \n", concat_blocks(current->blocks), concat_blocks(current->next->blocks), res);
+//            }
+
+        if(current->next != NULL && !(compare_blocks(current->blocks, current->next->blocks)))
+        {
+            return FALSE;
+        }
+        /* last node compare with head */
+        else if(!(compare_blocks(current->blocks, head->blocks)))
+            return FALSE;
+
+        current = current->next;
+    }
+
+    return TRUE;
+
+}
+
 
 node_t *find_node(node_t *head, int nid)
 {
@@ -172,7 +200,7 @@ void print_block_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-       char *blocks_buffer = concat_blocks(current->blocks);
+        char *blocks_buffer = concat_blocks(current->blocks);
         printf("%i: %s \n", current->nid, blocks_buffer);
         free(blocks_buffer);
 

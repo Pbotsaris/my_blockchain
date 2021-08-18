@@ -207,6 +207,113 @@ START_TEST (test_add_block_til_grow)
 END_TEST
 
 
+START_TEST (test_is_list_synced_indentical)
+{
+    node_t *n =   NULL; 
+    n = add_node(n, 1);
+    n = add_node(n, 2);
+    n = add_node(n, 3);
+
+    n = add_block(n,"dog", 1);
+    n = add_block(n,"cat", 1);
+    n = add_block(n,"camel", 1);
+    n = add_block(n,"cow", 1);
+
+    n = add_block(n,"dog", 2);
+    n = add_block(n,"cat", 2);
+    n = add_block(n,"camel", 2);
+    n = add_block(n,"cow", 2);
+
+    n = add_block(n,"dog", 3);
+    n = add_block(n,"cat", 3);
+    n = add_block(n,"camel", 3);
+    n = add_block(n,"cow", 3);
+
+    bool_t result = is_list_synced(n);
+    ck_assert_int_eq(result, TRUE);
+
+    free_list(n);
+}
+END_TEST
+
+
+START_TEST (test_is_list_synced_unordered)
+{
+    node_t *n =   NULL; 
+    n = add_node(n, 1);
+    n = add_node(n, 2);
+    n = add_node(n, 3);
+
+    n = add_block(n,"dog", 1);
+    n = add_block(n,"cat", 1);
+    n = add_block(n,"camel", 1);
+    n = add_block(n,"cow", 1);
+
+    n = add_block(n,"cat", 2);
+    n = add_block(n,"cow", 2);
+    n = add_block(n,"dog", 2);
+    n = add_block(n,"camel", 2);
+
+    n = add_block(n,"cat", 3);
+    n = add_block(n,"cow", 3);
+    n = add_block(n,"dog", 3);
+    n = add_block(n,"camel", 3);
+
+
+    bool_t result = is_list_synced(n);
+    ck_assert_int_eq(result, TRUE);
+
+    free_list(n);
+}
+END_TEST
+
+START_TEST (test_is_list_synced_not_synced)
+{
+    node_t *n =   NULL; 
+    n = add_node(n, 1);
+    n = add_node(n, 2);
+
+    n = add_block(n,"dog", 1);
+    n = add_block(n,"cat", 1);
+    n = add_block(n,"camel", 1);
+    n = add_block(n,"cow", 1);
+
+    n = add_block(n,"cat", 2);
+    n = add_block(n,"cow", 2);
+    n = add_block(n,"whales", 2);
+    n = add_block(n,"camel", 2);
+
+    bool_t result = is_list_synced(n);
+    ck_assert_int_eq(result, FALSE);
+
+    free_list(n);
+}
+END_TEST
+
+START_TEST (test_is_list_synced_diff_len)
+{
+    node_t *n =   NULL; 
+    n = add_node(n, 1);
+    n = add_node(n, 2);
+
+    n = add_block(n,"dog", 1);
+    n = add_block(n,"cat", 1);
+    n = add_block(n,"camel", 1);
+    n = add_block(n,"cow", 1);
+
+    n = add_block(n,"cat", 2);
+    n = add_block(n,"cow", 2);
+
+    bool_t result = is_list_synced(n);
+    ck_assert_int_eq(result, FALSE);
+
+    free_list(n);
+}
+END_TEST
+
+
+
+
 
 Suite * test_list(void)
 {
@@ -215,8 +322,8 @@ Suite * test_list(void)
 
     suite = suite_create("Test List");
     core = tcase_create("Core");
-
     tcase_add_test(core, test_add_node_to_head);
+
     tcase_add_test(core, test_add_block_to_node);
     tcase_add_test(core, test_add_many_blocks_to_node);
     tcase_add_test(core, test_add_dup_block_to_node);
@@ -226,6 +333,10 @@ Suite * test_list(void)
     tcase_add_test(core, test_node_exists);
     tcase_add_test(core, test_block_exists);
     tcase_add_test(core, test_add_block_til_grow);
+    tcase_add_test(core, test_is_list_synced_indentical);
+    tcase_add_test(core, test_is_list_synced_unordered);
+    tcase_add_test(core, test_is_list_synced_not_synced);
+    tcase_add_test(core, test_is_list_synced_diff_len);
     suite_add_tcase(suite, core);
 
     return(suite);

@@ -85,7 +85,31 @@ block_t *remove_bid(block_t *blocks, char *bid)
     blocks->index--;
 
     return blocks;
+}
 
+bool_t compare_blocks(block_t *b1, block_t *b2)
+{
+    bool_t result = FALSE;
+    if(b1->index != b2->index)
+        return FALSE;
+
+    for(int i = 0; i < b1->index; i++)
+    {
+        for(int j = 0; i < b2->index; i++)
+        {
+            if((strcmp(b1->bids[i], b2->bids[j])) == 0)
+            {
+                 result = TRUE;
+            }
+        }
+
+        if(result == FALSE)
+            return FALSE;
+
+        result = FALSE;
+    }
+
+    return TRUE;
 }
 
 
@@ -93,8 +117,7 @@ char *concat_blocks(block_t *blocks)
 {
     char *buffer = (char*) malloc((blocks->maxlen*MAX_BID_SIZE) * sizeof(char));
 
-    /* need to deduce 1 from index cause it is counter for the next block index*/ 
-    for(int i = 0; i <= blocks->index - 1; i++)
+    for(int i = 0; i < blocks->index; i++)
     {
         if(i < blocks->index - 1)
         {

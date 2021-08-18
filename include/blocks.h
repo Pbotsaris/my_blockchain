@@ -19,6 +19,7 @@ bool_t bid_exists(block_t *blocks, char *bid);
 block_t *add_bid(block_t *blocks, char *bid);
 block_t *remove_bid(block_t *blocks, char *bid);
 
+bool_t compare_blocks(block_t *b1, block_t *b2);
 char *concat_blocks(block_t *blocks);
 
 

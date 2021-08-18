@@ -23,8 +23,9 @@ node_t *remove_block(node_t *head, char *bid, int nid);
 node_t *remove_node(node_t *head, int nid);
 
 int node_exists(node_t *head, int nid);
-
 bool_t block_exists(node_t *head, char *bid, int nid);
+bool_t is_list_synced(node_t *head);
+
 node_t *find_node(node_t *head, int nid);
 
 void print_list(node_t *head);
