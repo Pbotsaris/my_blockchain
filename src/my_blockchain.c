@@ -36,7 +36,7 @@ int main(void)
    input_t *input = malloc(sizeof(input_t));
    input->option = NONE;
    input->is_synced = FALSE;
-   node_t *head = NULL;
+   input->head = NULL;
 
 //   synced = get_synced_nodes(synced);
 //   input->unsynced = copy_list(synced, input->unsynced);
@@ -54,17 +54,17 @@ int main(void)
 
            case LS_NID:
                print_message(LS_MSG);
-               print_list(head);
+               print_list(input->head);
                break;
 
            case LS_NID_BID:
                print_message(LS_L_MSG);
-               print_block_list(head);
+               print_block_list(input->head);
                break;
 
            case QUIT:
  //              write_nodes(head);
-               free_list(head);
+               free_list(input->head);
                free_struct(input);
                print_message(QUIT_MSG);
                break;
