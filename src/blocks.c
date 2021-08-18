@@ -8,7 +8,11 @@ block_t *create_blocks(int maxlen)
     blocks->bids = (char**)malloc(maxlen * sizeof(char*)); 
 
     for(int i = 0; i < maxlen; i++)
+    {
         blocks->bids[i] = (char*)malloc(MAX_BID_SIZE * sizeof(char));
+        strcpy(blocks->bids[i], "\0");
+    }
+
 
     return blocks;
 }
@@ -52,7 +56,8 @@ block_t *grow_blocks(block_t *blocks)
 
 block_t *add_bid(block_t *blocks, char *bid)
 {
-    if(blocks->index >= blocks->maxlen)
+
+    if(blocks->index >= blocks->maxlen - 1)
       blocks = grow_blocks(blocks);
     
       strcpy(blocks->bids[blocks->index], bid);
@@ -80,7 +85,31 @@ block_t *remove_bid(block_t *blocks, char *bid)
     blocks->index--;
 
     return blocks;
+}
 
+bool_t compare_blocks(block_t *b1, block_t *b2)
+{
+    bool_t result = FALSE;
+    if(b1->index != b2->index)
+        return FALSE;
+
+    for(int i = 0; i < b1->index; i++)
+    {
+        for(int j = 0; i < b2->index; i++)
+        {
+            if((strcmp(b1->bids[i], b2->bids[j])) == 0)
+            {
+                 result = TRUE;
+            }
+        }
+
+        if(result == FALSE)
+            return FALSE;
+
+        result = FALSE;
+    }
+
+    return TRUE;
 }
 
 
@@ -88,8 +117,16 @@ char *concat_blocks(block_t *blocks)
 {
     char *buffer = (char*) malloc((blocks->maxlen*MAX_BID_SIZE) * sizeof(char));
 
-    for(int i = 0; i <= blocks->index; i++)
-        strcat(buffer, blocks->bids[i]);    
+    for(int i = 0; i < blocks->index; i++)
+    {
+        if(i < blocks->index - 1)
+        {
+            strcat(buffer, blocks->bids[i]);    
+            strcat(buffer, ", ");    
+        }
+        else
+            strcat(buffer, blocks->bids[i]);    
+    }
 
     return buffer;
 }

@@ -14,7 +14,7 @@ OBJS=$(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SRCS))
 
 TEST=tests
 TESTS=$(wildcard $(TEST)/*.c)
-TESTOBJS=${OBJ}/list.o ${OBJ}/process_input.o ${OBJ}/process_commands.o 
+TESTOBJS=${OBJ}/list.o ${OBJ}/process_input.o ${OBJ}/process_commands.o ${OBJ}/blocks.o  ${OBJ}/messages.o 
 TESTBINS=$(patsubst $(TEST)/%.c, $(TEST)/bin/%, $(TESTS))
 
 

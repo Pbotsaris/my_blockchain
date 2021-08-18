@@ -118,8 +118,9 @@ status_t parse_input(input_t *input)
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
-        input->nid = get_input(input->buffer, &len_count); 
+
         input->bid = get_input(input->buffer, &len_count);
+        input->nid = get_input(input->buffer, &len_count); 
 
         if((strcmp(input->cmd, RM) == 0) && input->nid != NULL){
             return FAIL;
@@ -133,39 +134,28 @@ status_t parse_input(input_t *input)
     return SUCCESS;
 }
 
-/*
- *
- *       ADD BLOCK TO NODE
- *                                                      */
 
 status_t check_add_block(input_t *input)
 {
-
-
-    //    if(block_exists(input->unsynced, input->bid) >= 0)
-    //    {
-    //        print_error(BLOCK_EXISTS);
-    //        return FAIL;
-    //    }
-    //
-
     if(check_number(input->nid))
     {
-        if((node_exists(input->unsynced, atoi(input->nid))) >= 0)
-            input->unsynced = add_block(input->unsynced, input->bid, atoi(input->nid));
+        if((node_exists(input->head, atoi(input->nid))) >= 0)
+            input->head = add_block(input->head, input->bid, atoi(input->nid));
         else
+        {
             print_error(NODE_NOT_EXISTS);
+            return FAIL;
+        }
     }
     else 
+    {
         print_error(INVALID_NODE);
+        return FAIL;
+    }
 
     return SUCCESS;
 }
 
-/*
- *
- *       ADD A NODE 
- *                                                      */
 
 status_t check_add_node(input_t *input)
 {
@@ -176,38 +166,25 @@ status_t check_add_node(input_t *input)
         return FAIL;
     }
 
-    if(node_exists(input->unsynced,atoi(input->nid)) >= 0)
+    if(node_exists(input->head,atoi(input->nid)) >= 0)
     {
         print_error(NODE_EXISTS);
         return FAIL;
     }
 
-//    if(input->impact_all)
- //       input->unsynced = add_node(input->unsynced, input->bid, atoi(input->nid)); 
-  //  else
-      input->unsynced = add_node(input->unsynced, atoi(input->nid));
+      input->head = add_node(input->head, atoi(input->nid));
 
     return SUCCESS;
 }
 
-/*
- *
- *        REMOVE A BLOCK FROM A NODE
- *                                                      */
 
 status_t check_rm_block(input_t *input)
 {
-//    if((block_exists(input->unsynced, input->bid)) >= 0){
-        input->unsynced = remove_block(input->unsynced, atoi(input->nid), input->bid);
-        //return SUCCESS;
-   // }
+    /* Block or node don't exist checked within list implementation */
+    input->head = remove_block(input->head, input->bid, atoi(input->nid));
+
     return SUCCESS;
 }
-
-/*
- *
- *        REMOVE A NODE
- *                                                      */
 
 status_t check_rm_node(input_t *input)
 {
@@ -215,7 +192,7 @@ status_t check_rm_node(input_t *input)
     if(check_number(input->nid) == FALSE)
     {
         if((strcmp(input->nid, "*")) == 0){
-            input->unsynced = NULL;
+            input->head = NULL;
             return SUCCESS;
         }else{
             print_error(INVALID_NODE);
@@ -223,8 +200,8 @@ status_t check_rm_node(input_t *input)
         }
     }
 
-    if(node_exists(input->unsynced, atoi(input->nid)) >= 0){
-        input->unsynced = remove_node(input->unsynced, atoi(input->nid));
+    if(node_exists(input->head, atoi(input->nid)) >= 0){
+        input->head = remove_node(input->head, atoi(input->nid));
         return SUCCESS;
     }
     else
@@ -238,7 +215,7 @@ status_t check_rm_node(input_t *input)
  *
  */
 
-void process_commands(input_t *input, node_t *synced)
+void process_commands(input_t *input)
 {
 
     status_t status;
@@ -252,8 +229,8 @@ void process_commands(input_t *input, node_t *synced)
     if(is_add(input->cmd) && is_block(input->typ)){
         if((input->impact_all= check_block_impact(input->buffer)))
         {
-          //  add_block_all(synced, input->bid);
-          //  add_block_all(input->unsynced, input->bid);
+            //  add_block_all(synced, input->bid);
+            //  add_block_all(input->unsynced, input->bid);
         }
         else
             status = check_add_block(input);

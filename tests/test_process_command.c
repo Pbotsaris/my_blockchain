@@ -13,7 +13,7 @@ void free_input(input_t *input, char type)
     if(type == 'b')
         free(input->bid);
 }
-
+//
 START_TEST (test_get_cmd_type_stdin_buffer)
 {
     int len = 0;
@@ -58,7 +58,7 @@ START_TEST (test_process_input)
 {
     input_t input; 
     input.option = NONE;
-    input.unsynced = NULL;
+    input.head = NULL;
 
     int fd = open("tests/test_commands/quit", O_RDWR);
     option_t option =  process_input(fd, &input);
@@ -162,34 +162,38 @@ START_TEST (test_check_add_block)
 {
     input_t input; 
     input.option = NONE;
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
     strcpy(input.buffer, "add block cat 1\n");
-    input.unsynced = add_node(input.unsynced, "\0", 1);
+    input.head = add_node(input.head, 1);
 
     parse_input(&input);
 
-    check_add_block(&input);
-    ck_assert_str_eq(input.unsynced->bid, "cat");
+    status_t result = check_add_block(&input);
+    ck_assert_str_eq(input.head->blocks->bids[0], "cat");
+    ck_assert_int_eq(result, SUCCESS);
     free_input(&input, 'b');
-    free_list(input.unsynced);
+    free_list(input.head);
 }
 END_TEST
 
-START_TEST (test_check_add_block_when_empty)
+START_TEST (test_check_add_block_invalid_node)
 {
     input_t input; 
     input.option = NONE;
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
-    strcpy(input.buffer, "add block cat 1\n");
+    strcpy(input.buffer, "add block cat 2\n");
+    input.head = add_node(input.head, 1);
 
     parse_input(&input);
 
-    check_add_block(&input);
-    ck_assert_str_eq(input.unsynced->bid, "cat");
+    status_t result =  check_add_block(&input);
+       
+    ck_assert_str_eq(input.head->blocks->bids[0], "\0");
+    ck_assert_int_eq(result, FAIL);
     free_input(&input, 'b');
-    free_list(input.unsynced);
+    free_list(input.head);
 }
 END_TEST
 
@@ -198,53 +202,54 @@ END_TEST
 START_TEST (test_check_add_node)
 {
     input_t input; 
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
     strcpy(input.buffer, "add node 2\n");
     parse_input(&input);
 
     check_add_node(&input);
-    ck_assert_int_eq(input.unsynced->nid, 2);
+    ck_assert_int_eq(input.head->nid, 2);
 
     strcpy(input.buffer, "add node 1\n");
     parse_input(&input);
-    check_add_node(&input);
-    ck_assert_int_eq(input.unsynced->nid, 1);
+    status_t result = check_add_node(&input);
+    ck_assert_int_eq(input.head->nid, 1);
+    ck_assert_int_eq(result, SUCCESS);
 
     free_input(&input, 'n');
-    free_list(input.unsynced);
+    free_list(input.head);
 }
 
 
 START_TEST (test_check_rm_node)
 {
     input_t input; 
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
     strcpy(input.buffer, "rm node 1\n");
 
-    input.unsynced = add_node(input.unsynced, "\0", 2);
-    input.unsynced = add_node(input.unsynced, "\0", 1);
+    input.head = add_node(input.head, 2);
+    input.head = add_node(input.head, 1);
 
     parse_input(&input);
     check_rm_node(&input);
-    ck_assert_int_eq(input.unsynced->nid, 2);
+    ck_assert_int_eq(input.head->nid, 2);
 
     strcpy(input.buffer, "rm node 2\n");
     parse_input(&input);
     check_rm_node(&input);
 
-    ck_assert_ptr_null(input.unsynced); 
+    ck_assert_ptr_null(input.head); 
 
     // remove from empty
     strcpy(input.buffer, "rm node 2\n");
     parse_input(&input);
     check_rm_node(&input);
 
-    ck_assert_ptr_null(input.unsynced); 
+    ck_assert_ptr_null(input.head); 
 
     free_input(&input, 'n');
-    free_list(input.unsynced);
+    free_list(input.head);
 }
 
 
@@ -252,44 +257,47 @@ START_TEST (test_check_rm_block)
 {
 
     input_t input; 
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
-    strcpy(input.buffer, "rm block dog\n");
+    strcpy(input.buffer, "rm block dog 1\n");
 
-    input.unsynced = add_node(input.unsynced, "dog", 2);
-    input.unsynced = add_node(input.unsynced, "dog", 1);
+    input.head= add_node(input.head, 2);
+    input.head= add_node(input.head, 1);
+    input.head= add_block(input.head, "dog", 1);
+    input.head= add_block(input.head, "dog", 2);
+
+    ck_assert_str_eq(input.head->blocks->bids[0], "dog");
+    ck_assert_str_eq(input.head->next->blocks->bids[0], "dog");
 
      parse_input(&input);
+     check_rm_block(&input);
 
-    check_rm_block(&input);
-
-    ck_assert_int_eq(input.unsynced->bid[0], 0);
-    ck_assert_int_eq(input.unsynced->next->bid[0], 0);
+    ck_assert_str_eq(input.head->blocks->bids[0], "\0");
 
     free_input(&input, 'b');
-    free_list(input.unsynced);
+    free_list(input.head);
     
 }
+
 
 START_TEST (test_proces_command)
 {
 
     input_t input; 
-    input.unsynced = NULL;
+    input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
     strcpy(input.buffer, "add node 10\n");
 
-    input.unsynced = NULL;
+    input.head = NULL;
 
     process_commands(&input);
 
-    ck_assert_int_eq(input.unsynced->nid, 10);
+    ck_assert_int_eq(input.head->nid, 10);
 
     free_input(&input, 'n');
-    free_list(input.unsynced);
+    free_list(input.head);
     
 }
-
 
 
 END_TEST
@@ -308,7 +316,7 @@ Suite * test_options(void)
     tcase_add_test(core, test_check_number);
     tcase_add_test(core, test_parse_input);
     tcase_add_test(core, test_check_add_block);
-    tcase_add_test(core, test_check_add_block_when_empty);
+    tcase_add_test(core, test_check_add_block_invalid_node);
     tcase_add_test(core, test_check_add_node);
     tcase_add_test(core, test_check_rm_node);
     tcase_add_test(core, test_check_rm_block);

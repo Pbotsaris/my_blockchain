@@ -2,54 +2,13 @@
 #include "../include/messages.h"
 #include <string.h>
 
-/*
- *
- PRIVATE
- */
-
-//void make_bid_buffer(char *bid, node_t *node)
-//{
-//    int len = (int)strlen(bid);
-//
-//    node->bid = (char *)malloc((len + 2) * sizeof(char));
-//    strcpy(node->bid, bid);
-//}
 
 
-/*
- *
- *
- PUBLIC
- */
-
-
-
-//node_t init_list()
-
-//node_t *copy_list(node_t *src, node_t *dest){
-//
-//    if(src == NULL)
-//        return NULL;
-//    else{
-//        node_t *temp_head = src;
-//
-//        free_list(dest);
-//        dest = NULL;
-//
-//        while(temp_head){
-//                dest = add_node(dest, temp_head->bid, temp_head->nid);
-//                temp_head = temp_head->next;
-//        }
-//    }
-//    return dest;
-//
-//}
-//
 node_t *add_node(node_t *head, int nid)
 {
     node_t *node = (node_t *)malloc(sizeof(node_t));
+    node->blocks = create_blocks(BLOCKS_INIT_MAX_LEN);
     node->nid = nid;
-    node->blocks = create_blocks(5);
     node->next = head;
 
     return node;
@@ -116,20 +75,7 @@ node_t *add_block(node_t *head, char *bid, int nid)
 }
 
 
-//void add_block_all(node_t *head, char *bid)
-//{
-//    node_t *current = head;
-//    while (current)
-//    {
-//        free_blocks(current->blocks);
-//        make_bid_buffer(bid, current);
-//
-//        current = current->next;
-//    }
-//
-//}
-//
-node_t *remove_block(node_t *head, int nid, char *bid)
+node_t *remove_block(node_t *head, char *bid, int nid)
 {
     if (head == NULL) return NULL;
 
@@ -145,6 +91,29 @@ node_t *remove_block(node_t *head, int nid, char *bid)
     return head;
 }
 
+bool_t is_list_synced(node_t *head)
+{
+
+    node_t *current = head;
+
+    while (current)
+    {
+        if(current->next != NULL && !(compare_blocks(current->blocks, current->next->blocks)))
+        {
+            return FALSE;
+        }
+        /* last node compare with head */
+        else if(!(compare_blocks(current->blocks, head->blocks)))
+            return FALSE;
+
+        current = current->next;
+    }
+
+    return TRUE;
+
+}
+
+
 node_t *find_node(node_t *head, int nid)
 {
     node_t *current = head;
@@ -158,11 +127,26 @@ node_t *find_node(node_t *head, int nid)
 
 }
 
+
+int count_nodes(node_t *head)
+{
+    node_t *current = head;
+    int count = 0;
+    while (current)
+    {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+
+
 int node_exists(node_t *head, int nid)
 {
     if(head == NULL)
         return -2;
-////////////////////
+
     int count = 0;
     node_t *current = head;
     while (current)
@@ -175,24 +159,27 @@ int node_exists(node_t *head, int nid)
     return -1;
 }
 
-//int block_exists(node_t *head, char *bid)
-//{
-//
-//    if(head == NULL)
-//        return -1;
-//
-//    int count = 0;
-//    node_t *current = head;
-//    while (current)
-//    {
-//        if (strcmp(current->bid, bid) == 0) return count;
-//
-//        current = current->next;
-//        count++;
-//    }
-//    return -1;
-//}
-//
+bool_t block_exists(node_t *head, char *bid, int nid)
+{
+
+    if(head == NULL)
+        return -1;
+
+    int count = 0;
+    node_t *current = head;
+    while (current)
+    {
+        if(current->nid == nid)
+            return bid_exists(current->blocks, bid);
+
+        current = current->next;
+        count++;
+    }
+
+    print_error(NODE_NOT_EXISTS);
+    return FALSE;
+}
+
 
 void print_list(node_t *head)
 {
@@ -221,8 +208,8 @@ void print_block_list(node_t *head)
     node_t *current = head;
     while (current)
     {
-       char *blocks_buffer = concat_blocks(current->blocks);
-        printf("%i: %s, \n", current->nid, blocks_buffer);
+        char *blocks_buffer = concat_blocks(current->blocks);
+        printf("%i: %s \n", current->nid, blocks_buffer);
         free(blocks_buffer);
 
         current = current->next;
