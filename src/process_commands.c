@@ -118,8 +118,9 @@ status_t parse_input(input_t *input)
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
-        input->nid = get_input(input->buffer, &len_count); 
+
         input->bid = get_input(input->buffer, &len_count);
+        input->nid = get_input(input->buffer, &len_count); 
 
         if((strcmp(input->cmd, RM) == 0) && input->nid != NULL){
             return FAIL;
@@ -166,9 +167,9 @@ status_t check_add_node(input_t *input)
     }
 
     if(node_exists(input->head,atoi(input->nid)) >= 0)
+        return FAIL;
     {
         print_error(NODE_EXISTS);
-        return FAIL;
     }
 
     //    if(input->impact_all)

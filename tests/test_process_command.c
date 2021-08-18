@@ -138,7 +138,7 @@ START_TEST (test_parse_input)
     ck_assert_str_eq(input.typ, "node");
     ck_assert_str_eq(input.nid, "10");
 
-    strcpy(input.buffer, "add block 3 cat \n");
+    strcpy(input.buffer, "add block cat 3\n");
     result = parse_input(&input); 
     ck_assert_int_eq(result, SUCCESS);
     ck_assert_str_eq(input.cmd, "add");
@@ -164,7 +164,7 @@ START_TEST (test_check_add_block)
     input.option = NONE;
     input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
-    strcpy(input.buffer, "add block 1 cat\n");
+    strcpy(input.buffer, "add block cat 1\n");
     input.head = add_node(input.head, 1);
 
     parse_input(&input);
@@ -183,7 +183,7 @@ START_TEST (test_check_add_block_invalid_node)
     input.option = NONE;
     input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
-    strcpy(input.buffer, "add block 2 cat\n");
+    strcpy(input.buffer, "add block cat 2\n");
     input.head = add_node(input.head, 1);
 
     parse_input(&input);
@@ -259,7 +259,7 @@ START_TEST (test_check_rm_block)
     input_t input; 
     input.head = NULL;
     input.buffer = (char*)malloc(100 * sizeof(char));
-    strcpy(input.buffer, "rm block 1 dog\n");
+    strcpy(input.buffer, "rm block dog 1\n");
 
     input.head= add_node(input.head, 2);
     input.head= add_node(input.head, 1);
@@ -298,7 +298,6 @@ START_TEST (test_proces_command)
     free_list(input.head);
     
 }
-
 
 
 END_TEST
