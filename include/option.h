@@ -32,6 +32,7 @@ typedef struct input_split{
     char *buffer;
     struct node_s *head;
     bool_t impact_all;
+    bool_t is_synced;
     option_t option;
 } input_t;
 

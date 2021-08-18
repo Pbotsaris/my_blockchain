@@ -35,8 +35,9 @@ int main(void)
 
    input_t *input = malloc(sizeof(input_t));
    input->option = NONE;
-
+   input->is_synced = FALSE;
    node_t *head = NULL;
+
 //   synced = get_synced_nodes(synced);
 //   input->unsynced = copy_list(synced, input->unsynced);
 
