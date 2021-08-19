@@ -73,7 +73,6 @@ node_t *get_synced_nodes(node_t *head){
         }
 
     }
-
     free(current);
     free(nid);
     free(bids);
@@ -136,7 +135,7 @@ node_t* sync_nodes(node_t *head){
         current = current->next;
     }
 
-    head =impact_all_nodes(head);
+    head = impact_all_nodes(head);
 
     return head;
 }
