@@ -181,10 +181,12 @@ status_t check_add_node(input_t *input)
 status_t check_rm_block(input_t *input)
 {
     /* Block or node don't exist checked within list implementation */
+    printf("hello! from there \n");
     input->head = remove_block(input->head, input->bid, atoi(input->nid));
 
     return SUCCESS;
 }
+
 
 status_t check_rm_node(input_t *input)
 {

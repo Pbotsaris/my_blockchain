@@ -1,6 +1,6 @@
 #include <check.h>
 
-//#include "../include/test.h"
+#include "../include/sync.h"
 #include "../include/list.h"
 
 
