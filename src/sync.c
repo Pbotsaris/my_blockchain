@@ -11,28 +11,28 @@
 //            return NULL;
 //    }
 //
-//    char    *temp = malloc(sizeof(char)),
+//    char    *current = malloc(sizeof(char)),
 //            *nid = malloc(sizeof(char)*BUFSIZ),
 //            *bid = malloc(sizeof(char)*BUFSIZ);
 //    
 //    if(file < 0)
 //        return NULL;
 //    
-//    while(read(file, temp, 1) > 0){
+//    while(read(file, current, 1) > 0){
 //
-//        if(temp[0] == ' ')
+//        if(current[0] == ' ')
 //            continue;
 //
-//        if(temp[0] != ':' && skip == 0)
-//            strcat(nid, temp);
-//        else if(temp[0] == ':'){
+//        if(current[0] != ':' && skip == 0)
+//            strcat(nid, current);
+//        else if(current[0] == ':'){
 //            skip++;
 //            continue;
 //        }
 //
-//        if(temp[0] != ',' && skip == 1){
-//            strcat(bid, temp);
-//        }else if(temp[0] == ','){
+//        if(current[0] != ',' && skip == 1){
+//            strcat(bid, current);
+//        }else if(current[0] == ','){
 //            skip = 0;
 //            head = add_node(head, bid, atoi(nid));
 //            nid[0] = '\0';
@@ -40,7 +40,7 @@
 //        }
 //    }
 //
-//    free(temp);
+//    free(current);
 //    free(nid);
 //    free(bid);
 //    return head;
@@ -71,22 +71,16 @@
 //
 //    free(nid_str);
 //}
-node_t* impact_prev_nodes(node_t *head){
+node_t* impact_all_nodes(node_t *head){
 
-    node_t *first_node = malloc(sizeof(node_t*));
-    first_node = head;
- 
-    printf("first node %d\n", first_node->nid);
-
-    node_t *current = malloc(sizeof(node_t*));
+    node_t* current = malloc(sizeof(node_t*));
     current = head;
 
     while(current){
-        for(int i = 0; first_node->blocks->bids[i][0] != '\0'; i++){
-            if(!(bid_exists(current->blocks, first_node->blocks->bids[i]))){
-                add_bid (current->blocks, first_node->blocks->bids[i]);
-            }
-        }
+        for(int i = 0; head->blocks->bids[i][0]; i++)
+            if(!(bid_exists(current->blocks, head->blocks->bids[i])))
+                add_bid(current->blocks, head->blocks->bids[i]); 
+        
         current = current->next;
     }
 
@@ -95,19 +89,20 @@ node_t* impact_prev_nodes(node_t *head){
 
 node_t* sync_nodes(node_t *head){
 
-    node_t *temp = malloc(sizeof(node_t*));
-    temp = head;
-
-    while(temp){
-        if(temp->next != NULL)
-            for(int i = 0 ; temp->next->blocks->bids[i][0] != '\0'; i++)
-                if(!(bid_exists(temp->blocks, temp->next->blocks->bids[i])))
-                    add_bid(temp->blocks, temp->next->blocks->bids[i]);
-                
-        temp = temp->next;
+    node_t *current = malloc(sizeof(node_t*));
+    current = head;
+    
+    while(current){
+        for(int i = 0; current->blocks->bids[i][0] != '\0'; i++){
+            if(!(bid_exists(head->blocks, current->blocks->bids[i]))){
+                add_bid(head->blocks, current->blocks->bids[i]); 
+            }
+        }
+        current = current->next;
     }
 
-    head =impact_prev_nodes(head);
+    printf("outside\n");
+    head =impact_all_nodes(head);
 
     return head;
 }
