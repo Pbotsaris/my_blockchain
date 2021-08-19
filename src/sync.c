@@ -73,13 +73,12 @@
 //}
 node_t* impact_all_nodes(node_t *head){
 
-    node_t* current = malloc(sizeof(node_t*));
-    current = head;
+    node_t *current = head->next;
 
     while(current){
         for(int i = 0; head->blocks->bids[i][0]; i++)
             if(!(bid_exists(current->blocks, head->blocks->bids[i])))
-                add_bid(current->blocks, head->blocks->bids[i]); 
+                current->blocks = add_bid(current->blocks, head->blocks->bids[i]); 
         
         current = current->next;
     }
@@ -89,19 +88,17 @@ node_t* impact_all_nodes(node_t *head){
 
 node_t* sync_nodes(node_t *head){
 
-    node_t *current = malloc(sizeof(node_t*));
-    current = head;
+    node_t *current = head->next;
     
     while(current){
         for(int i = 0; current->blocks->bids[i][0] != '\0'; i++){
             if(!(bid_exists(head->blocks, current->blocks->bids[i]))){
-                add_bid(head->blocks, current->blocks->bids[i]); 
+                head->blocks = add_bid(head->blocks, current->blocks->bids[i]); 
             }
         }
         current = current->next;
     }
 
-    printf("outside\n");
     head =impact_all_nodes(head);
 
     return head;
