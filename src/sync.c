@@ -11,28 +11,28 @@
 //            return NULL;
 //    }
 //
-//    char    *temp = malloc(sizeof(char)),
+//    char    *current = malloc(sizeof(char)),
 //            *nid = malloc(sizeof(char)*BUFSIZ),
 //            *bid = malloc(sizeof(char)*BUFSIZ);
 //    
 //    if(file < 0)
 //        return NULL;
 //    
-//    while(read(file, temp, 1) > 0){
+//    while(read(file, current, 1) > 0){
 //
-//        if(temp[0] == ' ')
+//        if(current[0] == ' ')
 //            continue;
 //
-//        if(temp[0] != ':' && skip == 0)
-//            strcat(nid, temp);
-//        else if(temp[0] == ':'){
+//        if(current[0] != ':' && skip == 0)
+//            strcat(nid, current);
+//        else if(current[0] == ':'){
 //            skip++;
 //            continue;
 //        }
 //
-//        if(temp[0] != ',' && skip == 1){
-//            strcat(bid, temp);
-//        }else if(temp[0] == ','){
+//        if(current[0] != ',' && skip == 1){
+//            strcat(bid, current);
+//        }else if(current[0] == ','){
 //            skip = 0;
 //            head = add_node(head, bid, atoi(nid));
 //            nid[0] = '\0';
@@ -40,7 +40,7 @@
 //        }
 //    }
 //
-//    free(temp);
+//    free(current);
 //    free(nid);
 //    free(bid);
 //    return head;
@@ -71,3 +71,35 @@
 //
 //    free(nid_str);
 //}
+node_t* impact_all_nodes(node_t *head){
+
+    node_t *current = head->next;
+
+    while(current){
+        for(int i = 0; head->blocks->bids[i][0]; i++)
+            if(!(bid_exists(current->blocks, head->blocks->bids[i])))
+                current->blocks = add_bid(current->blocks, head->blocks->bids[i]); 
+        
+        current = current->next;
+    }
+
+    return head;
+}
+
+node_t* sync_nodes(node_t *head){
+
+    node_t *current = head->next;
+    
+    while(current){
+        for(int i = 0; current->blocks->bids[i][0] != '\0'; i++){
+            if(!(bid_exists(head->blocks, current->blocks->bids[i]))){
+                head->blocks = add_bid(head->blocks, current->blocks->bids[i]); 
+            }
+        }
+        current = current->next;
+    }
+
+    head =impact_all_nodes(head);
+
+    return head;
+}

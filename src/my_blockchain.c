@@ -48,6 +48,7 @@ int main(void)
 
        switch(input->option){
            case SYNC:
+               input->head = sync_nodes(input->head);
                print_message(SYNC_MSG);
              //  synced = copy_list(input->unsynced, synced);
                break;
