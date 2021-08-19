@@ -6,7 +6,6 @@
 typedef enum{
     FALSE,
     TRUE,
-    ERROR_BOOL,
 } bool_t;
 
 typedef enum{
@@ -29,6 +28,7 @@ typedef struct input_split{
     char *typ;
     char *bid;
     char *nid;
+    char *impact_bid;
     char *buffer;
     struct node_s *head;
     bool_t impact_all;
