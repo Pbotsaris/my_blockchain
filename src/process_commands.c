@@ -40,12 +40,12 @@ bool_t is_block(char *type){
     return FALSE;
 }
 
-bool_t check_block_impact(char *buffer)
+bool_t check_block_impact(input_t *input)
 {
-    size_t len = strlen(buffer);
+    size_t len = strlen(input->buffer);
 
     for (int i = len; i >= 0 ; --i) 
-        if(buffer[i] == '*')
+        if(input->buffer[i] == '*')
             return TRUE;
 
     return FALSE;
@@ -122,10 +122,13 @@ status_t parse_input(input_t *input)
         input->bid = get_input(input->buffer, &len_count);
         input->nid = get_input(input->buffer, &len_count); 
 
-        if((strcmp(input->cmd, RM) == 0) && input->nid != NULL){
+        if((strcmp(input->cmd, RM) == 0) && input->nid == NULL){
             return FAIL;
         }else if(input->bid == NULL || input->bid == NULL)
             return FAIL;
+        else if((strcmp(input->cmd, ADD) == 0) && input->nid == NULL){
+            return FAIL;
+        }
     }
 
     else
@@ -137,6 +140,12 @@ status_t parse_input(input_t *input)
 
 status_t check_add_block(input_t *input)
 {
+
+    if(input->impact_all == TRUE){
+        input->impact_all = FALSE;
+        free(input->impact_bid);
+    }
+
     if(check_number(input->nid))
     {
         if((node_exists(input->head, atoi(input->nid))) >= 0)
@@ -156,10 +165,22 @@ status_t check_add_block(input_t *input)
     return SUCCESS;
 }
 
+void add_block_previous(input_t *input){
+
+    node_t *current = input->head;
+
+    while(current){
+        if(!(bid_exists(current->blocks, input->bid))){
+            current->blocks = add_bid(current->blocks, input->bid);
+        }
+
+        current = current->next;
+    }
+
+}
 
 status_t check_add_node(input_t *input)
 {
-
     if(check_number(input->nid) == FALSE)
     {
         print_error(INVALID_NODE);
@@ -174,13 +195,15 @@ status_t check_add_node(input_t *input)
 
       input->head = add_node(input->head, atoi(input->nid));
 
+      if(input->impact_all == TRUE)
+          add_block(input->head, input->impact_bid, atoi(input->nid));
+
     return SUCCESS;
 }
 
 
 status_t check_rm_block(input_t *input)
 {
-    /* Block or node don't exist checked within list implementation */
     input->head = remove_block(input->head, input->bid, atoi(input->nid));
 
     return SUCCESS;
@@ -227,13 +250,14 @@ void process_commands(input_t *input)
     }
 
     if(is_add(input->cmd) && is_block(input->typ)){
-        if((input->impact_all= check_block_impact(input->buffer)))
+        if((input->impact_all= check_block_impact(input)))
         {
-            //  add_block_all(synced, input->bid);
-            //  add_block_all(input->unsynced, input->bid);
-        }
-        else
+            add_block_previous(input);
+            input->impact_bid = malloc(sizeof(char*)*BUFF_SIZE);
+            strcpy(input->impact_bid, input->bid);
+        }else{
             status = check_add_block(input);
+        }
     }
 
     if(is_add(input->cmd) && is_node(input->typ)){
@@ -242,7 +266,6 @@ void process_commands(input_t *input)
 
     if(is_rm(input->cmd) && is_block(input->typ))
     {
-        input->impact_all= check_block_impact(input->buffer);
         status = check_rm_block(input);
     }
 
