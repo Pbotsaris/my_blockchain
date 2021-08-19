@@ -23,7 +23,6 @@ void free_blocks(block_t *blocks)
     for(int i = 0; i < blocks->maxlen; i++)
         free(blocks->bids[i]);
 
-    free(blocks->bids);
     free(blocks);
 }
 

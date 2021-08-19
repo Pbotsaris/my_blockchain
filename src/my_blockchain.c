@@ -26,7 +26,6 @@ void free_struct(input_t *input){
     free(input->cmd);
     free(input->typ);
     free(input->nid);
-    free_list(input->head);
     free(input);
 }
 
@@ -38,8 +37,7 @@ int main(void)
    input->is_synced = FALSE;
    input->head = NULL;
 
-//   synced = get_synced_nodes(synced);
-//   input->unsynced = copy_list(synced, input->unsynced);
+   input->head = get_synced_nodes(input->head);
 
    while(input->option != QUIT){
 
@@ -50,7 +48,6 @@ int main(void)
            case SYNC:
                input->head = sync_nodes(input->head);
                print_message(SYNC_MSG);
-             //  synced = copy_list(input->unsynced, synced);
                break;
 
            case LS_NID:
@@ -64,11 +61,11 @@ int main(void)
                break;
 
            case QUIT:
- //              write_nodes(head);
-               free_list(input->head);
-               free_struct(input);
-               print_message(QUIT_MSG);
-               break;
+                write_nodes(input->head);
+                free_struct(input);
+                free_list(input->head);
+                print_message(QUIT_MSG);
+                break;
 
            default:
                process_commands(input);
