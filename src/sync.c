@@ -13,7 +13,7 @@ node_t * write_blocks(node_t *head, char *bids){
 
     while(bids[current]){
         if(bids[current] == ' ') continue;
-
+        
         if(bids[current] == ','){
             buffer[index] = '\0';
             head->blocks = add_bid(head->blocks, buffer);
@@ -55,6 +55,7 @@ node_t *get_synced_nodes(node_t *head){
         if(current[0] != ':' && skip == 0)
             strcat(nid, current);
         else if(current[0] == ':'){
+            strcat(nid, "\0");
             skip++;
             continue;
         }
