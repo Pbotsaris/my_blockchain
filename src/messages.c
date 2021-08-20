@@ -23,14 +23,13 @@ void print_message(msg_t type)
         "Program starting...\n",
         "NOK: Nothing to sync.\n",
         "OK: Syncing...\n",
-        "OK: Synced nodes:\n",
-        "OK: Synced nodes and blocks:\n",
-        "OK: Quitting program successful.\n",
+        "OK: list nodes:\n",
+        "OK: list nodes and blocks:\n",
+        "OK: Quit program successful.\n",
         "OK: Unsynced nodes:\n",
         "OK\n",
     };
 
     printf("%s", messages[type]);
 }
-
 

@@ -14,9 +14,12 @@
 #include "list.h"
 #include "blocks.h"
 #include "sync.h"
+#include "input.h"
+
 
 option_t process_input(int std_in, input_t *input);
 void process_commands(input_t *input);
 void prompt_display(input_t *input);
+
 
 #endif

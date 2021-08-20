@@ -1,7 +1,9 @@
 #include "../include/my_blockchain.h"
 #include "../include/messages.h"
 
-char *output_merge(char* output,char *status, int added_nodes){
+char *output_merge(char *status, int added_nodes){
+
+    char *output = malloc(sizeof(char)*BUFSIZ);
 
     char enter_boarder[] = "[";
     char end_boarder[] = "]> ";
@@ -20,8 +22,8 @@ char *output_merge(char* output,char *status, int added_nodes){
 void prompt_display(input_t *input){
 
      static char status[3];
+     char *output = NULL;
 
-    char *output = malloc(sizeof(char)*BUFSIZ);
 
     if(is_list_synced(input->head))
         strcpy(status, "s");
@@ -36,8 +38,8 @@ void prompt_display(input_t *input){
           status[0] = 's';
     }
 
-    output = output_merge(output, status, count_nodes(input->head));
-    write(0, output, sizeof(output));
+    output = output_merge(status, count_nodes(input->head));
+    write(0, output, strlen(output));
     free(output);
 
 }

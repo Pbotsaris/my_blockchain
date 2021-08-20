@@ -1,4 +1,5 @@
 #include "../include/my_blockchain.h"
+
 #define BUFF_SIZE 100
 
 static option_t basic_commands(input_t *input)
@@ -19,7 +20,8 @@ static option_t basic_commands(input_t *input)
 
 option_t process_input(int std_in, input_t *input){
     option_t option = NONE;
-    input->buffer = malloc(sizeof(char)*BUFF_SIZE);
+
+
     int read_ret = read(std_in, input->buffer, BUFF_SIZE);
     input->buffer[read_ret - 1] = '\0';
 
