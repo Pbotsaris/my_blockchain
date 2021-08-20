@@ -91,6 +91,30 @@ node_t *remove_block(node_t *head, char *bid, int nid)
     return head;
 }
 
+node_t *remove_every_block(node_t *head, char *bid)
+{
+    if (head == NULL) return NULL;
+
+    bool_t found_block = FALSE;
+
+    node_t *current = head;
+    while (current)
+    {
+        current->blocks = remove_bid(current->blocks, bid);
+        found_block = block_exists(current, bid, current->nid);
+        current = current->next;
+    }
+
+    if(found_block)
+        print_message(OK_MSG);
+    else
+        print_error(BLOCK_NOT_EXISTS);
+
+
+    return head;
+}
+
+
 bool_t is_list_synced(node_t *head)
 {
 
