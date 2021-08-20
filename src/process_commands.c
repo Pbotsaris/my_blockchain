@@ -207,10 +207,8 @@ void add_block_previous(input_t *input){
         if(!(bid_exists(current->blocks, input->bid))){
             current->blocks = add_bid(current->blocks, input->bid);
         }
-
         current = current->next;
     }
-
 }
 
 status_t check_add_node(input_t *input)
@@ -238,15 +236,29 @@ status_t check_add_node(input_t *input)
 
 status_t check_rm_block(input_t *input)
 {
-    input->head = remove_block(input->head, input->bid, atoi(input->nid));
+    if(input->nid[0] == '\0')
+    {
+        remove_every_block(input->head, input->bid);
+        /* Return fail "ok" messaging is delegated to remove_every_block.
+           see list.c:108
+                                                                  */
+        return FAIL;
+    }
 
+    if(check_number(input->nid) == FALSE)
+    {
+        print_error(INVALID_NODE);
+        return FAIL;
+    }
+
+    input->head = remove_block(input->head, input->bid, atoi(input->nid));
     return SUCCESS;
+
 }
 
 
 status_t check_rm_node(input_t *input)
 {
-
     if(check_number(input->nid) == FALSE)
     {
         if((strcmp(input->nid, "*")) == 0){
@@ -269,13 +281,14 @@ status_t check_rm_node(input_t *input)
 }
 
 /*
- *      MAIN PUBLIC FUNCTION
+ *      PUBLIC 
+ *      Process command takes use input and delagate action to respective funtion
+ *      in list.c (and consequently to block.c)
  *
- */
+                                                                             */
 
 void process_commands(input_t *input)
 {
-
     status_t status;
 
     if((parse_input(input)) == FAIL)
