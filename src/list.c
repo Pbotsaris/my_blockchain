@@ -103,7 +103,7 @@ node_t *remove_every_block(node_t *head, char *bid)
         if(found_block == FALSE)
            found_block = block_exists(current, bid, current->nid);
 
-        current->blocks = remove_bid(current->blocks, bid);
+            current->blocks = remove_bid(current->blocks, bid);
 
         current = current->next;
     }

@@ -45,14 +45,6 @@ block_t *grow_blocks(block_t *blocks)
 }
 
 
- bool_t bid_exists(block_t *blocks, char *bid)
-{
-    for(int i = 0; i <= blocks->index; i++)
-        if(strcmp(blocks->bids[i], bid) == 0)
-            return TRUE;
-
-    return FALSE;
-}
 
 
 block_t *add_bid(block_t *blocks, char *bid)
@@ -73,6 +65,10 @@ block_t *remove_bid(block_t *blocks, char *bid)
 
     int index = 0;
 
+    if(bid_exists(blocks, bid) == FALSE)
+        return blocks;
+
+
     /* find bid pos to delete */
     for(int i = 0; i <= blocks->index; i++)
         if(strcmp(blocks->bids[i], bid) == 0)
@@ -88,6 +84,17 @@ block_t *remove_bid(block_t *blocks, char *bid)
 
     return blocks;
 }
+
+
+ bool_t bid_exists(block_t *blocks, char *bid)
+{
+    for(int i = 0; i <= blocks->index; i++)
+        if(strcmp(blocks->bids[i], bid) == 0)
+            return TRUE;
+
+    return FALSE;
+}
+
 
 bool_t compare_blocks(block_t *b1, block_t *b2)
 {
