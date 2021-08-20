@@ -8,7 +8,8 @@ option_t basic_commands(char *buffer);
 
 /* HELPER process_commands */
 //char *extract_input_digits(char *stdin_buffer);
-bool_t check_block_impact(char *std_in);
+bool_t check_block_impact(input_t *input);
+
 bool_t check_number(char* input);
 char *get_input(char *input, int *input_index);
 status_t parse_input(input_t *input);

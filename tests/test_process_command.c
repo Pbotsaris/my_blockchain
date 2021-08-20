@@ -2,16 +2,24 @@
 #include "../include/test.h"
 #include "../include/list.h"
 
-void free_input(input_t *input, char type)
+void alloc_input(input_t *input)
+{
+    input->buffer = (char*)malloc(100 * sizeof(char));
+
+    input->cmd = (char*)malloc(100 * sizeof(char));
+    input->typ = (char*)malloc(100 * sizeof(char));
+    input->bid = (char*)malloc(100 * sizeof(char));
+    input->nid = (char*)malloc(100 * sizeof(char));
+}
+
+
+void free_ip(input_t *input)
 {
     free(input->buffer);
     free(input->cmd);
     free(input->typ);
-
-    if(type == 'b' || type == 'n')
-         free(input->nid);
-    if(type == 'b')
-        free(input->bid);
+    free(input->nid);
+    free(input->bid);
 }
 //
 START_TEST (test_get_cmd_type_stdin_buffer)
@@ -59,6 +67,7 @@ START_TEST (test_process_input)
     input_t input; 
     input.option = NONE;
     input.head = NULL;
+    input.buffer = (char*)malloc(100 * sizeof(char));
 
     int fd = open("tests/test_commands/quit", O_RDWR);
     option_t option =  process_input(fd, &input);
@@ -94,20 +103,28 @@ START_TEST (test_process_input)
     ck_assert_int_eq(option, test_option); 
 
     close(fd);
+
+    free(input.buffer);
 }
 END_TEST
 
 
 START_TEST (test_check_impact)
 {
-    char buffer[] = "add block 21 *\n";
+    input_t input;
+    input.buffer = (char*) malloc(100 * sizeof(char));
+    strcpy(input.buffer, "add block *\n");
 
-    bool_t result = check_block_impact(buffer);
+    bool_t result = check_block_impact(&input);
     ck_assert_int_eq(result, TRUE);
 
+
     char buffer2[] = "add block 21\n";
-    result = check_block_impact(buffer2);
+
+    strcpy(input.buffer, "add block 12\n");
+    result = check_block_impact(&input);
     ck_assert_int_eq(result, FALSE);
+    free(input.buffer);
 }
 END_TEST
 
@@ -128,7 +145,7 @@ START_TEST (test_parse_input)
 {
     input_t input; 
     input.option = NONE;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
 
     strcpy(input.buffer, "add node 10\n");
 
@@ -150,9 +167,7 @@ START_TEST (test_parse_input)
     result = parse_input(&input); 
     ck_assert_int_eq(result, FAIL);
 
-    free(input.buffer);
-    free(input.typ);
-    free(input.cmd);
+    free_ip(&input);
 
 }
 END_TEST
@@ -163,7 +178,7 @@ START_TEST (test_check_add_block)
     input_t input; 
     input.option = NONE;
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
     strcpy(input.buffer, "add block cat 1\n");
     input.head = add_node(input.head, 1);
 
@@ -172,7 +187,7 @@ START_TEST (test_check_add_block)
     status_t result = check_add_block(&input);
     ck_assert_str_eq(input.head->blocks->bids[0], "cat");
     ck_assert_int_eq(result, SUCCESS);
-    free_input(&input, 'b');
+    free_ip(&input);
     free_list(input.head);
 }
 END_TEST
@@ -182,7 +197,8 @@ START_TEST (test_check_add_block_invalid_node)
     input_t input; 
     input.option = NONE;
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
+
     strcpy(input.buffer, "add block cat 2\n");
     input.head = add_node(input.head, 1);
 
@@ -192,7 +208,7 @@ START_TEST (test_check_add_block_invalid_node)
        
     ck_assert_str_eq(input.head->blocks->bids[0], "\0");
     ck_assert_int_eq(result, FAIL);
-    free_input(&input, 'b');
+    free_ip(&input);
     free_list(input.head);
 }
 END_TEST
@@ -203,7 +219,7 @@ START_TEST (test_check_add_node)
 {
     input_t input; 
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
     strcpy(input.buffer, "add node 2\n");
     parse_input(&input);
 
@@ -216,7 +232,7 @@ START_TEST (test_check_add_node)
     ck_assert_int_eq(input.head->nid, 1);
     ck_assert_int_eq(result, SUCCESS);
 
-    free_input(&input, 'n');
+    free_ip(&input);
     free_list(input.head);
 }
 
@@ -225,7 +241,7 @@ START_TEST (test_check_rm_node)
 {
     input_t input; 
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
     strcpy(input.buffer, "rm node 1\n");
 
     input.head = add_node(input.head, 2);
@@ -248,7 +264,7 @@ START_TEST (test_check_rm_node)
 
     ck_assert_ptr_null(input.head); 
 
-    free_input(&input, 'n');
+    free_ip(&input);
     free_list(input.head);
 }
 
@@ -258,7 +274,7 @@ START_TEST (test_check_rm_block)
 
     input_t input; 
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
     strcpy(input.buffer, "rm block dog 1\n");
 
     input.head= add_node(input.head, 2);
@@ -274,7 +290,7 @@ START_TEST (test_check_rm_block)
 
     ck_assert_str_eq(input.head->blocks->bids[0], "\0");
 
-    free_input(&input, 'b');
+    free_ip(&input);
     free_list(input.head);
     
 }
@@ -285,7 +301,7 @@ START_TEST (test_proces_command)
 
     input_t input; 
     input.head = NULL;
-    input.buffer = (char*)malloc(100 * sizeof(char));
+    alloc_input(&input);
     strcpy(input.buffer, "add node 10\n");
 
     input.head = NULL;
@@ -294,7 +310,7 @@ START_TEST (test_proces_command)
 
     ck_assert_int_eq(input.head->nid, 10);
 
-    free_input(&input, 'n');
+    free_ip(&input);
     free_list(input.head);
     
 }
@@ -311,8 +327,8 @@ Suite * test_options(void)
     core = tcase_create("Core");
 
     tcase_add_test(core, test_process_input);
-    tcase_add_test(core, test_get_cmd_type_stdin_buffer);
     tcase_add_test(core, test_check_impact);
+    tcase_add_test(core, test_get_cmd_type_stdin_buffer);
     tcase_add_test(core, test_check_number);
     tcase_add_test(core, test_parse_input);
     tcase_add_test(core, test_check_add_block);
