@@ -17,6 +17,18 @@ You can also clean with
 
 ## Usage
 
+### 
+
+### The prompt
+
+The program will display information about the blockchain in the CLI. The prompt consits of a character and a digit. The character can be either an `s` for synced and `-` for unsyced blockchain. The digit tracks the number of nodes in the blockchain. Below an example of an unsynced 4 nodes blockchain.
+
+    `<[-4]>` 
+
+     
+
+### Commands
+
      <[s0]> ls [-l]
 
 Lists all nodes in the blockchain. `-l` will also list the blocks contained on each node.
@@ -26,6 +38,8 @@ Lists all nodes in the blockchain. `-l` will also list the blocks contained on e
 This command will sync the blocks of all nodes in the blockchain. Synced nodes will have the exact same blocks though unorderly.
 
      <[s0]> quit 
+
+Quits and pesists data to file.
 
      <[s0]> add node nid 
 
