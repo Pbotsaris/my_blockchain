@@ -1,5 +1,0 @@
-0: 
-12: pagos, caramba, 
-1: caramba, pagos, 
-0: caramba, pagos, 
-caramba, pagos, 

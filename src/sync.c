@@ -87,8 +87,14 @@ node_t *get_synced_nodes(node_t *head){
 node_t *write_nodes(node_t *head){
 
     int file;
+    FILE *f;
+
     char nid_str[BUFSIZ];
     node_t *temp = head;
+
+    /* clear file storing data */
+    f = fopen("./bin/saved_nodes.txt", "w");
+    fclose(f);
 
     if((file = open("./bin/saved_nodes.txt", O_CREAT | O_RDWR)) < 0)
         return head;
