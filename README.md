@@ -45,4 +45,6 @@ Similarly to `add block`, if the user doesn't specify a `nid` the program will r
 
 ## Tests
 
-This program is partially convered by tests.
+This program is partially convered by unit testing. In order to run tests you need to install the [check](https://libcheck.github.io/check/) library. To run tests us make:
+
+        $ make tests
