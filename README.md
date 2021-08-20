@@ -53,7 +53,7 @@ Adds a block to a node. Omiting a node identifier will add the block to every av
 
      [s0]> rm block bid [nid]
 
-Similarly to `rm block`, if the user doesn't specify a `nid` the program will remove the block `bid` from every node in the blockchain. 
+Similarly to `rm node`, if the user doesn't specify a `nid` the program will remove the block `bid` from every node in the blockchain. 
 
 ## Tests
 
