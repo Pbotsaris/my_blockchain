@@ -8,7 +8,9 @@ typedef enum err{
     NODE_NOT_EXISTS,
     BLOCK_NOT_EXISTS,
     CMD_NOT_FOUND,
-    INVALID_NODE
+    INVALID_NODE,
+    BAD_COMMAND,
+    BAD_TYPE,
 } err_t;
 
 
@@ -23,8 +25,8 @@ typedef enum msg{
     OK_MSG
 }msg_t;
 
-void print_error(err_t tyoe);
-void print_message(msg_t tyoe);
+void print_error(err_t type);
+void print_message(msg_t type);
 
 
 #endif

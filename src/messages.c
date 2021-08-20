@@ -33,4 +33,3 @@ void print_message(msg_t type)
     printf("%s", messages[type]);
 }
 
-

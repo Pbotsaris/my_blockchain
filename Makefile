@@ -2,7 +2,7 @@ SRC=src
 OBJ=obj
 BIN=bin
 
-CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude
+CFLAGS +=-W  -Wall -Wextra -g3 -Iinclude -fsanitize=address
 CFLAGS2 +=-W -g3 -Iinclude
 #CC=gcc-11
 CC=gcc

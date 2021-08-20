@@ -40,6 +40,24 @@ bool_t is_block(char *type){
     return FALSE;
 }
 
+bool_t is_valid_command(input_t *input)
+{
+    if(is_add(input->cmd) || is_rm(input->cmd))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+
+bool_t is_valid_type(input_t *input)
+{
+    if(is_node(input->cmd) || is_block(input->cmd))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+
 bool_t check_block_impact(input_t *input)
 {
     size_t len = strlen(input->buffer);
@@ -95,9 +113,26 @@ char *get_input(char *input, int *input_index)
     ret_command[index] = '\0';
 
     if(ret_command[0] == '\0')
+    {
+        free(ret_command);
         return NULL;
+    }
 
     return ret_command;
+}
+
+status_t validate_input(input_t *input, char **input_field, int *len_count)
+{
+    char *buffer;
+
+    if((buffer = get_input(input->buffer, len_count)) != NULL)
+    {
+        strcpy(*input_field, buffer);
+        free(buffer);
+        return SUCCESS;
+    }
+    else
+        return FAIL;
 }
 
 
@@ -105,32 +140,32 @@ status_t parse_input(input_t *input)
 {
     int len_count = 0;
 
-    if((input->cmd = get_input(input->buffer, &len_count)) == NULL)
+    if(validate_input(input, &input->cmd, &len_count) == FAIL)
         return FAIL;
 
-    if((input->typ = get_input(input->buffer, &len_count)) == NULL)
+
+    if(validate_input(input, &input->typ, &len_count) == FAIL)
         return FAIL;
 
-    if((strcmp(input->typ, NODE)) == 0){
-        if((input->nid = get_input(input->buffer, &len_count)) == NULL
-                || (get_input(input->buffer, &len_count)) != NULL)
+    if((strcmp(input->typ, NODE)) == 0)
+    {
+        if(validate_input(input, &input->nid, &len_count) == FAIL)
             return FAIL;
     }
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
+        validate_input(input, &input->bid, &len_count);
+        validate_input(input, &input->nid, &len_count);
 
-        input->bid = get_input(input->buffer, &len_count);
-        input->nid = get_input(input->buffer, &len_count); 
+        if((strcmp(input->cmd, RM) == 0) && input->nid == NULL)
+            return FAIL;
 
-        if((strcmp(input->cmd, RM) == 0) && input->nid == NULL){
+        else if(input->bid == NULL || input->bid == NULL)
             return FAIL;
-        }else if(input->bid == NULL || input->bid == NULL)
+
+        else if((strcmp(input->cmd, ADD) == 0) && input->nid == NULL)
             return FAIL;
-        else if((strcmp(input->cmd, ADD) == 0) && input->nid == NULL){
-            return FAIL;
-        }
     }
-
     else
         return FAIL;
 
@@ -141,10 +176,9 @@ status_t parse_input(input_t *input)
 status_t check_add_block(input_t *input)
 {
 
-    if(input->impact_all == TRUE){
+    if(input->impact_all == TRUE)
         input->impact_all = FALSE;
-        free(input->impact_bid);
-    }
+    
 
     if(check_number(input->nid))
     {
@@ -193,10 +227,10 @@ status_t check_add_node(input_t *input)
         return FAIL;
     }
 
-      input->head = add_node(input->head, atoi(input->nid));
+    input->head = add_node(input->head, atoi(input->nid));
 
-      if(input->impact_all == TRUE)
-          add_block(input->head, input->impact_bid, atoi(input->nid));
+    if(input->impact_all == TRUE)
+        add_block(input->head, input->impact_bid, atoi(input->nid));
 
     return SUCCESS;
 }
@@ -254,21 +288,19 @@ void process_commands(input_t *input)
         if((input->impact_all= check_block_impact(input)))
         {
             add_block_previous(input);
-            input->impact_bid = malloc(sizeof(char*)*BUFF_SIZE);
             strcpy(input->impact_bid, input->bid);
-        }else{
+        } else {
             status = check_add_block(input);
         }
     }
 
-    if(is_add(input->cmd) && is_node(input->typ)){
+    if(is_add(input->cmd) && is_node(input->typ))
         status = check_add_node(input);
-    }
+
 
     if(is_rm(input->cmd) && is_block(input->typ))
-    {
         status = check_rm_block(input);
-    }
+
 
     if(is_rm(input->cmd) && is_node(input->typ))
         status = check_rm_node(input);
