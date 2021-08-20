@@ -37,7 +37,7 @@ void prompt_display(input_t *input){
     }
 
     output = output_merge(output, status, count_nodes(input->head));
-    write(0, output, sizeof(output));
+    write(0, output, strlen(output));
     free(output);
 
 }
