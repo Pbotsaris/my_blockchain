@@ -27,9 +27,6 @@ void prompt_display(input_t *input){
         strcpy(status, "s");
     else
         strcpy(status, "-");
-    
-       if(count_nodes(input->head) == 0)  
-             print_message(LAUNCH_MSG);
 
     if(input->option == SYNC)
     {
