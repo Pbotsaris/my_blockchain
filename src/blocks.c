@@ -13,20 +13,22 @@ block_t *create_blocks(int maxlen)
         strcpy(blocks->bids[i], "\0");
     }
 
-
     return blocks;
 }
-
 
 void free_blocks(block_t *blocks)
 {
     for(int i = 0; i < blocks->maxlen; i++)
-        free(blocks->bids[i]);
+    {
+         free(blocks->bids[i]);
+    }
 
+    free(blocks->bids);
     free(blocks);
 }
 
-// grow blocks array by twice size
+/* grows blocks array by twice size */
+
 block_t *grow_blocks(block_t *blocks)
 {
     block_t *new_blocks = create_blocks(blocks->maxlen * 2);

@@ -84,32 +84,33 @@ node_t *get_synced_nodes(node_t *head){
     return head;
 }
 
-void write_nodes(node_t *head){
+node_t *write_nodes(node_t *head){
 
     int file;
     char nid_str[BUFSIZ];
+    node_t *temp = head;
 
     if((file = open("./bin/saved_nodes.txt", O_CREAT | O_RDWR)) < 0)
-        return;
+        return head;
 
-//    char *nid_str = malloc(sizeof(char)*BUFSIZ);
-
-    while(head)
+    while(temp)
     {
-        sprintf(nid_str, "%d", head->nid);
+        sprintf(nid_str, "%d", temp->nid);
         write(file, nid_str, strlen(nid_str));
         write(file, ": ", strlen(": "));
 
-        for(int i = 0; i < head->blocks->index; i++){
+        for(int i = 0; i < temp->blocks->index; i++){
 
-            write(file, head->blocks->bids[i], strlen(head->blocks->bids[i]));
+            write(file, temp->blocks->bids[i], strlen(temp->blocks->bids[i]));
             write(file, ", ", strlen(", "));
 
         }
         write(file, "\n", strlen("\n"));
 
-        head = head->next;
+        temp = temp->next;
     }
+
+    return head;
 }
 
 node_t* impact_all_nodes(node_t *head){

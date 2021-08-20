@@ -201,7 +201,7 @@ void print_block_list(node_t *head)
 {
     if (head == NULL)
     {
-        printf("Empty List\n");
+        printf("The blockchain is empty\n");
         return;
     }
 
@@ -230,5 +230,6 @@ void free_list(node_t *head)
         free_blocks(current->blocks);
         free(current);
         current = next;
+        
     }
 }

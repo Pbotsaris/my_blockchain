@@ -1,3 +1,3 @@
-12: all, dog, cat, makemenuts, 
-16: makemenuts, dog, cat, all, 
-0: dog, cat, makemenuts, all, 
+1: marcos, carros, caramba, makeit, beach, distant, 
+5: carros, marcos, caramba, makeit, beach, distant, 
+4: caramba, marcos, carros, makeit, beach, distant, 

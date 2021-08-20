@@ -48,7 +48,7 @@ int main(void)
                 break;
 
             case QUIT:
-                write_nodes(input->head);
+                input->head = write_nodes(input->head);
                 print_message(QUIT_MSG);
                 break;
 
@@ -57,7 +57,6 @@ int main(void)
                 break;
         }
     } 
-
 
     free_list(input->head);
     free_input(input);
