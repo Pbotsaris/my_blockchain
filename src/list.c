@@ -99,9 +99,12 @@ node_t *remove_every_block(node_t *head, char *bid)
 
     node_t *current = head;
     while (current)
-    {
+    { 
+        if(found_block == FALSE)
+           found_block = block_exists(current, bid, current->nid);
+
         current->blocks = remove_bid(current->blocks, bid);
-        found_block = block_exists(current, bid, current->nid);
+
         current = current->next;
     }
 

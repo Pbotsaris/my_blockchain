@@ -1,5 +1,5 @@
-0: beach, distant, carros, caramba, 
-4: carros, beach, distant, caramba, 
-5: caramba, beach, distant, carros, 
-1: beach, distant, carros, caramba, 
-0: beach, distant, carros, caramba, 
+0: 
+12: pagos, caramba, 
+1: caramba, pagos, 
+0: caramba, pagos, 
+caramba, pagos, 

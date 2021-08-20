@@ -23,9 +23,7 @@ You can also clean with
 
 The program will display information about the blockchain in the CLI. The prompt consits of a character and a digit. The character can be either an `s` for synced and `-` for unsyced blockchain. The digit tracks the number of nodes in the blockchain. Below an example of an unsynced 4 nodes blockchain.
 
-    `<[-4]>` 
-
-     
+    <[-4]> 
 
 ### Commands
 

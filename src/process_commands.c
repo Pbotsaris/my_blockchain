@@ -155,7 +155,8 @@ status_t parse_input(input_t *input)
     else if((strcmp(input->typ, BLOCK)) == 0)
     {
         validate_input(input, &input->bid, &len_count);
-        validate_input(input, &input->nid, &len_count);
+        if(validate_input(input, &input->nid, &len_count) == FAIL)
+            input->nid[0] = '\0';
 
         if((strcmp(input->cmd, RM) == 0) && input->nid == NULL)
             return FAIL;
