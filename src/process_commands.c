@@ -263,6 +263,7 @@ status_t check_rm_node(input_t *input)
     if(check_number(input->nid) == FALSE)
     {
         if((strcmp(input->nid, "*")) == 0){
+            free_list(input->head);
             input->head = NULL;
             return SUCCESS;
         }else{
